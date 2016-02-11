@@ -6,7 +6,7 @@
   "repository": "",
   "author": "Mostafa Eweda <mo.eweda@gmail.com>",
   "dependencies": {
-    "async": "~0.2.8",
+    "async": "^0.2.10",
     "express": "^3.2.6",
     "mime": "^1.3.4",
     "socket.io": "~0.9.14",
