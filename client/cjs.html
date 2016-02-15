@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="text/javascript" src="js/createjs-2015.11.26.min.js"></script>
+        <style type="text/css">
+            canvas{
+                left: 50%;
+                top: 50%;
+                margin: -360px 0 0 -480px;
+                position: absolute;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="canvas1" name="canvas" width="960" height="720">Your browser doesn't support canvas.</canvas>
+        <script type="text/javascript">
+            /*global createjs*/
+            var stage;
+            
+            window.onload = function() {
+                stage = new createjs.Stage("canvas1");
+                
+                var bg = new createjs.Shape();
+                bg.graphics.beginFill("White").drawRect(0, 0, 960, 620);
+                bg.x = 0;
+                bg.y = 0;
+                stage.addChild(bg);
+                
+                var controlPanel = new createjs.Shape();
+                controlPanel.graphics.beginFill("Gray").drawRect(0, 620, 960, 100);
+                controlPanel.x = 0;
+                controlPanel.y = 0;
+                stage.addChild(controlPanel);
+                
+                
+                var circle = new createjs.Shape();
+                circle.graphics.beginFill("Crimson").drawCircle(0, 0, 20);
+                circle.x = 100;
+                circle.y = 100;
+                stage.addChild(circle);
+                
+                bg.on('mousedown', clickMove, null, false, {obj: circle});
+                  
+                createjs.Ticker.setFPS(60);
+                createjs.Ticker.addEventListener("tick", stage);
+            }
+            
+            function clickMove(event, data){
+                var d = Math.sqrt((stage.mouseX - data.obj.x) * (stage.mouseX - data.obj.x)
+                        + (stage.mouseY - data.obj.y) * (stage.mouseY - data.obj.y));
+                var t = d / 200 * 1000;
+                console.log(d);
+                
+                createjs.Tween.get(data.obj)
+                  .to({x: stage.mouseX, y: stage.mouseY}, t, createjs.Ease.line);
+            }
+        </script>
+    </body>
+</html>
