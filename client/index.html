@@ -1,119 +1,186 @@
-<!doctype html>
-<html lang="en" ng-app>
-  <head>
-    <title>Chat Example</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/bootstrap-responsive.min.css">
-    <style>
-      body {
-        padding-top: 60px;
-      }
-    </style>
-    <script>
-      function ChatController($scope) {
-        var socket = io.connect();
-
-        $scope.messages = [];
-        $scope.roster = [];
-        $scope.name = '';
-        $scope.text = {
-          msg:'',
-          time:''
-        };
-
-        socket.on('connect', function () {
-          $scope.setName();
-        });
-
-        socket.on('refresh', function(msg){
-          $scope.messages = [];
-          $scope.$apply();
-        })
-
-        socket.on('message', function (msg) {
-          console.log(msg)
-          $scope.messages.push(msg);
-          $scope.$apply();
-        });
-
-        socket.on('roster', function (names) {
-          $scope.roster = names;
-          $scope.$apply();
-        });
-
-        $scope.send = function send() {
-          console.log('Sending message:', $scope.text.msg);
-          var myTime = new Date();
-          $scope.text.time = myTime.toLocaleString();
-          console.log('time:',$scope.text.time)
-          socket.emit('message', $scope.text);
-          $scope.text.msg = '';
-        };
-        
-        $scope.setName = function setName() {
-          socket.emit('identify', $scope.name);
-        };
-        
-        $scope.delete = function() {
-          socket.emit('delete');
-        };
-      }
-    </script>
-  </head>
-  <body>
-    <div class="container" ng-controller="ChatController">
-      <div class="navbar navbar-fixed-top navbar-inverse">
-        <div class="navbar-inner">
-          <div class="pull-right">
-            <a href="https://c9.io" class="brand">Cloud9 IDE</a>
-          </div>
-        </div>
-      </div>
-      <div class="page-header">
-        <h1>........</h1>
-      </div>
-      <div class="row">
-        <div class="span3">
-          <ul class="nav nav-list well">
-            <li class="nav-header">Local Users</li>
-            <li ng-repeat="user in roster" ng-bind="user">
-            </li>
-          </ul>
-        </div>
-        <div class="span9">
-          <table class="table table-striped table-bordered">
-            <thead>
-              <tr>
-                <th class="span2">Name</th>
-                <th class="span5">Text</th>
-                <th class="span4">Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr ng-repeat="msg in messages">
-                <td class="span2" ng-bind="msg.name"></td>
-                <td class="span5" ng-bind="msg.text"></td>
-                <td class="span4" ng-bind="msg.time"></td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="row controls">
-            <form ng-submit="send()">
-              <div class="span2"><input type="text" class="input-block-level" ng-model="name" ng-change="setName()" placeholder="Your Name"></div>
-              <div class="input-append span7">
-                <input type="text" class="span5" ng-model="text.msg" placeholder="Message">
-                <input type="submit" class="span1 btn btn-primary" value="Send" ng-disabled="!text.msg">
-                <input type="button" class="span1 btn btn-primary" value="Delete" ng-click="delete()">
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/js/jquery.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/angular.min.js"></script>
-  </body>
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="text/javascript" src="js/ghostnight-engine.js"></script>
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/createjs-2015.11.26.min.js"></script>
+        <style>
+            canvas{
+                left: 50%;
+                top: 50%;
+                margin: -360px 0 0 -640px;
+                position: absolute;
+            }
+        </style>
+        <title>Ghost Night</title>
+    </head>
+    <body style="background-color: black" onload="init()">
+        <canvas id="canvas" name="canvas" width="1280" height="720" style="background-color: #202020">Your browser doesn't support canvas.</canvas>
+        <script>
+            /*global createjs, GM*/ 
+            var canvas, stage;
+            var drawingCanvas;
+            var oldPt;
+            var oldMidPt;
+            var title;
+            var color;
+            var stroke;
+            var colors;
+            var index;
+            
+            var startJoint, prevJoint, newJoint;
+            
+            function init() {
+            	canvas = document.getElementById("canvas");
+            	index = 0;
+            	colors = ["#222222", "#828b20", "#b0ac31", "#cbc53d", "#fad779", "#f9e4ad", "#faf2db", "#563512", "#9b4a0b", "#d36600", "#fe8a00", "#f9a71f"];
+            
+            	//check to see if we are running in a browser with touch support
+            	stage = new createjs.Stage(canvas);
+            	stage.autoClear = false;
+            	stage.enableDOMEvents(true);
+            	
+            	canvas.oncontextmenu = function (event) {
+                    event.preventDefault();
+                };
+            	
+            	createjs.Touch.enable(stage);
+            	createjs.Ticker.setFPS(24);
+            
+            	drawingCanvas = new createjs.Shape();
+            
+            	stage.addEventListener("stagemousedown", handleMouseDown);
+            	stage.addEventListener("stagemouseup", handleMouseUp);
+            
+            	stage.addChild(drawingCanvas);
+            	stage.update();
+            	
+            	createjs.Ticker.setFPS(60);
+                createjs.Ticker.addEventListener("tick", stage);
+            }
+            
+            function handleMouseDown(event) {
+            	if (!event.primary) { return; }
+            	console.log(event.nativeEvent.button);
+            	if(event.nativeEvent.button == 0)
+            	{
+                	color = colors[(index++) % colors.length];
+                	stroke = 3;
+                	oldPt = new createjs.Point(stage.mouseX, stage.mouseY);
+                	oldMidPt = oldPt.clone();
+                	
+                	var circle = new createjs.Shape();
+                	circle.graphics.clear().beginFill(color).drawCircle(0, 0, 10);
+                	circle.x = stage.mouseX;
+                	circle.y = stage.mouseY;
+                	stage.addChild(circle);
+                	stage.update();
+                	
+                	startJoint = new Joint(stage.mouseX, stage.mouseY);
+                	prevJoint = startJoint;
+                	
+                	stage.addEventListener("stagemousemove", handleMouseMove);
+            	}
+            	else if(event.nativeEvent.button >= 1)
+            	{
+            	    if(event.nativeEvent.button == 2)
+                	    color = colors[(index++) % colors.length];
+            	    else
+            	        color = "#FFFFFF";
+            	    var circle = new createjs.Shape();
+                	circle.graphics.clear().beginFill(color).drawCircle(0, 0, 20);
+                	circle.x = stage.mouseX;
+                	circle.y = stage.mouseY;
+                	
+                	circle.moveToNext = function () {
+                	    var nearestJoint = findNearest(new Transform(this.x, this.y)).Next();
+                	    console.log(nearestJoint);
+                	    
+                	    createjs.Tween.get(circle)
+                	        .to({x: nearestJoint.transform.x, y: nearestJoint.transform.y}, 200)
+                	        .call(function(){
+                	            if(nearestJoint.Next() != null)
+                	                circle.moveToNext();
+                	            else
+                	                stage.removeChild(circle);
+                	        });
+                	};
+                	
+                	if(GM.jointCount > 0)
+                	{
+                	    var nearestJoint = findNearest(new Transform(circle.x, circle.y));
+                	    console.log(nearestJoint);
+                	    
+                	    createjs.Tween.get(circle)
+                	        .to({x: nearestJoint.transform.x, y: nearestJoint.transform.y}, 300)
+                	        .call(function(){
+                	            circle.moveToNext();
+                	        });
+                	}
+                	
+                	stage.addChild(circle);
+                	stage.update();
+            	}
+            }
+            
+            function handleMouseMove(event) {
+            	if (!event.primary) { return; }
+            	if(new Transform(stage.mouseX, stage.mouseY).DistanceTo(new Transform(oldPt.x, oldPt.y)) > 20)
+                {
+                    drawingCanvas.graphics.clear().setStrokeStyle(stroke, 'round', 'round').beginStroke(color).moveTo(oldPt.x, oldPt.y).lineTo(stage.mouseX, stage.mouseY);
+                    drawingCanvas.graphics.setStrokeStyle(stroke, 'round', 'round').beginStroke(color).drawCircle(stage.mouseX, stage.mouseY, 8);
+                    oldPt.x = stage.mouseX;
+                    oldPt.y = stage.mouseY;
+                	stage.update();
+                	
+                	newJoint = new Joint(stage.mouseX, stage.mouseY);
+                	newJoint.AttachTo(prevJoint);
+                	prevJoint = newJoint;
+                }
+            }
+            
+            function handleMouseUp(event) {
+            	if (!event.primary) { return; }
+            	stage.removeEventListener("stagemousemove", handleMouseMove);
+            }
+            
+            // Slot
+            var s0 = new Slot(100, 0);
+            var s1 = new Slot(100, 200);
+            
+            // Road test
+            var j0 = new Joint(0, 0);
+            var j1 = new Joint(0, 100);
+            var j2 = new Joint(100, 100);
+            var j3 = new Joint(200, 200);
+            var j4 = new Joint(200, 100);
+            
+            j1.AttachTo(j0);
+            j2.AttachTo(j1);
+            j3.AttachTo(j2);
+            j4.AttachTo(j2);
+            
+            var rs = new RoadSign(1.5, 1.5, j2, [j0, j1]);
+            
+            // Tower
+            var t0 = new Amaterasu(s0);
+            
+            // Unit
+            var u0 = new Kappa(0, 0, j0);
+            
+            j0.SteppedBy(u0);
+            t0.Attack();
+            t0.Attack();
+            
+            // console.log(j2.dest);
+            // rs.Turn();
+            // console.log(j2.dest);
+            // rs.Turn();
+            // console.log(j2.dest);
+            // rs.Turn();
+            // console.log(j2.dest);
+            
+            
+        </script>
+    </body>
 </html>
