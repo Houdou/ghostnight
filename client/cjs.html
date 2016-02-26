@@ -51,7 +51,7 @@
                 var t = d / 200 * 1000;
                 console.log(d);
                 
-                createjs.Tween.get(data.obj)
+                createjs.Tween.get(data.obj, {override: true})
                   .to({x: stage.mouseX, y: stage.mouseY}, t, createjs.Ease.line);
             }
         </script>

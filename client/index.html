@@ -33,7 +33,7 @@
             function init() {
             	canvas = document.getElementById("canvas");
             	index = 0;
-            	colors = ["#222222", "#828b20", "#b0ac31", "#cbc53d", "#fad779", "#f9e4ad", "#faf2db", "#563512", "#9b4a0b", "#d36600", "#fe8a00", "#f9a71f"];
+            	colors = ["#828b20", "#b0ac31", "#cbc53d", "#fad779", "#f9e4ad", "#faf2db", "#563512", "#9b4a0b", "#d36600", "#fe8a00", "#f9a71f"];
             
             	//check to see if we are running in a browser with touch support
             	stage = new createjs.Stage(canvas);
@@ -57,13 +57,38 @@
             	
             	createjs.Ticker.setFPS(60);
                 createjs.Ticker.addEventListener("tick", stage);
+                
+                
+                stage.addChild(buildButton("Neko", 30, 640, 50, 50, function(event){
+                    if(startJoint == null) return;
+            	    event.preventDefault();
+            	    color = colors[(index++) % colors.length];
+            	    
+            	    var circle = new createjs.Shape();
+                	circle.graphics.clear().beginFill(color).drawCircle(0, 0, 20);
+                	circle.x = startJoint.transform.x;
+                	circle.y = startJoint.transform.y;
+                	
+                	var neko = new Kappa(startJoint.transform.x - 10, startJoint.transform.y - 10, startJoint)
+                	
+                	stage.addChild(circle);
+                	
+                	circle.addEventListener("tick", function() {
+                	    circle.x = neko.transform.x;
+                	    circle.y = neko.transform.y;
+                	})
+                	
+                	neko.Move();
+                	
+            	}, {}));
             }
             
             function handleMouseDown(event) {
             	if (!event.primary) { return; }
-            	console.log(event.nativeEvent.button);
             	if(event.nativeEvent.button == 0)
             	{
+            	    if(stage.mouseY > 640) return;
+            	    
                 	color = colors[(index++) % colors.length];
                 	stroke = 3;
                 	oldPt = new createjs.Point(stage.mouseX, stage.mouseY);
@@ -112,9 +137,9 @@
                 	    console.log(nearestJoint);
                 	    
                 	    createjs.Tween.get(circle)
-                	        .to({x: nearestJoint.transform.x, y: nearestJoint.transform.y}, 300)
+                	        .set({x: nearestJoint.transform.x, y: nearestJoint.transform.y})
                 	        .call(function(){
-                	            circle.moveToNext();
+                	           // circle.moveToNext();
                 	        });
                 	}
                 	
@@ -144,23 +169,46 @@
             	stage.removeEventListener("stagemousemove", handleMouseMove);
             }
             
+            
+            function buildButton(str, x, y, width, height, onclickFunction, data)
+        	{
+        		var c = new createjs.Container();
+        
+        		var button = new createjs.Shape();
+        		button.graphics.beginStroke("#000").beginFill("#DDD").drawRect(0, 0, width, height);
+        		var buttonStr = new createjs.Text(str, "18px Arial", "#777777");
+            	buttonStr.x = width / 2 - buttonStr.getBounds().width / 2;
+            	buttonStr.y = height / 2 - buttonStr.getBounds().height / 2;
+            	
+            	c.addChild(button);
+            	c.addChild(buttonStr);
+        
+        		c.on('click', onclickFunction, null, false, data);
+        
+        		c.x = x;
+        		c.y = y;
+        
+        		return c;
+        	}
+        	
+        	
+            
             // Slot
-            var s0 = new Slot(100, 0);
-            var s1 = new Slot(100, 200);
+            var s0 = new Slot(200, 0);
             
             // Road test
-            var j0 = new Joint(0, 0);
-            var j1 = new Joint(0, 100);
-            var j2 = new Joint(100, 100);
-            var j3 = new Joint(200, 200);
-            var j4 = new Joint(200, 100);
+            var j0 = new Joint(0, 100);
+            var j1 = new Joint(100, 100);
+            var j2 = new Joint(200, 100);
+            var j3 = new Joint(300, 100);
+            var j4 = new Joint(400, 100);
             
             j1.AttachTo(j0);
             j2.AttachTo(j1);
             j3.AttachTo(j2);
-            j4.AttachTo(j2);
+            j4.AttachTo(j3);
             
-            var rs = new RoadSign(1.5, 1.5, j2, [j0, j1]);
+            // var rs = new RoadSign(1.5, 1.5, j2, [j0, j1]);
             
             // Tower
             var t0 = new Amaterasu(s0);
@@ -169,7 +217,23 @@
             var u0 = new Kappa(0, 0, j0);
             
             j0.SteppedBy(u0);
+            console.log(t0.unitsInRange);
             t0.Attack();
+            
+            j1.SteppedBy(u0);
+            console.log(t0.unitsInRange);
+            t0.Attack();
+            
+            j2.SteppedBy(u0);
+            console.log(t0.unitsInRange);
+            t0.Attack();
+            
+            j3.SteppedBy(u0);
+            console.log(t0.unitsInRange);
+            t0.Attack();
+            
+            j4.SteppedBy(u0);
+            console.log(t0.unitsInRange);
             t0.Attack();
             
             // console.log(j2.dest);

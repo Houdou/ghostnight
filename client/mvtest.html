@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="text/javascript" src="js/ghostnight-engine.js"></script>
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/createjs-2015.11.26.min.js"></script>
+        <script type="text/javascript" src="js/underscore.min.js"></script>
+        <script type="text/javascript" src="js/backbone.min.js"></script>
+        <style>
+            canvas{
+                left: 50%;
+                top: 50%;
+                margin: -360px 0 0 -640px;
+                position: absolute;
+            }
+        </style>
+        <title>Ghost Night</title>
+    </head>
+    <body style="background-color: black">
+        <canvas id="canvas" name="canvas" width="1280" height="720" style="background-color: #202020">Your browser doesn't support canvas.</canvas>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                var stage = new createjs.Stage("canvas");
+                
+                var view = new CanvasView({stage: stage}).render();
+                
+                // stage.addChild(new createjs.Bitmap("/img/assets/neko.png"));
+                
+            });
+        </script>
+        <script type="text/javascript" src="backbone/model.js"></script>
+        <script type="text/javascript" src="backbone/view.js"></script>
+    </body>
+</html>

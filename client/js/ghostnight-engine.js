@@ -1,3 +1,5 @@
+/*global createjs*/
+
 // Static Class Tags
 var Tags = {
     unit: 0,
@@ -56,9 +58,6 @@ var GM = {
     soul: 0,
     gold: 0
 };
-
-var reachDistance = 5;
-
 
 
 // Class Transform
@@ -195,15 +194,34 @@ Hero.prototype.move = function() {
 
 // Class Unit : GameUnit
 // variables
-function Unit(name, tag, x, y, destJoint, hp, atk, range, rate, def, spd, price, layer, value) {
-    GameUnit.call(this, name, tag, x, y, destJoint, hp, atk, range, rate, def, spd, layer, price, value);
+function Unit(name, tag, x, y, joint, hp, atk, range, rate, def, spd, price, layer, value) {
+    GameUnit.call(this, name, tag, x, y, joint, hp, atk, range, rate, def, spd, layer, price, value);
     // var
 }
 Unit.prototype = new GameUnit();
 // functions
-Unit.prototype.move = function() {
-    if (this.transform.DistanceTo(this.destJoint.transform) >= reachDistance) {
+Unit.prototype.MoveTo = function(x, y, end) {
+    createjs.Tween.get(this.transform, {override: true})
+        .to({x: x, y: y}, 1000 / this.spd)
+        .call(function() {
+            if(end) return end();
+        }, this);
+}
 
+Unit.prototype.Move = function () {
+    if(this.joint != null) {
+        var d = this.joint;
+        var self = this;
+        this.MoveTo(d.transform.x, d.transform.y, function() {
+            if(d.Next() != null) {
+                self.joint = d.Next();
+                self.Move();
+            }
+        });
+        
+        //DEBUG
+        console.log(this.transform.x + ", " + this.transform.y);
+        //DEBUG
     }
 }
 
@@ -237,7 +255,7 @@ Tower.prototype.Attack = function() {
             //DEBUG
             
             
-            this.nextAtkTime = (new Date()).getTime() + 1000 / this.rate;
+            // this.nextAtkTime = (new Date()).getTime() + 1000 / this.rate;
         }
     }
 }
@@ -399,7 +417,7 @@ var _HERO = {
 
 var _UNIT = {
     Kappa: {
-        hp: 100, atk: 100, range: 100, rate: 10, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land },
+        hp: 100, atk: 100, range: 100, rate: 10, def: 10, spd: 4, price: 100, value: 30, layer: Layers.land },
     Wanyudo: {
         hp: 100, atk: 100, range: 100, rate: 10, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land },
     Foxfire: {
@@ -428,7 +446,7 @@ var _TOWER = {
     Asura: {
         hp: 100, atk: 100, range: 100, rate: 10, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land },
     Amaterasu: {
-        hp: 100, atk: 100, range: 100, rate: 10, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land | Layers.sky }
+        hp: 100, atk: 100, range: 200, rate: 10, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land | Layers.sky }
 };
 
 /**
@@ -439,8 +457,8 @@ var _TOWER = {
 // Class Nekomata : Hero
 // variables
 function Nekomata(x, y, joint) {
-    Hero.call(this, "Nekomata", Tags.hero, x, y, joint, _HERO.Nekomata.hp, _HERO.Nekomata.atk, _UNIT.Nekomata.range,
-        _UNIT.Nekomata.rate, _HERO.Nekomata.def, _HERO.Nekomata.spd, _HERO.Nekomata.price, _HERO.Nekomata.value);
+    Hero.call(this, "Nekomata", Tags.hero, x, y, joint, _HERO.Nekomata.hp, _HERO.Nekomata.atk, _HERO.Nekomata.range,
+        _HERO.Nekomata.rate, _HERO.Nekomata.def, _HERO.Nekomata.spd, _HERO.Nekomata.price, _HERO.Nekomata.value);
     // var
 }
 Nekomata.prototype = new Hero();
@@ -452,8 +470,8 @@ Nekomata.prototype.funA = function() {
 // Class Ameonna : Hero
 // variables
 function Ameonna(x, y, joint) {
-    Hero.call(this, "Ameonna", Tags.hero, x, y, joint, _HERO.Ameonna.hp, _HERO.Ameonna.atk, _UNIT.Ameonna.range,
-        _UNIT.Ameonna.rate, _HERO.Ameonna.def, _HERO.Ameonna.spd, _HERO.Ameonna.price, _HERO.Ameonna.value);
+    Hero.call(this, "Ameonna", Tags.hero, x, y, joint, _HERO.Ameonna.hp, _HERO.Ameonna.atk, _HERO.Ameonna.range,
+        _HERO.Ameonna.rate, _HERO.Ameonna.def, _HERO.Ameonna.spd, _HERO.Ameonna.price, _HERO.Ameonna.value);
     // var
 }
 Ameonna.prototype = new Hero();
@@ -465,8 +483,8 @@ Ameonna.prototype.funA = function() {
 // Class Todomeki : Hero
 // variables
 function Todomeki(x, y, joint) {
-    Hero.call(this, "Todomeki", Tags.hero, x, y, joint, _HERO.Todomeki.hp, _HERO.Todomeki.atk, _UNIT.Todomeki.range,
-        _UNIT.Todomeki.rate, _HERO.Todomeki.def, _HERO.Todomeki.spd, _HERO.Todomeki.price, _HERO.Todomeki.value);
+    Hero.call(this, "Todomeki", Tags.hero, x, y, joint, _HERO.Todomeki.hp, _HERO.Todomeki.atk, _HERO.Todomeki.range,
+        _HERO.Todomeki.rate, _HERO.Todomeki.def, _HERO.Todomeki.spd, _HERO.Todomeki.price, _HERO.Todomeki.value);
     // var
 }
 Todomeki.prototype = new Hero();
