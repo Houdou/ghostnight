@@ -1,9 +1,22 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script type="text/javascript" src="js/ghostnight-engine.js"></script>
         <script type="text/javascript" src="js/jquery.min.js"></script>
         <script type="text/javascript" src="js/createjs-2015.11.26.min.js"></script>
+        <script type="text/javascript" src="js/ghostnight/GN-static.js"></script>
+        <script type="text/javascript" src="js/ghostnight/extend.js"></script>
+        <script type="text/javascript" src="js/ghostnight/GM.js"></script>
+        <script type="text/javascript" src="js/ghostnight/Transform.js"></script>
+        <script type="text/javascript" src="js/ghostnight/GameObject.js"></script>
+        <script type="text/javascript" src="js/ghostnight/GameUnit.js"></script>
+        <script type="text/javascript" src="js/ghostnight/Joint.js"></script>
+        <script type="text/javascript" src="js/ghostnight/RoadSign.js"></script>
+        <script type="text/javascript" src="js/ghostnight/Blocker.js"></script>
+        <script type="text/javascript" src="js/ghostnight/Slot.js"></script>
+        <script type="text/javascript" src="js/ghostnight/Tower.js"></script>
+        <script type="text/javascript" src="js/ghostnight/Unit.js"></script>
+        <script type="text/javascript" src="js/ghostnight/Hero.js"></script>
+        <script type="text/javascript" src="js/ghostnight/obj.js"></script>
         <style>
             canvas{
                 left: 50%;
@@ -17,7 +30,7 @@
     <body style="background-color: black" onload="init()">
         <canvas id="canvas" name="canvas" width="1280" height="720" style="background-color: #202020">Your browser doesn't support canvas.</canvas>
         <script>
-            /*global createjs, GM*/ 
+            /*global createjs, GN*/ 
             var canvas, stage;
             var drawingCanvas;
             var oldPt;
@@ -27,6 +40,8 @@
             var stroke;
             var colors;
             var index;
+            
+            var neko, nekomata;
             
             var startJoint, prevJoint, newJoint;
             
@@ -58,6 +73,29 @@
             	createjs.Ticker.setFPS(60);
                 createjs.Ticker.addEventListener("tick", stage);
                 
+                var tower = new createjs.Shape();
+                	tower.graphics.clear().beginFill("rgba(255,255,255,0.01)").drawCircle(0, 0, 400);
+                	tower.x = 400;
+                	tower.y = 200;
+                
+                stage.addChild(tower);
+                
+                setTimeout(function(){
+                    nekomata = new Nekomata(startJoint.transform.x - 10, startJoint.transform.y - 10, startJoint);
+                	
+                neko = new createjs.Shape();
+                	neko.graphics.clear().beginFill("#FF3300").drawCircle(0, 0, 15);
+                	neko.x = startJoint.transform.x;
+                	neko.y = startJoint.transform.y;
+                	
+            	stage.addChild(neko);
+            	
+            	neko.addEventListener("tick", function() {
+            	    neko.x = nekomata.transform.x;
+            	    neko.y = nekomata.transform.y;
+            	});
+                }, 1000);
+                
                 
                 stage.addChild(buildButton("Neko", 30, 640, 50, 50, function(event){
                     if(startJoint == null) return;
@@ -69,16 +107,20 @@
                 	circle.x = startJoint.transform.x;
                 	circle.y = startJoint.transform.y;
                 	
-                	var neko = new Kappa(startJoint.transform.x - 10, startJoint.transform.y - 10, startJoint)
+                	
+                	var kappa = new Kappa(startJoint.transform.x - 10, startJoint.transform.y - 10, startJoint)
+                	
+                	console.log(kappa);
+                	
                 	
                 	stage.addChild(circle);
                 	
                 	circle.addEventListener("tick", function() {
-                	    circle.x = neko.transform.x;
-                	    circle.y = neko.transform.y;
+                	    circle.x = kappa.transform.x;
+                	    circle.y = kappa.transform.y;
                 	})
                 	
-                	neko.Move();
+                	kappa.Move();
                 	
             	}, {}));
             }
@@ -94,31 +136,52 @@
                 	oldPt = new createjs.Point(stage.mouseX, stage.mouseY);
                 	oldMidPt = oldPt.clone();
                 	
-                	var circle = new createjs.Shape();
-                	circle.graphics.clear().beginFill(color).drawCircle(0, 0, 10);
-                	circle.x = stage.mouseX;
-                	circle.y = stage.mouseY;
-                	stage.addChild(circle);
-                	stage.update();
-                	
-                	startJoint = new Joint(stage.mouseX, stage.mouseY);
-                	prevJoint = startJoint;
-                	
-                	stage.addEventListener("stagemousemove", handleMouseMove);
-            	}
-            	else if(event.nativeEvent.button >= 1)
-            	{
-            	    if(event.nativeEvent.button == 2)
-                	    color = colors[(index++) % colors.length];
-            	    else
-            	        color = "#FFFFFF";
+                	if(startJoint != null)
+                	{
+                    	var connectPoint = GN.Joint.FindNearest(new GN.Transform(stage.mouseX, stage.mouseY), 40);
+                    	if(connectPoint != null)
+                    	{
+                    	    drawingCanvas.graphics.clear().setStrokeStyle(stroke, 'round', 'round')
+                    	        .beginStroke(color)
+                    	        .moveTo(connectPoint.transform.x, connectPoint.transform.y)
+                    	        .lineTo(stage.mouseX, stage.mouseY);
+                	        drawingCanvas.graphics.setStrokeStyle(stroke, 'round', 'round')
+                	            .beginStroke(color)
+                	            .drawCircle(stage.mouseX, stage.mouseY, 8);
+                	            
+            	            prevJoint = new GN.Joint(stage.mouseX, stage.mouseY);
+            	            prevJoint.AttachTo(connectPoint);
+            	            
+            	            var rs = new GN.RoadSign(connectPoint.transform.x, connectPoint.transform.x, connectPoint, []);
+            	            console.log(rs);
+            	            
+            	            
+            	            stage.addEventListener("stagemousemove", handleMouseMove);
+                    	}
+                	}
+                	else
+                	{
+                    	var circle = new createjs.Shape();
+                    	circle.graphics.clear().beginFill(color).drawCircle(0, 0, 10);
+                    	circle.x = stage.mouseX;
+                    	circle.y = stage.mouseY;
+                    	stage.addChild(circle);
+                    	stage.update();
+                    	
+                    	startJoint = new GN.Joint(stage.mouseX, stage.mouseY);
+                    	prevJoint = startJoint;
+                    	
+                	    stage.addEventListener("stagemousemove", handleMouseMove);
+                	}
+            	} else if(event.nativeEvent.button == 1) {
+            	    color = colors[(index++) % colors.length];
             	    var circle = new createjs.Shape();
                 	circle.graphics.clear().beginFill(color).drawCircle(0, 0, 20);
                 	circle.x = stage.mouseX;
                 	circle.y = stage.mouseY;
                 	
                 	circle.moveToNext = function () {
-                	    var nearestJoint = findNearest(new Transform(this.x, this.y)).Next();
+                	    var nearestJoint = GN.Joint.FindNearest(new GN.Transform(this.x, this.y)).Next();
                 	    console.log(nearestJoint);
                 	    
                 	    createjs.Tween.get(circle)
@@ -131,26 +194,36 @@
                 	        });
                 	};
                 	
-                	if(GM.jointCount > 0)
+                	if(GN.GM.jointCount > 0)
                 	{
-                	    var nearestJoint = findNearest(new Transform(circle.x, circle.y));
+                	    var nearestJoint = GN.Joint.FindNearest(new GN.Transform(circle.x, circle.y), 50);
                 	    console.log(nearestJoint);
                 	    
-                	    createjs.Tween.get(circle)
-                	        .set({x: nearestJoint.transform.x, y: nearestJoint.transform.y})
-                	        .call(function(){
-                	           // circle.moveToNext();
-                	        });
+                	    if(nearestJoint != null) {
+                    	    createjs.Tween.get(circle)
+                    	        .set({x: nearestJoint.transform.x, y: nearestJoint.transform.y})
+                    	        .call(function(){stage.addChild(circle);});
+                	    }
                 	}
-                	
-                	stage.addChild(circle);
                 	stage.update();
+            	} else if (event.nativeEvent.button == 2) {
+            	    var selectJoint = GN.Joint.FindNearest(new GN.Transform(stage.mouseX, stage.mouseY), 40);
+            	    if(selectJoint != null)
+            	    {
+            	        drawingCanvas.graphics.setStrokeStyle(stroke, 'round', 'round').beginStroke("#DDDD00").drawCircle(selectJoint.transform.x, selectJoint.transform.y, 8);
+                        
+                        console.log(selectJoint);
+                        
+            	        var path = GN.Joint.FindPathTo(selectJoint, nekomata.joint);
+            	        if(path != null)
+                	        nekomata.Move(path);
+            	    }
             	}
             }
             
             function handleMouseMove(event) {
             	if (!event.primary) { return; }
-            	if(new Transform(stage.mouseX, stage.mouseY).DistanceTo(new Transform(oldPt.x, oldPt.y)) > 20)
+            	if(new GN.Transform(stage.mouseX, stage.mouseY).DistanceTo(new GN.Transform(oldPt.x, oldPt.y)) > 20)
                 {
                     drawingCanvas.graphics.clear().setStrokeStyle(stroke, 'round', 'round').beginStroke(color).moveTo(oldPt.x, oldPt.y).lineTo(stage.mouseX, stage.mouseY);
                     drawingCanvas.graphics.setStrokeStyle(stroke, 'round', 'round').beginStroke(color).drawCircle(stage.mouseX, stage.mouseY, 8);
@@ -158,7 +231,7 @@
                     oldPt.y = stage.mouseY;
                 	stage.update();
                 	
-                	newJoint = new Joint(stage.mouseX, stage.mouseY);
+                	newJoint = new GN.Joint(Math.round(stage.mouseX), Math.round(stage.mouseY));
                 	newJoint.AttachTo(prevJoint);
                 	prevJoint = newJoint;
                 }
@@ -194,19 +267,28 @@
         	
             
             // Slot
-            var s0 = new Slot(200, 0);
+            var s0 = new GN.Slot(400, 200);
             
-            // Road test
-            var j0 = new Joint(0, 100);
-            var j1 = new Joint(100, 100);
-            var j2 = new Joint(200, 100);
-            var j3 = new Joint(300, 100);
-            var j4 = new Joint(400, 100);
+            // // Road test
+            // var j0 = new Joint(100, 500);
+            // var j1 = new Joint(200, 400);
+            // var j2 = new Joint(300, 300);
+            // var j3 = new Joint(400, 200);
+            // var j4 = new Joint(300, 100);
+            // var j5 = new Joint(500, 200);
+            // var j6 = new Joint(600, 200);
+            // var j7 = new Joint(200, 200);
             
-            j1.AttachTo(j0);
-            j2.AttachTo(j1);
-            j3.AttachTo(j2);
-            j4.AttachTo(j3);
+            // j1.AttachTo(j0);
+            // j2.AttachTo(j1);
+            // j3.AttachTo(j2);
+            // j5.AttachTo(j3);
+            // j6.AttachTo(j6);
+            
+            // j7.AttachTo(j2);
+            // j4.AttachTo(j7);
+            
+            // findPathTo(j1, j5);
             
             // var rs = new RoadSign(1.5, 1.5, j2, [j0, j1]);
             
@@ -214,27 +296,27 @@
             var t0 = new Amaterasu(s0);
             
             // Unit
-            var u0 = new Kappa(0, 0, j0);
+            // var u0 = new Nekomata(400, 100, j4);
             
-            j0.SteppedBy(u0);
-            console.log(t0.unitsInRange);
-            t0.Attack();
+            // j0.SteppedBy(u0);
+            // console.log(t0.unitsInRange);
+            // t0.Attack();
             
-            j1.SteppedBy(u0);
-            console.log(t0.unitsInRange);
-            t0.Attack();
+            // j1.SteppedBy(u0);
+            // console.log(t0.unitsInRange);
+            // t0.Attack();
             
-            j2.SteppedBy(u0);
-            console.log(t0.unitsInRange);
-            t0.Attack();
+            // j2.SteppedBy(u0);
+            // console.log(t0.unitsInRange);
+            // t0.Attack();
             
-            j3.SteppedBy(u0);
-            console.log(t0.unitsInRange);
-            t0.Attack();
+            // j3.SteppedBy(u0);
+            // console.log(t0.unitsInRange);
+            // t0.Attack();
             
-            j4.SteppedBy(u0);
-            console.log(t0.unitsInRange);
-            t0.Attack();
+            // j4.SteppedBy(u0);
+            // console.log(t0.unitsInRange);
+            // t0.Attack();
             
             // console.log(j2.dest);
             // rs.Turn();

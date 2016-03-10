@@ -37,21 +37,21 @@ var Weather = {
 var GM = {
     unitCount: 0,
     assignUnitID: function() {
-        return this.unitCount++;
+        return GM.unitCount++;
     },
     jointCount: 0,
     joints: [],
     assignJointID: function() {
-        return this.jointCount++;
+        return GM.jointCount++;
     },
     roadSignCount: 0,
     assignSignID: function() {
-        return this.roadSignCount++;
+        return GM.roadSignCount++;
     },
     slotCount: 0,
     slots: [],
     assignSlotID: function() {
-        return this.slotCount++;
+        return GM.slotCount++;
     },
     weather: Weather.Night,
     time: 0,
@@ -187,14 +187,36 @@ function Hero(name, tag, x, y, destJoint, hp, atk, range, rate, def, spd, layer,
 }
 Hero.prototype = new GameUnit();
 // functions
-Hero.prototype.move = function() {
-    //...
+Hero.prototype.MoveTo = function(x, y, end) {
+    createjs.Tween.get(this.transform, {override: true})
+        .to({x: x, y: y}, 1000 / this.spd)
+        .call(function() {
+            if(end) return end();
+        }, this);
+}
+Hero.prototype.Move = function(path) {
+    this.path = path;
+    
+    if(this.path.length > 0) {
+        var d = this.path.shift();
+        var self = this;
+        this.MoveTo(d.transform.x, d.transform.y, function() {
+            //Notice the joint
+            d.SteppedBy(self);
+            self.joint = d;
+            
+            //Move to next joint
+            if(self.path.length > 0) {
+                self.Move(self.path);
+            }
+        });
+    }
 }
 
 
 // Class Unit : GameUnit
 // variables
-function Unit(name, tag, x, y, joint, hp, atk, range, rate, def, spd, price, layer, value) {
+function Unit(name, tag, x, y, joint, hp, atk, range, rate, def, spd, layer, price, value) {
     GameUnit.call(this, name, tag, x, y, joint, hp, atk, range, rate, def, spd, layer, price, value);
     // var
 }
@@ -213,6 +235,10 @@ Unit.prototype.Move = function () {
         var d = this.joint;
         var self = this;
         this.MoveTo(d.transform.x, d.transform.y, function() {
+            //Notice the joint
+            d.SteppedBy(self);
+            
+            //Move to next joint
             if(d.Next() != null) {
                 self.joint = d.Next();
                 self.Move();
@@ -220,7 +246,7 @@ Unit.prototype.Move = function () {
         });
         
         //DEBUG
-        console.log(this.transform.x + ", " + this.transform.y);
+        // console.log(this.transform.x + ", " + this.transform.y);
         //DEBUG
     }
 }
@@ -263,7 +289,7 @@ Tower.prototype.requireTarget = function() {
     var target = null;
     while (this.unitsInRange.length > 0) {
         target = this.unitsInRange[0];
-        if (target.transform.DistanceSquare(this.transform) <= this.range * this.range) {
+        if (target.transform.DistanceSquare(this.transform) <= this.range * this.range && target.hp > 0) {
             return target;
         } else {
             this.unitsInRange.shift();
@@ -296,7 +322,9 @@ function RoadSign(x, y, joint, from) {
     this.dests = this.joint.nbs;
 
     for (var i = 0; i < from.length; i++) {
-        this.dests.splice(this.joint.nbs.indexOf(from[i]), 1);
+        var index = this.joint.nbs.indexOf(from[i]);
+        if(index >= 0)
+            this.dests.splice(this.joint.nbs.indexOf(from[i]), 1);
     }
 
     this.currentDestIndex = 0;
@@ -348,6 +376,58 @@ Joint.prototype.AttachTo = function(joint) {
 Joint.prototype.Next = function() {
     return this.dest;
 }
+
+Joint.prototype.findPath = function(from, to) {
+    var list = new Array();
+    for(var i = 0; i < this.nbs.length; i++) {
+        if (this.nbs[i].visited)
+            continue;
+        
+        if (this.nbs[i] == to)
+        {
+            console.log([this, to]);
+            return [this, to];
+        }
+        else if (this.nbs[i] == from)
+            continue;
+        else
+            list.push(this.nbs[i]);
+    }
+    for(var i = 0; i < list.length; i++) {
+        var path = list[i].findPath(this, to);
+        list[i].visited = true;
+        if(path != null) {
+            path.unshift(this);
+            return path;
+        }
+    }
+    return null;
+};
+
+function findPathTo(j, at) {
+    var path = new Array();
+    
+    GM.joints.forEach(function(joint) {
+        joint.visited = false;
+    })
+    
+    if(at == j) return j;
+    var list = new Array();
+    for(var i = 0; i < at.nbs.length; i++) {
+        if(at.nbs[i] != j)
+            list.push(at.nbs[i]);
+        else
+            return [j];
+    }
+    for(var i = 0; i< list.length; i++) {
+        var p = list[i].findPath(at, j);
+        list[i].visited = true;
+        if(p != null)
+            path = p;
+    }
+    return path;
+}
+
 Joint.prototype.GetTowers = function(range) {
     var towerBitMask = 0b0;
     for (var i = 0; i < this.distances.length; i++) {
@@ -377,18 +457,10 @@ Joint.prototype.SteppedBy = function(unit) {
     }
 }
 
-function ToEnd(joint) {
-    var j = joint;
-    while (j.Next() != null) {
-        console.log(j.transform);
-        j = j.Next();
-    }
-}
-
-function findNearest(at) {
-    var d = 9999;
+function findNearest(at, maxDistance) {
+    var d = maxDistance;
     var j = null;
-
+    
     GM.joints.forEach(function(joint) {
         var nd = at.DistanceTo(joint.transform);
         if (nd < d) {
@@ -408,11 +480,11 @@ function findNearest(at) {
 //Values
 var _HERO = {
     Nekomata: {
-        hp: 100, atk: 100, range: 100, rate: 10, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land },
+        hp: 100, atk: 100, range: 100, rate: 10, def: 10, spd: 6, price: 100, value: 30, layer: Layers.land },
     Ameonna: {
-        hp: 100, atk: 100, range: 100, rate: 10, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land },
+        hp: 100, atk: 100, range: 100, rate: 10, def: 10, spd: 6, price: 100, value: 30, layer: Layers.land },
     Todomeki: {
-        hp: 100, atk: 100, range: 100, rate: 10, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land }
+        hp: 100, atk: 100, range: 100, rate: 10, def: 10, spd: 6, price: 100, value: 30, layer: Layers.land }
 };
 
 var _UNIT = {
@@ -446,7 +518,7 @@ var _TOWER = {
     Asura: {
         hp: 100, atk: 100, range: 100, rate: 10, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land },
     Amaterasu: {
-        hp: 100, atk: 100, range: 200, rate: 10, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land | Layers.sky }
+        hp: 100, atk: 100, range: 400, rate: 10, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land | Layers.sky }
 };
 
 /**
@@ -458,7 +530,7 @@ var _TOWER = {
 // variables
 function Nekomata(x, y, joint) {
     Hero.call(this, "Nekomata", Tags.hero, x, y, joint, _HERO.Nekomata.hp, _HERO.Nekomata.atk, _HERO.Nekomata.range,
-        _HERO.Nekomata.rate, _HERO.Nekomata.def, _HERO.Nekomata.spd, _HERO.Nekomata.price, _HERO.Nekomata.value);
+        _HERO.Nekomata.rate, _HERO.Nekomata.def, _HERO.Nekomata.spd, _HERO.Nekomata.layer, _HERO.Nekomata.price, _HERO.Nekomata.value);
     // var
 }
 Nekomata.prototype = new Hero();
@@ -471,7 +543,7 @@ Nekomata.prototype.funA = function() {
 // variables
 function Ameonna(x, y, joint) {
     Hero.call(this, "Ameonna", Tags.hero, x, y, joint, _HERO.Ameonna.hp, _HERO.Ameonna.atk, _HERO.Ameonna.range,
-        _HERO.Ameonna.rate, _HERO.Ameonna.def, _HERO.Ameonna.spd, _HERO.Ameonna.price, _HERO.Ameonna.value);
+        _HERO.Ameonna.rate, _HERO.Ameonna.def, _HERO.Ameonna.spd, _HERO.Ameonna.layer, _HERO.Ameonna.price, _HERO.Ameonna.value);
     // var
 }
 Ameonna.prototype = new Hero();
@@ -484,7 +556,7 @@ Ameonna.prototype.funA = function() {
 // variables
 function Todomeki(x, y, joint) {
     Hero.call(this, "Todomeki", Tags.hero, x, y, joint, _HERO.Todomeki.hp, _HERO.Todomeki.atk, _HERO.Todomeki.range,
-        _HERO.Todomeki.rate, _HERO.Todomeki.def, _HERO.Todomeki.spd, _HERO.Todomeki.price, _HERO.Todomeki.value);
+        _HERO.Todomeki.rate, _HERO.Todomeki.def, _HERO.Todomeki.spd, _HERO.Todomeki.layer, _HERO.Todomeki.price, _HERO.Todomeki.value);
     // var
 }
 Todomeki.prototype = new Hero();

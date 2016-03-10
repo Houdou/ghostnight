@@ -26,6 +26,10 @@ router.use(express.static(path.resolve(__dirname, 'client')));
 var messages = [];
 var sockets = [];
 
+io.on("hero-move", function(joint){
+  console.log(joint);
+})
+
 io.on('connection', function (socket) {
     messages.forEach(function (data) {
       socket.emit('message', data);
