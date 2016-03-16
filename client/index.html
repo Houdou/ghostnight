@@ -3,20 +3,7 @@
     <head>
         <script type="text/javascript" src="js/jquery.min.js"></script>
         <script type="text/javascript" src="js/createjs-2015.11.26.min.js"></script>
-        <script type="text/javascript" src="js/ghostnight/GN-static.js"></script>
-        <script type="text/javascript" src="js/ghostnight/extend.js"></script>
-        <script type="text/javascript" src="js/ghostnight/GM.js"></script>
-        <script type="text/javascript" src="js/ghostnight/Transform.js"></script>
-        <script type="text/javascript" src="js/ghostnight/GameObject.js"></script>
-        <script type="text/javascript" src="js/ghostnight/GameUnit.js"></script>
-        <script type="text/javascript" src="js/ghostnight/Joint.js"></script>
-        <script type="text/javascript" src="js/ghostnight/RoadSign.js"></script>
-        <script type="text/javascript" src="js/ghostnight/Blocker.js"></script>
-        <script type="text/javascript" src="js/ghostnight/Slot.js"></script>
-        <script type="text/javascript" src="js/ghostnight/Tower.js"></script>
-        <script type="text/javascript" src="js/ghostnight/Unit.js"></script>
-        <script type="text/javascript" src="js/ghostnight/Hero.js"></script>
-        <script type="text/javascript" src="js/ghostnight/obj.js"></script>
+        <script type="text/javascript" src="/socket.io/socket.io.js"></script>
         <style>
             canvas{
                 left: 50%;
@@ -32,18 +19,11 @@
         <script>
             /*global createjs, GN*/ 
             var canvas, stage;
-            var drawingCanvas;
-            var oldPt;
-            var oldMidPt;
-            var title;
             var color;
-            var stroke;
             var colors;
             var index;
             
-            var neko, nekomata;
-            
-            var startJoint, prevJoint, newJoint;
+            var socket;
             
             function init() {
             	canvas = document.getElementById("canvas");
@@ -55,193 +35,38 @@
             	stage.autoClear = false;
             	stage.enableDOMEvents(true);
             	
-            	canvas.oncontextmenu = function (event) {
-                    event.preventDefault();
-                };
-            	
             	createjs.Touch.enable(stage);
             	createjs.Ticker.setFPS(24);
-            
-            	drawingCanvas = new createjs.Shape();
-            
-            	stage.addEventListener("stagemousedown", handleMouseDown);
-            	stage.addEventListener("stagemouseup", handleMouseUp);
-            
-            	stage.addChild(drawingCanvas);
-            	stage.update();
-            	
-            	createjs.Ticker.setFPS(60);
-                createjs.Ticker.addEventListener("tick", stage);
                 
-                var tower = new createjs.Shape();
-                	tower.graphics.clear().beginFill("rgba(255,255,255,0.01)").drawCircle(0, 0, 400);
-                	tower.x = 400;
-                	tower.y = 200;
+                socket = io.connect();
                 
-                stage.addChild(tower);
-                
-                setTimeout(function(){
-                    nekomata = new Nekomata(startJoint.transform.x - 10, startJoint.transform.y - 10, startJoint);
-                	
-                neko = new createjs.Shape();
-                	neko.graphics.clear().beginFill("#FF3300").drawCircle(0, 0, 15);
-                	neko.x = startJoint.transform.x;
-                	neko.y = startJoint.transform.y;
-                	
-            	stage.addChild(neko);
-            	
-            	neko.addEventListener("tick", function() {
-            	    neko.x = nekomata.transform.x;
-            	    neko.y = nekomata.transform.y;
-            	});
-                }, 1000);
-                
-                
-                stage.addChild(buildButton("Neko", 30, 640, 50, 50, function(event){
-                    if(startJoint == null) return;
-            	    event.preventDefault();
+            	stage.addChild(buildButton("Kappa", 30, 640, 80, 50, function(event){
             	    color = colors[(index++) % colors.length];
             	    
-            	    var circle = new createjs.Shape();
-                	circle.graphics.clear().beginFill(color).drawCircle(0, 0, 20);
-                	circle.x = startJoint.transform.x;
-                	circle.y = startJoint.transform.y;
+            	   // var circle = new createjs.Shape();
+                // 	circle.graphics.clear().beginFill(color).drawCircle(0, 0, 20);
+                // 	circle.x = startJoint.transform.x;
+                // 	circle.y = startJoint.transform.y;
                 	
+                	socket.emit("create-unit", {type: "kappa"});
                 	
-                	var kappa = new Kappa(startJoint.transform.x - 10, startJoint.transform.y - 10, startJoint)
+                	console.log("emit");
                 	
-                	console.log(kappa);
+                	//var kappa = new Kappa(startJoint.transform.x - 10, startJoint.transform.y - 10, startJoint)
                 	
+                // 	stage.addChild(circle);
                 	
-                	stage.addChild(circle);
+                // 	circle.addEventListener("tick", function() {
+                	   // circle.x = kappa.transform.x;
+                	   // circle.y = kappa.transform.y;
+                // 	})
                 	
-                	circle.addEventListener("tick", function() {
-                	    circle.x = kappa.transform.x;
-                	    circle.y = kappa.transform.y;
-                	})
-                	
-                	kappa.Move();
+                    // 	kappa.Move();
                 	
             	}, {}));
+            	
+            	stage.update();
             }
-            
-            function handleMouseDown(event) {
-            	if (!event.primary) { return; }
-            	if(event.nativeEvent.button == 0)
-            	{
-            	    if(stage.mouseY > 640) return;
-            	    
-                	color = colors[(index++) % colors.length];
-                	stroke = 3;
-                	oldPt = new createjs.Point(stage.mouseX, stage.mouseY);
-                	oldMidPt = oldPt.clone();
-                	
-                	if(startJoint != null)
-                	{
-                    	var connectPoint = GN.Joint.FindNearest(new GN.Transform(stage.mouseX, stage.mouseY), 40);
-                    	if(connectPoint != null)
-                    	{
-                    	    drawingCanvas.graphics.clear().setStrokeStyle(stroke, 'round', 'round')
-                    	        .beginStroke(color)
-                    	        .moveTo(connectPoint.transform.x, connectPoint.transform.y)
-                    	        .lineTo(stage.mouseX, stage.mouseY);
-                	        drawingCanvas.graphics.setStrokeStyle(stroke, 'round', 'round')
-                	            .beginStroke(color)
-                	            .drawCircle(stage.mouseX, stage.mouseY, 8);
-                	            
-            	            prevJoint = new GN.Joint(stage.mouseX, stage.mouseY);
-            	            prevJoint.AttachTo(connectPoint);
-            	            
-            	            var rs = new GN.RoadSign(connectPoint.transform.x, connectPoint.transform.x, connectPoint, []);
-            	            console.log(rs);
-            	            
-            	            
-            	            stage.addEventListener("stagemousemove", handleMouseMove);
-                    	}
-                	}
-                	else
-                	{
-                    	var circle = new createjs.Shape();
-                    	circle.graphics.clear().beginFill(color).drawCircle(0, 0, 10);
-                    	circle.x = stage.mouseX;
-                    	circle.y = stage.mouseY;
-                    	stage.addChild(circle);
-                    	stage.update();
-                    	
-                    	startJoint = new GN.Joint(stage.mouseX, stage.mouseY);
-                    	prevJoint = startJoint;
-                    	
-                	    stage.addEventListener("stagemousemove", handleMouseMove);
-                	}
-            	} else if(event.nativeEvent.button == 1) {
-            	    color = colors[(index++) % colors.length];
-            	    var circle = new createjs.Shape();
-                	circle.graphics.clear().beginFill(color).drawCircle(0, 0, 20);
-                	circle.x = stage.mouseX;
-                	circle.y = stage.mouseY;
-                	
-                	circle.moveToNext = function () {
-                	    var nearestJoint = GN.Joint.FindNearest(new GN.Transform(this.x, this.y)).Next();
-                	    console.log(nearestJoint);
-                	    
-                	    createjs.Tween.get(circle)
-                	        .to({x: nearestJoint.transform.x, y: nearestJoint.transform.y}, 200)
-                	        .call(function(){
-                	            if(nearestJoint.Next() != null)
-                	                circle.moveToNext();
-                	            else
-                	                stage.removeChild(circle);
-                	        });
-                	};
-                	
-                	if(GN.GM.jointCount > 0)
-                	{
-                	    var nearestJoint = GN.Joint.FindNearest(new GN.Transform(circle.x, circle.y), 50);
-                	    console.log(nearestJoint);
-                	    
-                	    if(nearestJoint != null) {
-                    	    createjs.Tween.get(circle)
-                    	        .set({x: nearestJoint.transform.x, y: nearestJoint.transform.y})
-                    	        .call(function(){stage.addChild(circle);});
-                	    }
-                	}
-                	stage.update();
-            	} else if (event.nativeEvent.button == 2) {
-            	    var selectJoint = GN.Joint.FindNearest(new GN.Transform(stage.mouseX, stage.mouseY), 40);
-            	    if(selectJoint != null)
-            	    {
-            	        drawingCanvas.graphics.setStrokeStyle(stroke, 'round', 'round').beginStroke("#DDDD00").drawCircle(selectJoint.transform.x, selectJoint.transform.y, 8);
-                        
-                        console.log(selectJoint);
-                        
-            	        var path = GN.Joint.FindPathTo(selectJoint, nekomata.joint);
-            	        if(path != null)
-                	        nekomata.Move(path);
-            	    }
-            	}
-            }
-            
-            function handleMouseMove(event) {
-            	if (!event.primary) { return; }
-            	if(new GN.Transform(stage.mouseX, stage.mouseY).DistanceTo(new GN.Transform(oldPt.x, oldPt.y)) > 20)
-                {
-                    drawingCanvas.graphics.clear().setStrokeStyle(stroke, 'round', 'round').beginStroke(color).moveTo(oldPt.x, oldPt.y).lineTo(stage.mouseX, stage.mouseY);
-                    drawingCanvas.graphics.setStrokeStyle(stroke, 'round', 'round').beginStroke(color).drawCircle(stage.mouseX, stage.mouseY, 8);
-                    oldPt.x = stage.mouseX;
-                    oldPt.y = stage.mouseY;
-                	stage.update();
-                	
-                	newJoint = new GN.Joint(Math.round(stage.mouseX), Math.round(stage.mouseY));
-                	newJoint.AttachTo(prevJoint);
-                	prevJoint = newJoint;
-                }
-            }
-            
-            function handleMouseUp(event) {
-            	if (!event.primary) { return; }
-            	stage.removeEventListener("stagemousemove", handleMouseMove);
-            }
-            
             
             function buildButton(str, x, y, width, height, onclickFunction, data)
         	{
@@ -257,75 +82,12 @@
             	c.addChild(buttonStr);
         
         		c.on('click', onclickFunction, null, false, data);
-        
+                
         		c.x = x;
         		c.y = y;
         
         		return c;
         	}
-        	
-        	
-            
-            // Slot
-            var s0 = new GN.Slot(400, 200);
-            
-            // // Road test
-            // var j0 = new Joint(100, 500);
-            // var j1 = new Joint(200, 400);
-            // var j2 = new Joint(300, 300);
-            // var j3 = new Joint(400, 200);
-            // var j4 = new Joint(300, 100);
-            // var j5 = new Joint(500, 200);
-            // var j6 = new Joint(600, 200);
-            // var j7 = new Joint(200, 200);
-            
-            // j1.AttachTo(j0);
-            // j2.AttachTo(j1);
-            // j3.AttachTo(j2);
-            // j5.AttachTo(j3);
-            // j6.AttachTo(j6);
-            
-            // j7.AttachTo(j2);
-            // j4.AttachTo(j7);
-            
-            // findPathTo(j1, j5);
-            
-            // var rs = new RoadSign(1.5, 1.5, j2, [j0, j1]);
-            
-            // Tower
-            var t0 = new Amaterasu(s0);
-            
-            // Unit
-            // var u0 = new Nekomata(400, 100, j4);
-            
-            // j0.SteppedBy(u0);
-            // console.log(t0.unitsInRange);
-            // t0.Attack();
-            
-            // j1.SteppedBy(u0);
-            // console.log(t0.unitsInRange);
-            // t0.Attack();
-            
-            // j2.SteppedBy(u0);
-            // console.log(t0.unitsInRange);
-            // t0.Attack();
-            
-            // j3.SteppedBy(u0);
-            // console.log(t0.unitsInRange);
-            // t0.Attack();
-            
-            // j4.SteppedBy(u0);
-            // console.log(t0.unitsInRange);
-            // t0.Attack();
-            
-            // console.log(j2.dest);
-            // rs.Turn();
-            // console.log(j2.dest);
-            // rs.Turn();
-            // console.log(j2.dest);
-            // rs.Turn();
-            // console.log(j2.dest);
-            
             
         </script>
     </body>
