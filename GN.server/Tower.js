@@ -2,11 +2,11 @@ var GameUnit = require('./GameUnit');
 
 // Class Tower : GameUnit
 // variables
-var Tower = function (name, tag, x, y, bindJoint, hp, atk, range, rate, def, spd, layer, price, value) {
-    GameUnit.call(this, name, tag, x, y, bindJoint, hp, atk, range, rate, def, spd, layer, price, value);
+var Tower = function (name, id, tag, x, y, bindJoint, hp, atk, range, rate, def, spd, layer, price, value, GM) {
+    GameUnit.call(this, name, id, tag, x, y, bindJoint, hp, atk, range, rate, def, spd, layer, price, value, GM);
     // var
     this.unitsInRange = [];
-    
+    this.slot = null;
 }
 Tower.prototype = new GameUnit();
 // functions
@@ -17,6 +17,7 @@ Tower.prototype.Sight = function(unit) {
             this.Attack();
     }
 };
+// Override the requireTarget method
 Tower.prototype.requireTarget = function() {
     var target = null;
     while (this.unitsInRange.length > 0) {
@@ -28,6 +29,10 @@ Tower.prototype.requireTarget = function() {
         }
     }
     return null;
+};
+// Override the Dead method
+Tower.prototype.Dead = function(killedBy) {
+    this.slot.ResetTower();
 }
 
 module.exports = Tower;

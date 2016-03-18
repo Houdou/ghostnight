@@ -1,4 +1,4 @@
-﻿// Static Class Tags
+// Static Class Tags
 var Tags = {
     unit: 0,
     hero: 1,

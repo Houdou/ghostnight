@@ -1,32 +1,33 @@
 var Weather = require('./Statics/Weather.js');
 
-var GM = {
-    unitCount: 0,
-    assignUnitID: function () {
-        return GM.unitCount++;
-    },
-    jointCount: 0,
-    joints: [],
-    assignJointID: function () {
-        return GM.jointCount++;
-    },
-    roadSignCount: 0,
-    assignSignID: function () {
-        return GM.roadSignCount++;
-    },
-    slotCount: 0,
-    slots: [],
-    assignSlotID: function () {
-        return GM.slotCount++;
-    },
-    weather: Weather.Night,
-    time: 0,
-    soul: 0,
-    gold: 0,
+var GameMaster = function(settings){
+    this.unitCount = 0;
+    this.slotCount = 0;
+    this.slots = new Array();
+    this.jointCount = 0;
+    this.joints = new Array();
     
-    settings: {
-        MinDamage: 1
-    }
+    this.roadSignCount = 0;
+    
+    this.weather = Weather.Night;
+    this.time = 0;
+    this.soul = 0;
+    this.gold = 0;
+    
+    this.settings = settings;
 };
 
-module.exports = GM;
+GameMaster.prototype.assignUnitID = function () {
+    return this.unitCount++;
+};
+GameMaster.prototype.assignJointID = function () {
+    return this.jointCount++;
+};
+GameMaster.prototype.assignSignID = function () {
+    return this.roadSignCount++;
+};
+GameMaster.prototype.assignSlotID = function () {
+    return this.slotCount++;
+};
+
+module.exports = GameMaster;

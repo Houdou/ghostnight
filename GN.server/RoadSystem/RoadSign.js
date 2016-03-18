@@ -5,10 +5,10 @@ var GM = require('../GameMaster');
 
 // Class RoadSign : GameObject
 // variables
-var RoadSign = function (x, y, joint, from) {
-    this.rid = GM.assignSignID();
+var RoadSign = function (id, x, y, joint, from, GM) {
+    this.rid = id
 
-    GameObject.call(this, "_RS" + this.rid, Tags.roadsign, x, y);
+    GameObject.call(this, "_RS" + this.rid, Tags.roadsign, x, y, GM);
     // var
     this.joint = joint;
     this.dests = this.joint.nbs;

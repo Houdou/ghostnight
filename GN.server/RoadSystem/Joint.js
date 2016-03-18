@@ -1,20 +1,21 @@
 var GameObject = require('../GameObject');
 var Tags = require('../Statics/Tags');
 
-var GM = require('../GameMaster');
-
 // Class Joint : GameObject
-var Joint = function(x, y) {
-    this.jid = GM.assignJointID();
-
-    GameObject.call(this, "_J" + this.jid, Tags.joint, x, y);
+var Joint = function(id, x, y, GM) {
+    this.jid = id;
+    
+    GameObject.call(this, "_J" + this.jid, Tags.joint, x, y, GM);
     // var
     var that = this;
     this.nbs = [];
     this.dest = null;
-
+    
+    this.blocker = null;
+    
     this.distances = [];
-    GM.slots.forEach(function(slot) {
+    
+    this.GM.slots.forEach(function(slot) {
         that.distances.push(slot.transform.DistanceTo(that.transform));
     });
 }
@@ -59,13 +60,13 @@ Joint.prototype.findPath = function(from, to) {
     return null;
 };
 
-Joint.prototype.GetNearesTower = function(range) {
+Joint.prototype.GetNearestTower = function(range) {
     var tower = null;
     var d = 9999;
     for(var i = 0; i < this.distances.length; i++) {
-        if(GM.slots[i].tower != null) {
+        if(this.GM.slots[i].tower != null) {
             if(this.distances[i] <= range && this.distances[i] < d) {
-                tower = GM.slots[i].tower;
+                tower = this.GM.slots[i].tower;
                 d = this.distances[i];
             }
         }
@@ -78,55 +79,57 @@ Joint.prototype.GetDistances = function() {
 Joint.prototype.SteppedBy = function(unit) {
     //Notice all the towers
     for(var i = 0; i < this.distances.length; i++) {
-        if (GM.slots[i].tower != null) {
-            if (this.distances[i] <= GM.slots[i].tower.range) {
-                GM.slots[i].tower.Sight(unit);
+        if (this.GM.slots[i].tower != null) {
+            if (this.distances[i] <= this.GM.slots[i].tower.range) {
+                this.GM.slots[i].tower.Sight(unit);
                 
                 //DEBUG
-                console.log("Tower: " + GM.slots[i].tower.name + " sight " + unit.name);
+                console.log("Tower: " + this.GM.slots[i].tower.name + " sight " + unit.name);
                 //DEBUG
             }
         }
     }
+    
+    return this.blocker;
 }
 
-function findPathTo(j, at) {
-    var path = new Array();
+// function findPathTo(j, at) {
+//     var path = new Array();
     
-    GM.joints.forEach(function(joint) {
-        joint.visited = false;
-    })
+//     GM.joints.forEach(function(joint) {
+//         joint.visited = false;
+//     })
     
-    if(at == j) return j;
-    var list = new Array();
-    for(var i = 0; i < at.nbs.length; i++) {
-        if(at.nbs[i] != j)
-            list.push(at.nbs[i]);
-        else
-            return [j];
-    }
-    for(var i = 0; i< list.length; i++) {
-        var p = list[i].findPath(at, j);
-        list[i].visited = true;
-        if(p != null)
-            path = p;
-    }
-    return path;
-}
+//     if(at == j) return j;
+//     var list = new Array();
+//     for(var i = 0; i < at.nbs.length; i++) {
+//         if(at.nbs[i] != j)
+//             list.push(at.nbs[i]);
+//         else
+//             return [j];
+//     }
+//     for(var i = 0; i< list.length; i++) {
+//         var p = list[i].findPath(at, j);
+//         list[i].visited = true;
+//         if(p != null)
+//             path = p;
+//     }
+//     return path;
+// }
 
-function findNearest(at, maxDistance) {
-    var d = maxDistance;
-    var j = null;
+// function findNearest(at, maxDistance) {
+//     var d = maxDistance;
+//     var j = null;
     
-    GM.joints.forEach(function(joint) {
-        var nd = at.DistanceTo(joint.transform);
-        if (nd < d) {
-            j = joint;
-            d = nd;
-        }
-    })
+//     GM.joints.forEach(function(joint) {
+//         var nd = at.DistanceTo(joint.transform);
+//         if (nd < d) {
+//             j = joint;
+//             d = nd;
+//         }
+//     })
 
-    return j;
-}
+//     return j;
+// }
 
 module.exports = Joint;

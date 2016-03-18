@@ -1,24 +1,28 @@
 var GameObject = require('../GameObject');
 var Tags = require('../Statics/Tags');
 
-var GM = require('../GameMaster');
-
 // Class Slot : GameObject
 // variables
-var Slot = function(x, y) {
-    this.sid = GM.assignSlotID();
-
-    GameObject.call(this, "_S" + this.sid, Tags.slot, x, y);
+var Slot = function(id, x, y, GM) {
+    this.sid = id;
+    GameObject.call(this, "_S" + this.sid, Tags.slot, x, y, GM);
     // var
     this.tower = null;
     this.disabled = false;
-
-    GM.slots.push(this);
+    
+    this.canBuild = true;
 }
 Slot.prototype = new GameObject();
 // functions
-Slot.prototype.funA = function() {
-    //...
+Slot.prototype.BuildTower = function(tower) {
+    if(this.canBuild) {
+        this.tower = tower;
+        this.canBuild = false;
+        this.tower.slot = this;
+    }
 }
-
+Slot.prototype.ResetTower = function() {
+    this.tower = null;
+    this.canBuild = true;
+}
 module.exports = Slot;

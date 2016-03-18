@@ -2,8 +2,8 @@ var GameUnit = require('./GameUnit');
 
 // Class Hero : GameUnit
 // variables
-function Hero(name, tag, x, y, destJoint, hp, atk, range, rate, def, spd, layer, price, value) {
-    GameUnit.call(this, name, tag, x, y, destJoint, hp, atk, range, rate, def, spd, layer, price, value);
+var Hero = function(name, id, tag, x, y, destJoint, hp, atk, range, rate, def, spd, layer, price, value, GM) {
+    GameUnit.call(this, name, id, tag, x, y, destJoint, hp, atk, range, rate, def, spd, layer, price, value, GM);
     // var
     this.target = null;
 }
@@ -24,29 +24,37 @@ Hero.prototype.Move = function(path) {
     
     if(this.path.length > 0) {
         var d = this.path.shift();
-        var self = this;
+        var that = this;
         this.MoveTo(d.transform.x, d.transform.y, function() {
             //Notice the joint
-            d.SteppedBy(self);
-            self.joint = d;
+            d.SteppedBy(that);
+            that.joint = d;
             
             // Get the nearest tower
-            var target = d.GetNearesTower(self.range);
+            var target = d.GetNearestTower(that.range);
             if(target != null) {
-                self.target = target;
-                if(!self.isAttacking)
-                    self.Attack();
+                that.target = target;
+                if(!that.isAttacking)
+                    that.Attack();
             }
             
             //Move to next joint
-            if(self.path.length > 0) {
-                self.Move(self.path);
+            if(that.path.length > 0) {
+                that.Move(that.path);
             }
         });
     }
 }
+// Override the requireTarget method
 Hero.prototype.requireTarget = function() {
     return this.target;
+}
+// Override the Dead method
+Hero.prototype.Dead = function(killedBy) {
+    // TODO
+    /*
+    Re-enable the hero selection function and also UI
+    */
 }
 
 module.exports = Hero;

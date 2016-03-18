@@ -1,18 +1,35 @@
-var GN = {};
+var GhostNight = function(settings) {
+    // Game setup
+    this.GM = new (require("./GameMaster"))(settings);
+    this.SceneMangement = new (require('./Setup/Scene'))(this.GM);
+    
+    // Player setup
+    this.SetupGhost = require('./Setup/Ghost');
+    // this.SetupHuman = require('./Setup/Human');
+    
+    // Game object
+    this.GNObjects = new (require('./GNObjects'))(this.GM);
+    this.Transform = require('./Transform');
+    
+    // Road system
+    this.Slot = require('./RoadSystem/Slot');
+    this.Joint = require('./RoadSystem/Joint');
+    this.RoadSign = require('./RoadSystem/RoadSign');
+    this.Blocker = require('./Blocker');
+    
+};
 
-// Game objects
-GN.GM = require("./GameMaster");
-GN.GNObjects = require('./GNObjects');
-GN.Transform = require('./Transform');
+GhostNight.prototype.newHero = function(type) {
+    var hero = (new this.GNObjects.GetHeroType(type))(
+        this.GM.entryJoint.transform.x, this.GM.entryJoint.transform.y,
+        this.GM.entryJoint, this.GM);
+}
 
-// Road system
-GN.Slot = require('./RoadSystem/Slot');
-GN.Joint = require('./RoadSystem/Joint');
-GN.RoadSign = require('./RoadSystem/RoadSign');
+GhostNight.prototype.NewUnit = function(type) {
+    
+}
+GhostNight.prototype.NewTower = function(type) {
+    
+}
 
-// Setup
-GN.SetupGhost = require('./Setup/Ghost');
-// GN.SetupHuman = require('./Setup/Human');
-// GN.SceneMangement = require('./Setup/Scene');
-
-module.exports = GN;
+module.exports = GhostNight;
