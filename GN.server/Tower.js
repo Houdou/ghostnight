@@ -22,7 +22,7 @@ Tower.prototype.requireTarget = function() {
     var target = null;
     while (this.unitsInRange.length > 0) {
         target = this.unitsInRange[0];
-        if (target.transform.DistanceSquare(this.transform) <= this.range * this.range && target.hp > 0) {
+        if (target.transform.DistanceSquare(this.transform) <= this.range * this.range && !target.isDead) {
             return target;
         } else {
             this.unitsInRange.shift();

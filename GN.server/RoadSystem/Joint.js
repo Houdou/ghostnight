@@ -18,6 +18,47 @@ var Joint = function(id, x, y, GM) {
     this.GM.slots.forEach(function(slot) {
         that.distances.push(slot.transform.DistanceTo(that.transform));
     });
+    
+    // For NodeJS inspect
+    this.inspect = function(depth) {
+        var str = '';
+        if(depth <= 0)
+            str += '{"jid": ' + this.jid + "}";
+        else {
+            str += '{';
+                str += '"jid": ' + this.jid + ', ';
+                
+                str += '"nbs": ';
+                if(depth <= 1)
+                    str += '"Joint[' + this.nbs.length + ']"' + ', ';
+                else {
+                    str += '[';
+                    for(var i = 0; i < this.nbs.length; i++) {
+                        str += this.nbs[i].inspect(0);
+                        if(i + 1 != this.nbs.length) str += ', ';
+                    }   
+                    str += ']' + ', ';
+                }
+                
+                if(this.dest != null)
+                    str += '"dest": ' + this.dest.inspect(0) + ', ';
+                else
+                    str += '"dest": null' + ', ';
+                
+                if(this.blocker != null)
+                    str += '"blocker": ' + this.blocker.inspect(1) + ', ';
+                else
+                    str += '"blocker": null' + ', ';
+                
+                if(depth <= 1)
+                    str += '"distances": "float[' + this.distances.length + ']" ';
+                else
+                    str += '"distances": [' + this.distances.join(', ') + '] '
+            str += '}';
+        }
+        return str;
+    }
+    
 }
 Joint.prototype = new GameObject();
 // functions
@@ -65,7 +106,7 @@ Joint.prototype.GetNearestTower = function(range) {
     var d = 9999;
     for(var i = 0; i < this.distances.length; i++) {
         if(this.GM.slots[i].tower != null) {
-            if(this.distances[i] <= range && this.distances[i] < d) {
+            if(!this.GM.slots[i].tower.isDead && this.distances[i] <= range && this.distances[i] < d) {
                 tower = this.GM.slots[i].tower;
                 d = this.distances[i];
             }

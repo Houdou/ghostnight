@@ -6,7 +6,6 @@ Core game system							|	2/2		+2/24
 GN server									|	3/10
 GN server module							|	3/12
 
-### Level
 #### Map
 Level 1										|	-/-
 Level 2										|	-/-
@@ -53,7 +52,7 @@ Attack										|	2/24	+3/16
 Damage										|	2/24	+3/16
 Dead										|	3/16
 (Unit upgrade)								|	-/-
-(SKill protocal)							|	-/-
+(SKill protocol)							|	-/-
 #### Hero system
 Build										|	-/-
 Skill										|	-/-
@@ -79,6 +78,7 @@ Synchronization								|	-/-
 #### Scene management
 Load map									|	3/13	TPASS
 Load assets									|	-/-
+PreloadJS									|	-/-
 #### Game management
 User action response						|	-/-
 Validation									|	-/-

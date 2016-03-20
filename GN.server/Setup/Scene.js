@@ -14,7 +14,12 @@ SceneMangement.prototype.LoadMap = function(MapID, end) {
     // Load the joints from the map data stored in file
     var fs = require('fs');
     fs.readFile('./GN.server/data/map/' + MapID, 'utf8', function(err, data){
-        if(err){ console.log('unable to read map ' + MapID); return}
+        if(err) {
+            console.log('Unable to read map ' + MapID);
+            if(end) {
+                return end(true, err);
+            } else { return false; }
+        }
         map = JSON.parse(data);
         
         // Slot
@@ -43,10 +48,39 @@ SceneMangement.prototype.LoadMap = function(MapID, end) {
             });
         }
         
-        that.GM.entryJoint = that.GM.joints[map.entryJoint.id];
+        // RoadSign
+        // Load the roadSigns into GameMaster
+        if(map.roadSigns != undefined) {
+            // Travesal of all joints data
+            map.roadSigns.forEach(function(r) {
+                // Exclude the coming joint
+                var exclJoints = new Array();
+                if(r.froms.length > 0) {
+                    for(var i = 0; i < r.froms.length; i++) {
+                        exclJoints.push(that.GM.joints[r.froms[i]]);
+                    }
+                }
+                
+                // Push new joint
+                that.GM.roadSigns.push(new RoadSign(that.GM.assignJointID(), r.x, r.y, that.GM.joints[r.bindJoint], exclJoints, that.GM));
+                
+            });
+        }
+        
+        if(map.entryJoint != undefined) {
+            that.GM.entryJoint = that.GM.joints[map.entryJoint.id];
+        } else {
+            console.log("The entry joint of map is not defined.");
+            if(that.GM.joints[0] != null) {
+                that.GM.entryJoint = that.GM.joints[0];
+                console.log("Use the first joint instead.");
+            } else {
+                console.log("The map is invalid.");
+            }
+        }
         
         if(end)
-            return end();
+            return end(false, null);
     });
 }
 

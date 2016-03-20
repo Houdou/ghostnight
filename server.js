@@ -9,6 +9,8 @@ var router = express();
 var server = http.createServer(router);
 var io = socketio.listen(server);
 
+var util = require('util');
+
 var GhostNight = require('./GN.server/GN');
 
 router.use(express.static(path.resolve(__dirname, 'client')));
@@ -17,13 +19,23 @@ var sockets = [];
 io.on('connection', function (socket) {
 	sockets.push(socket);
 	
+	socket.on('click', function(click){
+	    // click: {x, y, button};
+        console.log(click);
+	});
+	
 	socket.on('join-room', function(data) {
 	    socket.join(data.room);
 	    socket.on('choose-side', function(data) {
 	        var GN = new GhostNight({MinDamage: 1});
     	    
-    	    GN.SceneMangement.LoadMap('m01', function() {
-                var rs0 = new GN.RoadSign(GN.GM.assignSignID(), 200, 400, GN.GM.joints[19], [GN.GM.joints[18]], GN.GM);
+    	    GN.SceneMangement.LoadMap('m01', function(err, data) {
+    	        if(err) {
+    	            console.log(data);
+    	        }
+    	        
+    	        // To do when the map is loaded.
+                // console.log(util.inspect(GN.GM, {depth: 4}));
             });
             
             socket.on('create-unit', function(data) {
@@ -47,4 +59,26 @@ function broadcast(event, data) {
 server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
     var addr = server.address();
     console.log("Server listening at", addr.address + ":" + addr.port);
+    
+    var GN = new GhostNight({MinDamage: 1});
+    var mapNo = "m01";
+    
+    console.log("loading map: " + mapNo);
+    GN.SceneMangement.LoadMap(mapNo, function(err, data) {
+        if(err) {
+            console.log(data);
+        }
+        
+        // To do when the map is loaded.
+        // console.log(util.inspect(GN.GM, {depth: 4}));
+        
+        console.log("map " + mapNo + " is loaded");
+        
+        var k = GN.createUnit("Kappa");
+        
+        var s = GN.createTower("Miko", GN.GM.slots[0]);
+        
+        
+        k.Move();
+    });
 });

@@ -17,19 +17,48 @@ var GhostNight = function(settings) {
     this.RoadSign = require('./RoadSystem/RoadSign');
     this.Blocker = require('./Blocker');
     
+    
+    
 };
 
-GhostNight.prototype.newHero = function(type) {
-    var hero = (new this.GNObjects.GetHeroType(type))(
-        this.GM.entryJoint.transform.x, this.GM.entryJoint.transform.y,
-        this.GM.entryJoint, this.GM);
-}
 
-GhostNight.prototype.NewUnit = function(type) {
+GhostNight.prototype.createHero = function(type) {
+    // Validation: ???
     
+    if(true) {
+        var entryJoint = this.GM.entryJoint;
+        // Get the class from GNObjects
+        var newHero = new (this.GNObjects.GetHeroType(type))(
+            entryJoint.transform.x, entryJoint.transform.y, entryJoint, this.GM);
+        this.GM.hero = newHero;
+        return newHero;
+    } else
+        return false;
 }
-GhostNight.prototype.NewTower = function(type) {
+GhostNight.prototype.createUnit = function(type) {
+    // Validation: check cooldown time in GameMaster
     
+    if(true) {
+        var entryJoint = this.GM.entryJoint;
+        // Get the class from GNObjects and create new unit
+        var newUnit = new (this.GNObjects.GetUnitType(type))(
+            entryJoint.transform.x, entryJoint.transform.y, entryJoint, this.GM);
+        this.GM.units.push(newUnit);
+        return newUnit;
+    } else
+        return false;
+}
+GhostNight.prototype.createTower = function(type, slot) {
+    // Validation: check slot's canBuild property
+    if(slot.canBuild) {
+        // Get the class from GNObjects and create new tower
+        var newTower = new (this.GNObjects.GetTowerType(type))(slot);
+        // Update the slot state
+        slot.BuildTower(newTower);
+        this.GM.towers.push(newTower);
+        return newTower;
+    } else
+        return null;
 }
 
 module.exports = GhostNight;

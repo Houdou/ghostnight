@@ -40,6 +40,11 @@
                 
                 socket = io.connect();
                 
+                stage.on('stagemousedown', function(evt, data){
+                    console.log(evt);
+                    socket.emit('click', {x: evt.stageX, y: evt.stageY, button: evt.nativeEvent.button});
+                })
+                
             	stage.addChild(buildButton("Kappa", 30, 640, 80, 50, function(event){
             	    color = colors[(index++) % colors.length];
             	    
@@ -48,7 +53,7 @@
                 // 	circle.x = startJoint.transform.x;
                 // 	circle.y = startJoint.transform.y;
                 	
-                	socket.emit("create-unit", {type: "kappa"});
+                	socket.emit("create-unit", "kappa");
                 	
                 	console.log("emit");
                 	

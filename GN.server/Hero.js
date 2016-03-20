@@ -23,15 +23,15 @@ Hero.prototype.Move = function(path) {
     this.path = path;
     
     if(this.path.length > 0) {
-        var d = this.path.shift();
+        var j = this.path.shift();
         var that = this;
-        this.MoveTo(d.transform.x, d.transform.y, function() {
+        this.MoveTo(j.transform.x, j.transform.y, function() {
             //Notice the joint
-            d.SteppedBy(that);
-            that.joint = d;
+            j.SteppedBy(that);
+            that.joint = j;
             
             // Get the nearest tower
-            var target = d.GetNearestTower(that.range);
+            var target = j.GetNearestTower(that.range);
             if(target != null) {
                 that.target = target;
                 if(!that.isAttacking)

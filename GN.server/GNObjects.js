@@ -4,45 +4,45 @@ var Layers = require('./Statics/Layers');
 //Values
 var _HERO = {
     Nekomata: {
-        hp: 100, atk: 100, range: 100, rate: 10, def: 10, spd: 6, price: 100, value: 30, layer: Layers.land },
+        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 6, price: 100, value: 30, layer: Layers.land },
     Ameonna: {
-        hp: 100, atk: 100, range: 100, rate: 10, def: 10, spd: 6, price: 100, value: 30, layer: Layers.land },
+        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 6, price: 100, value: 30, layer: Layers.land },
     Todomeki: {
-        hp: 100, atk: 100, range: 100, rate: 10, def: 10, spd: 6, price: 100, value: 30, layer: Layers.land }
+        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 6, price: 100, value: 30, layer: Layers.land }
 };
 
 var _UNIT = {
     Kappa: {
-        hp: 100, atk: 100, range: 100, rate: 10, def: 10, spd: 4, price: 100, value: 30, layer: Layers.land },
+        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 5, price: 100, value: 30, layer: Layers.land },
     Wanyudo: {
-        hp: 100, atk: 100, range: 100, rate: 10, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land },
+        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land },
     Foxfire: {
-        hp: 100, atk: 100, range: 100, rate: 10, def: 10, spd: 10, price: 100, value: 30, layer: Layers.sky },
+        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 10, price: 100, value: 30, layer: Layers.sky },
     Dojoji: {
-        hp: 100, atk: 100, range: 100, rate: 10, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land },
+        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land },
     Futakuchi: {
-        hp: 100, atk: 100, range: 100, rate: 10, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land },
+        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land },
     Raiju: {
-        hp: 100, atk: 100, range: 100, rate: 10, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land },
+        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land },
     Ubume: {
-        hp: 100, atk: 100, range: 100, rate: 10, def: 10, spd: 10, price: 100, value: 30, layer: Layers.sky }
+        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 10, price: 100, value: 30, layer: Layers.sky }
 };
 
 var _TOWER = {
     Miko: {
-        hp: 100, atk: 100, range: 100, rate: 10, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land },
+        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land },
     Inari: {
-        hp: 100, atk: 100, range: 100, rate: 10, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land | Layers.sky },
+        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land | Layers.sky },
     Inugami: {
-        hp: 100, atk: 100, range: 100, rate: 10, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land | Layers.sky },
+        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land | Layers.sky },
     Ebisu: {
-        hp: 100, atk: 100, range: 100, rate: 10, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land },
+        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land },
     Snake: {
-        hp: 100, atk: 100, range: 100, rate: 10, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land },
+        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land },
     Asura: {
-        hp: 100, atk: 100, range: 100, rate: 10, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land },
+        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land },
     Amaterasu: {
-        hp: 100, atk: 100, range: 400, rate: 10, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land | Layers.sky }
+        hp: 1000, atk: 100, range: 400, rate: 3, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land | Layers.sky }
 };
 
 var Hero = require('./Hero');
@@ -222,7 +222,7 @@ var GNObjects = function(GM){
         Tower.call(this, "Miko", that.GM.assignUnitID(), Tags.tower, slot.transform.x, slot.transform.y, null, _TOWER.Miko.hp, _TOWER.Miko.atk, _TOWER.Miko.range,
             _TOWER.Miko.rate, _TOWER.Miko.def, _TOWER.Miko.spd, _TOWER.Miko.layer, _TOWER.Miko.price, _TOWER.Miko.value, that.GM);
             
-        slot.tower = this;
+        this.slot = slot;
     }
     Miko.prototype = new Tower();
     this.Miko = Miko;
@@ -232,7 +232,7 @@ var GNObjects = function(GM){
         Tower.call(this, "Inari", that.GM.assignUnitID(), Tags.tower, slot.transform.x, slot.transform.y, null, _TOWER.Inari.hp, _TOWER.Inari.atk, _TOWER.Inari.range,
             _TOWER.Inari.rate, _TOWER.Inari.def, _TOWER.Inari.spd, _TOWER.Inari.layer, _TOWER.Inari.price, _TOWER.Inari.value, that.GM);
             
-        slot.tower = this;
+        this.slot = slot;
     }
     Inari.prototype = new Tower();
     this.Inari = Inari;
@@ -242,7 +242,7 @@ var GNObjects = function(GM){
         Tower.call(this, "Inugami", that.GM.assignUnitID(), Tags.tower, slot.transform.x, slot.transform.y, null, _TOWER.Inugami.hp, _TOWER.Inugami.atk, _TOWER.Inugami.range,
             _TOWER.Inugami.rate, _TOWER.Inugami.def, _TOWER.Inugami.spd, _TOWER.Inugami.layer, _TOWER.Inugami.price, _TOWER.Inugami.value, that.GM);
             
-        slot.tower = this;
+        this.slot = slot;
     }
     Inugami.prototype = new Tower();
     this.Inugami = Inugami;
@@ -252,7 +252,7 @@ var GNObjects = function(GM){
         Tower.call(this, "Ebisu", that.GM.assignUnitID(), Tags.tower, slot.transform.x, slot.transform.y, null, _TOWER.Ebisu.hp, _TOWER.Ebisu.atk, _TOWER.Ebisu.range,
             _TOWER.Ebisu.rate, _TOWER.Ebisu.def, _TOWER.Ebisu.spd, _TOWER.Ebisu.layer, _TOWER.Ebisu.price, _TOWER.Ebisu.value, that.GM);
             
-        slot.tower = this;
+        this.slot = slot;
     }
     Ebisu.prototype = new Tower();
     this.Ebisu = Ebisu;
@@ -262,7 +262,7 @@ var GNObjects = function(GM){
         Tower.call(this, "Snake", that.GM.assignUnitID(), Tags.tower, slot.transform.x, slot.transform.y, null, _TOWER.Snake.hp, _TOWER.Snake.atk, _TOWER.Snake.range,
             _TOWER.Snake.rate, _TOWER.Snake.def, _TOWER.Snake.spd, _TOWER.Snake.layer, _TOWER.Snake.price, _TOWER.Snake.value, that.GM);
             
-        slot.tower = this;
+        this.slot = slot;
     }
     Snake.prototype = new Tower();
     this.Snake = Snake;
@@ -272,7 +272,7 @@ var GNObjects = function(GM){
         Tower.call(this, "Asura", that.GM.assignUnitID(), Tags.tower, slot.transform.x, slot.transform.y, null, _TOWER.Asura.hp, _TOWER.Asura.atk, _TOWER.Asura.range,
             _TOWER.Asura.rate, _TOWER.Asura.def, _TOWER.Asura.spd, _TOWER.Asura.layer, _TOWER.Asura.price, _TOWER.Asura.value, that.GM);
             
-        slot.tower = this;
+        this.slot = slot;
     }
     Asura.prototype = new Tower();
     this.Asura = Asura;
@@ -282,7 +282,7 @@ var GNObjects = function(GM){
         Tower.call(this, "Amaterasu", that.GM.assignUnitID(), Tags.tower, slot.transform.x, slot.transform.y, null, _TOWER.Amaterasu.hp, _TOWER.Amaterasu.atk, _TOWER.Amaterasu.range,
             _TOWER.Amaterasu.rate, _TOWER.Amaterasu.def, _TOWER.Amaterasu.spd, _TOWER.Amaterasu.layer, _TOWER.Amaterasu.price, _TOWER.Amaterasu.value, that.GM);
             
-        slot.tower = this;
+        this.slot = slot;
     }
     Amaterasu.prototype = new Tower();
     this.Amaterasu = Amaterasu;

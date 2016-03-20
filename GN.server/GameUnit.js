@@ -7,6 +7,7 @@ var GameUnit = function(name, id, tag, x, y, joint, hp, atk, range, rate, def, s
     GameObject.call(this, name, tag, x, y, GM);
     this.joint = joint;
     this.hp = hp;
+    this.maxhp = hp;
     this.atk = atk;
     this.range = range;
     this.rate = rate;
@@ -20,6 +21,8 @@ var GameUnit = function(name, id, tag, x, y, joint, hp, atk, range, rate, def, s
     
     this.isAttacking = false;
     this.attackInterval = null;
+    
+    this.isDead = false;
 }
 GameUnit.prototype = new GameObject();
 // functions
@@ -33,15 +36,10 @@ GameUnit.prototype.Attack = function() {
         // Different classes will have different implementation of requrieTarget
         var target = that.requireTarget();
         
-        if (target != null) {
+        if (target != null && !that.isDead) {
             // Minimal damage can be set in GameMaster
-            var dmg = Math.max(that.atk - target.def, this.GM.settings.MinDamage);
+            var dmg = Math.max(that.atk - target.def, that.GM.settings.MinDamage);
             target.DealDamage(that, dmg);
-            
-            //DEBUG
-            console.log(that.name + " attack " + target.name);
-            console.log("Deal " + dmg + " damage");
-            //DEBUG
             
             // Set the next attack time
             //that.nextAtkTime = (new Date()).getTime() + 1000 / that.rate;
@@ -58,9 +56,15 @@ GameUnit.prototype.requireTarget = function() {
     return null;
 }
 GameUnit.prototype.DealDamage = function(from, dmg) {
+    //DEBUG
+    console.log(from.name + " attack " + this.name + " and deal " + dmg + " damage");
+    console.log(this.name + " now : " + this.hp + "/" + this.maxhp);
+    //DEBUG
+    
     if(this.hp < dmg) {
         this.hp = 0;
         
+        // Handle the death
         this.Dead(from);
         console.log(this.name + " is dead.");
         // The target is dead
