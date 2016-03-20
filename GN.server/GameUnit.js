@@ -34,35 +34,39 @@ GameUnit.prototype.Attack = function() {
     // Attack time interval
     this.attackInterval = setInterval(function(){
         // Different classes will have different implementation of requrieTarget
-        var target = that.requireTarget();
+        var target = that.RequireTarget();
         
         if (target != null && !that.isDead) {
             // Minimal damage can be set in GameMaster
             var dmg = Math.max(that.atk - target.def, that.GM.settings.MinDamage);
+            // 'that' is refering to the attacker, not target (ry
             target.DealDamage(that, dmg);
-            
-            // Set the next attack time
-            //that.nextAtkTime = (new Date()).getTime() + 1000 / that.rate;
         } else {
+            // Stop attacking
             clearInterval(that.attackInterval);
             that.isAttacking = false;
         }
         
     }, 1000 / this.rate);
 }
-GameUnit.prototype.requireTarget = function() {
+GameUnit.prototype.RequireTarget = function() {
     // This is an abstract method to be override by the child class.
-    console.log("Invalid call of abstract method requireTarget()");
+    console.log("Invalid call of abstract method RequireTarget()");
     return null;
 }
 GameUnit.prototype.DealDamage = function(from, dmg) {
-    //DEBUG
+    // DEBUG
     console.log(from.name + " attack " + this.name + " and deal " + dmg + " damage");
-    console.log(this.name + " now : " + this.hp + "/" + this.maxhp);
-    //DEBUG
+    // DEBUG
     
     if(this.hp < dmg) {
         this.hp = 0;
+        
+        // DEBUG
+        console.log(this.name + " now : " + this.hp + "/" + this.maxhp);
+        // DEBUG
+        
+        this.isDead = true;
         
         // Handle the death
         this.Dead(from);
@@ -71,6 +75,11 @@ GameUnit.prototype.DealDamage = function(from, dmg) {
         return true;
     } else {
         this.hp -= dmg;
+        
+        // DEBUG
+        console.log(this.name + " now : " + this.hp + "/" + this.maxhp);
+        // DEBUG
+        
         // The target is still alive
         return false;
     }

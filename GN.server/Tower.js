@@ -17,8 +17,8 @@ Tower.prototype.Sight = function(unit) {
             this.Attack();
     }
 };
-// Override the requireTarget method
-Tower.prototype.requireTarget = function() {
+// Override the RequireTarget method
+Tower.prototype.RequireTarget = function() {
     var target = null;
     while (this.unitsInRange.length > 0) {
         target = this.unitsInRange[0];

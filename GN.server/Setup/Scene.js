@@ -1,8 +1,9 @@
 var Slot = require('../RoadSystem/Slot');
 var Joint = require('../RoadSystem/Joint');
 var RoadSign = require('../RoadSystem/RoadSign');
+var Blocker = require('../Blocker');
 
-var SceneMangement = function(GM){
+var SceneMangement = function(GM) {
     this.GM = GM;
 }
 
@@ -13,7 +14,7 @@ SceneMangement.prototype.LoadMap = function(MapID, end) {
     
     // Load the joints from the map data stored in file
     var fs = require('fs');
-    fs.readFile('./GN.server/data/map/' + MapID, 'utf8', function(err, data){
+    fs.readFile('./GN.server/data/map/' + MapID, 'utf8', function(err, data) {
         if(err) {
             console.log('Unable to read map ' + MapID);
             if(end) {
@@ -29,6 +30,17 @@ SceneMangement.prototype.LoadMap = function(MapID, end) {
             map.slots.forEach(function(s) {
                 // Push new slot
                 that.GM.slots.push(new Slot(that.GM.assignSlotID(), s.x, s.y, that.GM));
+            });
+        }
+        
+        // Blocker Slot
+        if(map.blockers != undefined) {
+            // Travesal of all blockers data
+            map.blockers.forEach(function(b) {
+                // Create slot for the blocker
+                var newSlot = new Slot(that.GM.assignSlotID(), b.x, b.y, that.GM);
+                b.useSlot = newSlot.sid;
+                that.GM.slots.push(newSlot);
             });
         }
         
@@ -48,6 +60,20 @@ SceneMangement.prototype.LoadMap = function(MapID, end) {
             });
         }
         
+        // Build blocker
+        // Load the blockers into GameMaster
+        if(map.blockers != undefined) {
+            // Travesal of all blockers data
+            map.blockers.forEach(function(b) {
+                // Get the location from the bound joint
+                var j = that.GM.joints[b.bindJoint];
+                // Create new blocker
+                var newBlocker = new Blocker("Blocker " + b.id, that.GM.assignTowerID, j.transform.x, j.transform.y, that.GM.joints[b.bindJoint], that.GM.slots[b.useSlot], that.GM);
+                // Build blocker on slot;
+                that.GM.slots[b.useSlot].BuildTower(newBlocker);
+            });
+        }
+        
         // RoadSign
         // Load the roadSigns into GameMaster
         if(map.roadSigns != undefined) {
@@ -60,10 +86,8 @@ SceneMangement.prototype.LoadMap = function(MapID, end) {
                         exclJoints.push(that.GM.joints[r.froms[i]]);
                     }
                 }
-                
                 // Push new joint
                 that.GM.roadSigns.push(new RoadSign(that.GM.assignJointID(), r.x, r.y, that.GM.joints[r.bindJoint], exclJoints, that.GM));
-                
             });
         }
         

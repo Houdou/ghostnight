@@ -19,7 +19,7 @@ var sockets = [];
 io.on('connection', function (socket) {
 	sockets.push(socket);
 	
-	socket.on('click', function(click){
+	socket.on('click', function(click) {
 	    // click: {x, y, button};
         console.log(click);
 	});
@@ -56,7 +56,7 @@ function broadcast(event, data) {
     });
 }
 
-server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
+server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function() {
     var addr = server.address();
     console.log("Server listening at", addr.address + ":" + addr.port);
     
@@ -67,6 +67,7 @@ server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
     GN.SceneMangement.LoadMap(mapNo, function(err, data) {
         if(err) {
             console.log(data);
+            return false;
         }
         
         // To do when the map is loaded.
@@ -74,11 +75,8 @@ server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
         
         console.log("map " + mapNo + " is loaded");
         
-        var k = GN.createUnit("Kappa");
+        GN.createTower("Miko", 0);
+        GN.createUnit("Kappa");
         
-        var s = GN.createTower("Miko", GN.GM.slots[0]);
-        
-        
-        k.Move();
     });
 });

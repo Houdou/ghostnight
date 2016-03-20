@@ -41,11 +41,11 @@ Road structure								|	2/26	TPASS
 Unit movement								|	2/28
 Path finding								|	3/6
 RoadSign navigation							|	2/26
-Blocker										|	-/-
+Blocker										|	3/21	TPASS
 #### Build system
 Economic									|	-/-
-Create unit									|	-/-
-Create tower								|	-/-
+Create unit									|	3/21	TPASS
+Create tower								|	3/21	TPASS
 Termination									|	-/-
 #### Engagement system
 Attack										|	2/24	+3/16
@@ -76,7 +76,7 @@ Boardcast									|	-/-
 Synchronization								|	-/-
 (Failure management)						|	-/-
 #### Scene management
-Load map									|	3/13	TPASS
+Load map									|	3/13	+3/16	TPASS
 Load assets									|	-/-
 PreloadJS									|	-/-
 #### Game management

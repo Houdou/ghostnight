@@ -45,8 +45,8 @@ Hero.prototype.Move = function(path) {
         });
     }
 }
-// Override the requireTarget method
-Hero.prototype.requireTarget = function() {
+// Override the RequireTarget method
+Hero.prototype.RequireTarget = function() {
     return this.target;
 }
 // Override the Dead method

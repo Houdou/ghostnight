@@ -5,6 +5,9 @@
         {"id": 2, "x": 693, "y": 564},
         {"id": 3, "x": 900, "y": 416}
     ],
+    "blockers": [
+        {"id": 0, "x": 205, "y": 371, "bindJoint": 10}
+    ],
     "entryJoint": {"id": 0},
     "joints": [
         {"id": 0, "x": 2, "y": 364, "attach": []},

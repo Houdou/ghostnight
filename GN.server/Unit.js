@@ -31,6 +31,8 @@ Unit.prototype.Move = function () {
         // DEBUG
         
         this.MoveTo(j.transform.x, j.transform.y, function() {
+            if(that.isDead)
+                return false;
             
             // DEBUG
             console.log(that.name + " arrive at " + j.name);
@@ -67,18 +69,17 @@ Unit.prototype.Move = function () {
         });
     }
 }
-// Override the requireTarget method
-Unit.prototype.requireTarget = function() {
-    if(this.transform.DistanceTo(this.target.transform) <  this.range)
+// Override the RequireTarget method
+Unit.prototype.RequireTarget = function() {
+    if(this.target != null && !this.target.isDead && this.transform.DistanceTo(this.target.transform) < this.range)
         return this.target;
     else
         return null;
 }
 // Override the Dead method
 Unit.prototype.Dead = function() {
+    this.canMove = false;
     // TODO
     // Currency for the enemy
-    this.isDead = true;
-    this.canMove = false;
 }
 module.exports = Unit;

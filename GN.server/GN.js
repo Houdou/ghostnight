@@ -44,11 +44,20 @@ GhostNight.prototype.createUnit = function(type) {
         var newUnit = new (this.GNObjects.GetUnitType(type))(
             entryJoint.transform.x, entryJoint.transform.y, entryJoint, this.GM);
         this.GM.units.push(newUnit);
+        // Start moving at beginning
+        newUnit.Move();
         return newUnit;
     } else
         return false;
 }
-GhostNight.prototype.createTower = function(type, slot) {
+GhostNight.prototype.createTower = function(type, slotID) {
+    var slot = this.GM.slots[slotID];
+    // Validation: check if slotID exists
+    if(slot == null) {
+        console.log("Fail to build tower: Invalid SlotID");
+        return null;
+    }
+    
     // Validation: check slot's canBuild property
     if(slot.canBuild) {
         // Get the class from GNObjects and create new tower

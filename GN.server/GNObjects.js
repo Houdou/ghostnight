@@ -13,7 +13,7 @@ var _HERO = {
 
 var _UNIT = {
     Kappa: {
-        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 5, price: 100, value: 30, layer: Layers.land },
+        hp: 600, atk: 100, range: 100, rate: 3, def: 10, spd: 1000 / 500, price: 100, value: 30, layer: Layers.land },
     Wanyudo: {
         hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 10, price: 100, value: 30, layer: Layers.land },
     Foxfire: {
