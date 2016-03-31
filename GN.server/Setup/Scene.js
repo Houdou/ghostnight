@@ -68,7 +68,7 @@ SceneMangement.prototype.LoadMap = function(MapID, end) {
                 // Get the location from the bound joint
                 var j = that.GM.joints[b.bindJoint];
                 // Create new blocker
-                var newBlocker = new Blocker("Blocker " + b.id, that.GM.assignTowerID, j.transform.x, j.transform.y, that.GM.joints[b.bindJoint], that.GM.slots[b.useSlot], that.GM);
+                var newBlocker = new Blocker("Blocker-" + b.id, that.GM.assignTowerID, j.transform.x, j.transform.y, that.GM.joints[b.bindJoint], that.GM.slots[b.useSlot], that.GM);
                 // Build blocker on slot;
                 that.GM.slots[b.useSlot].BuildTower(newBlocker);
             });

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/createjs-2015.11.26.min.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    
+  </head>
+  <body>
+      
+    <button onclick="loadImage();" class="load-image" id="bt">Load Image</button>
+    <br/>
+    
+    <script>
+      function loadImage() {
+          /*global createjs, GN*/
+          var bt = document.getElementById("bt");
+          bt.innerHTML = "click";
+          var preload = new createjs.LoadQueue();
+          preload.addEventListener("fileload", handleFileLoad);
+          preload.addEventListener("complete", handleFileComplete);
+          //preload.loadFile("music_game.mp3");
+          for (var i = 0;i<10;i++) preload.loadFile("bcg.jpg");
+      }
+
+      function handleFileLoad(event) {
+          var bt = document.getElementById("bt");
+          bt.innerHTML = "fileload";
+        document.body.appendChild(event.result);
+        console.log(event.result);
+      }
+      function handleFileComplete(event) {
+          var bt = document.getElementById("bt");
+          bt.innerHTML = "file complete";
+        //document.body.appendChild(event.result);
+        console.log("complete");
+      }
+    </script>
+  </body>
+</html>

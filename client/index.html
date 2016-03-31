@@ -4,6 +4,7 @@
         <script type="text/javascript" src="js/jquery.min.js"></script>
         <script type="text/javascript" src="js/createjs-2015.11.26.min.js"></script>
         <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+        <script type="text/javascript" src="js/ghostnight-client.js"></script>
         <style>
             canvas{
                 left: 50%;
@@ -23,7 +24,7 @@
             var colors;
             var index;
             
-            var socket;
+            //var socket;
             
             function init() {
             	canvas = document.getElementById("canvas");
@@ -41,37 +42,47 @@
                 socket = io.connect();
                 
                 stage.on('stagemousedown', function(evt, data){
-                    console.log(evt);
                     socket.emit('click', {x: evt.stageX, y: evt.stageY, button: evt.nativeEvent.button});
                 })
                 
+                stage.addChild(buildButton("Create Room", 900, 300, 120, 50, function(event) {
+                    socket.emit('create-room');
+                    
+                    console.log('emit: ' + 'create-room');
+                }, {}));
+                
+                stage.addChild(buildButton("Join Room", 1100, 300, 120, 50, function(event) {
+                    var roomNo = ('000'+prompt('Room Number')).substr(-3, 3);
+                    
+                    socket.emit('join-room', roomNo);
+                }, {}));
+                
             	stage.addChild(buildButton("Kappa", 30, 640, 80, 50, function(event){
-            	    color = colors[(index++) % colors.length];
-            	    
-            	   // var circle = new createjs.Shape();
-                // 	circle.graphics.clear().beginFill(color).drawCircle(0, 0, 20);
-                // 	circle.x = startJoint.transform.x;
-                // 	circle.y = startJoint.transform.y;
-                	
-                	socket.emit("create-unit", "kappa");
-                	
-                	console.log("emit");
-                	
-                	//var kappa = new Kappa(startJoint.transform.x - 10, startJoint.transform.y - 10, startJoint)
-                	
-                // 	stage.addChild(circle);
-                	
-                // 	circle.addEventListener("tick", function() {
-                	   // circle.x = kappa.transform.x;
-                	   // circle.y = kappa.transform.y;
-                // 	})
-                	
-                    // 	kappa.Move();
-                	
+            	    console.log("emit");
             	}, {}));
             	
             	stage.update();
+            	
+            	initSocket();
             }
+            
+            // function initSocket(){
+            //     socket.on('join-room', function(roomNo){
+            //         console.log(roomNo);
+            //         stage.addChild(buildButton('Ghost Side', 900, 500, 120, 50, function(event) {
+            //             socket.emit('choose-side', 'ghost');
+            //             console.log('choose: ghost');
+            //         }, {}));
+            //         stage.addChild(buildButton('Human Side', 1100, 500, 120, 50, function(event) {
+            //             socket.emit('choose-side', 'human');
+            //             console.log('choose: human');
+            //         }, {}));
+            //         stage.update();
+            //     });
+            //     socket.on('side-chosen', function(data) {
+            //         console.log(data);
+            //     })
+            // }
             
             function buildButton(str, x, y, width, height, onclickFunction, data)
         	{
@@ -92,6 +103,10 @@
         		c.y = y;
         
         		return c;
+        	}
+        	
+        	function loadScene() {
+        	    
         	}
             
         </script>

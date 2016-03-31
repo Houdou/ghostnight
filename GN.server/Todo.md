@@ -48,8 +48,10 @@ Create unit									|	3/21	TPASS
 Create tower								|	3/21	TPASS
 Termination									|	-/-
 #### Engagement system
-Attack										|	2/24	+3/16
-Damage										|	2/24	+3/16
+Attack										|	2/24	+3/16   TPASS
+Damage										|	2/24	+3/16   TPASS
+Heal                                        |   3/27
+Buff & Nerf                                 |   3/29
 Dead										|	3/16
 (Unit upgrade)								|	-/-
 (SKill protocol)							|	-/-
@@ -60,6 +62,10 @@ Movement									|	3/6
 Rebirth cooldown							|	-/-
 Reselect hero								|	-/-
 (Pay rebirth)								|	-/-
+#### Ensign system
+Build										|	-/-
+Movement									|	-/-
+Buff                                        |   -/-
 #### Single player
 (Simple human AI)							|	-/-
 (Difficulties)								|	-/-
@@ -69,7 +75,7 @@ Reselect hero								|	-/-
 Node.js Setup								|	-/-
 (Framework: Single Page?)					|	-/-
 #### Connection
-Create & Join room							|	-/-
+Create & Join room							|	3/24
 Two sides setup								|	-/-
 #### Communication
 Boardcast									|	-/-
@@ -90,6 +96,7 @@ Main menu									|	-/-
 Room & side selection						|	-/-
 Navigation									|	-/-
 In-game UI									|	-/-
+Yuan or tuoyuan                             |   -/-
 
 ### Characters Features
 #### Hero
@@ -104,20 +111,17 @@ Todomeki SKill 1							|	-/-
 Todomeki SKill 2							|	-/-
 #### Unit
 Kappa										|	-/-
-Wanyudo										|	-/-
-Foxfire										|	-/-
-Dojoji										|	-/-
-Futakuchi									|	-/-
-Raiju										|	-/-
-Ubume										|	-/-
+Wanyudo										|	3/30    TPASS
+Foxfire										|	3/30    TPASS
+Dojoji										|	3/30    TPASS
+Futakuchi									|	3/30    TPASS
+Raiju										|	3/31    TPASS
+Ubume										|	3/30    TPASS
 #### Tower
-Miko										|	-/-
-Inari										|	-/-
-Inugami										|	-/-
-Ebisu										|	-/-
-Snake										|	-/-
-Asura										|	-/-
-Amaterasu									|	-/-
+Inugami										|	3/30    TPASS
+Ebisu										|	3/31    TPASS
+Snake										|	3/31    TPASS
+Amaterasu									|	3/31    TPASS
 
 
 ## Graphics
@@ -132,33 +136,43 @@ Status										|	-/-
 
 ### Assets
 #### Characters
-Nekomata									|	-/-
-Ameonna										|	-/-
-Todomeki									|	-/-
-Kappa										|	-/-
-Wanyudo										|	-/-
-Foxfire										|	-/-
+Nekomata									|	2/25
+Ameonna										|	2/25
+Todomeki									|	2/26
+Kappa										|	3/10
+Wanyudo										|	2/25
+Foxfire										|	3/10
 Dojoji										|	-/-
-Futakuchi									|	-/-
-Raiju										|	-/-
-Ubume										|	-/-
+Futakuchi									|	3/16
+Raiju										|	3/16
+Ubume										|	3/10
 Miko										|	-/-
 Inari										|	-/-
 Inugami										|	-/-
 Ebisu										|	-/-
-Snake										|	-/-
-Asura										|	-/-
-Amaterasu									|	-/-
+Snake										|	3/29
+Asura										|	3/24
+Amaterasu									|	2/25
+Throns                                      |   3/22
+Ensign                                      |   -/-
 #### Background
-Map 1										|	-/-
-Map 2										|	-/-
+Map 1										|	2/23
+Map 2										|	3/24
 Map 3										|	-/-
 
+### Effects
+#### General effects
+Movement                                    |   3/23
+#### Attack effects
+Normal attack                               |   -/-
+Damage                                      |   -/-
+Special damage                              |   -/-
+Snake AOE                                   |   -/-
 
 ## (Sounds)
 ### (BGM)
-Main menu									|	-/-
-Battle										|	-/-
+Main menu									|	3/29
+Battle										|	3/29
 (Result)									|	-/-
 ### (Effects)
 (Attack)									|	-/-

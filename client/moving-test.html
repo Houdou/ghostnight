@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/createjs-2015.11.26.min.js"></script>
+        <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+        <style>
+            canvas{
+                left: 50%;
+                top: 50%;
+                margin: -360px 0 0 -640px;
+                position: absolute;
+            }
+        </style>
+        <title>Ghost Night</title>
+    </head>
+    <body style="background-color: black" onload="init()">
+        <canvas id="canvas" style="background-image:url(./img/bg/map01.png)" name="canvas" width="1280" height="720" style="background-color: #202020">Your browser doesn't support canvas.</canvas>
+        <script>
+            /*global createjs, GN*/ 
+            var canvas, stage;
+            var color;
+            var colors;
+            var index;
+            var filter;
+            var s;
+            
+            var socket;
+            
+            function init() {
+            	canvas = document.getElementById("canvas");
+            	index = 0;
+            	colors = ["#828b20", "#b0ac31", "#cbc53d", "#fad779", "#f9e4ad", "#faf2db", "#563512", "#9b4a0b", "#d36600", "#fe8a00", "#f9a71f"];
+                
+            	//check to see if we are running in a browser with touch support
+            	stage = new createjs.Stage(canvas);
+            	stage.autoClear = true;
+            	stage.enableDOMEvents(true);
+            	
+            	createjs.Touch.enable(stage);
+            	createjs.Ticker.setFPS(24);
+                
+                socket = io.connect();
+                
+                s = new createjs.Bitmap('./img/char/todomeki.png');
+                s.filters = [new createjs.ColorFilter(1,1,0,0,204,51,0,0)];
+                s.scaleX = 0.25;
+                s.scaleY = 0.25;
+        		s.regX = 96;
+        		s.regY = 144;
+        		
+        		s.x = 100;
+        		s.y = 100;
+        		
+                stage.addChild(s);
+                
+                setInterval(function(){
+                    s.rotation = 12 * Math.sin((new Date()).getTime() / 400);
+                    stage.update();
+                }, 1000/ 20);
+                
+                // stage.on('stagemousedown', function(evt, data){
+                //     console.log(evt);
+                //     socket.emit('click', {x: evt.stageX, y: evt.stageY, button: evt.nativeEvent.button});
+                //     createjs.Tween.get(s, {override: true})
+                //         .to({x: evt.stageX, y: evt.stageY}, 700);
+                // })
+                
+                stage.addChild(buildButton("normalDamage", 70, 660, 80, 50, function(event){
+            	   //filter._applyFilter(s.image);
+                    s.cache(0,0,50,50);
+            	}, {}));
+            	
+            	stage.update();
+            }
+            
+            function buildButton(str, x, y, width, height, onclickFunction, data)
+        	{
+        		var c = new createjs.Container();
+        
+        		var button = new createjs.Shape();
+        		button.graphics.beginStroke("#000").beginFill("#DDD").drawRect(0, 0, width, height);
+        		var buttonStr = new createjs.Text(str, "18px Arial", "#777777");
+            	buttonStr.x = width / 2 - buttonStr.getBounds().width / 2;
+            	buttonStr.y = height / 2 - buttonStr.getBounds().height / 2;
+            	
+            	c.regX = width / 2;
+            	c.regY = height / 2;
+            	
+            	c.addChild(button);
+            	c.addChild(buttonStr);
+        
+        		c.on('click', onclickFunction, null, false, data);
+                
+        		c.x = x;
+        		c.y = y;
+        
+        		return c;
+        	}
+            
+        </script>
+    </body>
+</html>

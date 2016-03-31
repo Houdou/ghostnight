@@ -7,12 +7,13 @@ var Unit = function (name, id, tag, x, y, joint, hp, atk, range, rate, def, spd,
     // var
     this.target = null;
     this.canMove = true;
+    this.moveTimeout = -1;
 }
 Unit.prototype = new GameUnit();
 // functions
 Unit.prototype.MoveTo = function(x, y, end) {
     this.transform.MoveTo(x, y);
-    setTimeout(end, 1000 / this.spd);
+    this.moveTimeout = setTimeout(end, 1000 / this.spd);
     
     // createjs.Tween.get(this.transform, {override: true})
     //     .to({x: x, y: y}, 1000 / this.spd)

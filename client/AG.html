@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/createjs-2015.11.26.min.js"></script>
+        <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+        <style>
+            canvas{
+                left: 50%;
+                top: 50%;
+                margin: -360px 0 0 -640px;
+                position: absolute;
+            }
+        </style>
+        <title>Ghost Night</title>
+    </head>
+    <body style="background-color: black" onload="init()">
+        <canvas id="canvas" name="canvas" width="1280" height="720" style="background-color: #202020">Your browser doesn't support canvas.</canvas>
+        <script>
+            /*global createjs, GN*/ 
+            var canvas, stage;
+            var color;
+            var colors;
+            var index;
+            
+            function init() {
+                canvas = document.getElementById("canvas");
+                
+                stage = new createjs.Stage(canvas);
+                
+                stage.autoClear = false;
+                stage.enableDOMEvents(true);
+            	
+            	tan3c();
+            }
+            
+            function tan3c() {
+                var r = 50 + 150 * Math.random();
+                var x = 640;
+                var y = 360;
+                var pos = new Array();
+                var len = new Array();
+                var ras = new Array();
+                
+                for(var i = 0; i < 3; i++) {
+                    // var an = 2 * Math.PI * Math.random();
+                    var an = 2 * Math.PI / 3 * i + Math.random();
+                    pos.push(x + r * Math.cos(an));
+                    pos.push(y + r * Math.sin(an));
+                    
+                    // circle(pos[2 * i], pos[2 * i + 1], 50);
+                }
+                
+                len.push(distance(pos[0], pos[1], pos[2], pos[3]));
+                len.push(distance(pos[2], pos[3], pos[4], pos[5]));
+                len.push(distance(pos[4], pos[5], pos[0], pos[1]));
+                
+                var toLen = (len[0] + len[1] + len[2]) / 2;
+                ras[0] = toLen - len[1];
+                ras[1] = toLen - len[2];
+                ras[2] = toLen - len[0];
+                
+                // console.log(ras);
+                // for(var i = 0; i < 3; i++) {
+                //     circle(1 / ras[i], pos[2 * i], pos[2 * i + 1]);
+                // }
+                ag([[-3, 0, 0], [4, 1/3, 0], [12, -3, 0], [13, -8/3, 2]]);
+            }
+            
+            function ag(data){
+                var circles = new Array();
+                
+                var R = 320 * Math.abs(data[0][0]);
+                
+                // for(var i = 0; i < data.length; i++) {
+                //     circles.push(circle(data[i][0], data[i][1], data[i][2], R));
+                // }
+                
+                Q = [];
+                s = data;
+                S = -400 * s[0][0];
+                
+                for (c = 4; c--; circle(s[0][0], s[0][1], s[0][2], R), s.push(s.shift())) {
+                    Q.push(s.slice());
+                }
+                
+                for (; s = Q.shift(); circle(c[0], c[1], c[2], R)) {
+                    c = [];
+                    for (i = 4; i--;) {
+                        c[i] = 2 * (s[0][i] + s[1][i] + s[2][i]) - s[3][i];
+                    }
+                    for (i = 6; c[0] < S/2 && i;) {
+                        Q.push([s[i-- % 3], s[i-- % 3], c, s[i % 3]]);
+                        // console.log("i: " + i + " s:");
+                        // console.log(s);
+                    }
+            
+                }
+            }
+            
+            
+            function distance(x0, y0, x1, y1) {
+                return Math.sqrt((x0 - x1) * (x0 - x1) + (y0 - y1) * (y0 - y1));
+            }
+            
+            function circle(cur, cx, cy, R, stroke, width, fill) {
+                if(cur == 0) {
+                    console.log("Zero curvature");
+                    return null;
+                }
+                
+                var radius = Math.abs(R / cur);
+                var x = cx * radius;
+                var y = cy * radius;
+                
+                if(arguments.length == 4) {
+                    stroke = "#FFFFFF";
+                    width = 1;
+                    fill = "#000000";
+                }
+                
+                var c = new createjs.Shape();
+                c.graphics.clear().ss(width, "round").s(stroke).f(fill).dc(0, 0, radius);
+                c.x = x + 640;
+                c.y = y + 360;
+                stage.addChild(c);
+                stage.update();
+                
+                return c;
+            }
+            
+        </script>
+    </body>
+</html>

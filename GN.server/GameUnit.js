@@ -20,20 +20,110 @@ var GameUnit = function(name, id, tag, x, y, joint, hp, atk, range, rate, def, s
     this.id = id;
     
     this.isAttacking = false;
-    this.attackInterval = null;
+    this.attackInterval = -1;
+    
+    this.stateUpdateInterval = -1;
     
     this.isDead = false;
 }
 GameUnit.prototype = new GameObject();
 // functions
+GameUnit.prototype.Nerf = function(property, multiplier, duration){
+    if((multiplier < 0) || (duration < 0)) {
+        console.log("Nagative multiplier or duration setting");
+        return false;
+    }
+    // Convert (ms) into (s)
+    duration *= 1000;
+    var that = this;
+    
+    // New Method
+    if(this[property] != undefined) {
+        this[property] *= multiplier;
+        // Restore the value
+        setTimeout(function(){that[property] /= multiplier;}, duration);
+    } else { console.log("Wrong property type"); }
+    
+    // Back up
+    // switch (property) {
+    //     case 'atk':
+    //         this.atk *= multiplier;
+    //         setTimeout(function(){that.atk /= multiplier;}, duration);
+    //         break;
+    //     case 'def': 
+    //         this.def *= multiplier;
+    //         setTimeout(function(){that.def /= multiplier;}, duration);
+    //         break;
+    //     case 'range':
+    //         this.range *= multiplier;
+    //         setTimeout(function(){that.range /= multiplier;}, duration);
+    //         break;
+    //     case 'spd':
+    //         this.spd *= multiplier;
+    //         setTimeout(function(){that.spd /= multiplier;}, duration);
+    //         break;
+    //     case 'rate':
+    //         this.rate *= multiplier;
+    //         setTimeout(function(){that.rate /= multiplier;}, duration);
+    //         break;
+    //     case 'value':
+    //         this.value *= multiplier;
+    //         setTimeout(function(){that.value /= multiplier;}, duration);
+    //         break;
+    //     default: 
+    //         console.log("Wrong property type");
+    //         break;
+    // }
+}
+GameUnit.prototype.Buff = GameUnit.prototype.Nerf;
+GameUnit.prototype.setState = function(from, addState, duration) {
+    // Check if the unit is already in that state
+    if((this.state & addState) != 0) { return false; }
+    
+    var that = this;
+    
+    if(this.state == States.normal) {
+        // Set interval to handle the states
+        this.stateUpdateInterval = setInterval(function(){
+            if(that.state == States.normal || that.isDead) {
+                clearInterval(that.stateUpdateInterval);
+            } else {
+                // On fire
+                if((that.state & States.fire) != 0) {
+                    var dmg = Math.max(that.hp * 0.05, that.GM.settings.MinDamage);
+                    console.log(that.name + " is on fire, and deal " + dmg);
+                    that.DealDamage(from, dmg);
+                }
+                // Paralyzed
+                if((that.state & States.paralyzed) != 0) {
+                    // Nothing right now
+                }
+            }
+        }, 500);
+    }
+    // Mark the state
+    this.state |= addState;
+    
+    // Set recovery delay
+    setTimeout(function(){
+        that.state &= ~addState;
+    }, duration);
+    
+    return true;
+}
 GameUnit.prototype.Attack = function() {
+    // Prevent bursting attack
+    if(this.rate <= 0) { return };
+    
     var that = this;
     
     this.isAttacking = true;
     
     // Attack time interval
     this.attackInterval = setInterval(function(){
-        // Different classes will have different implementation of requrieTarget
+        // Cannot attack under paralyzed state
+        if((that.state & States.paralyzed) != 0) { return; }
+        // Different classes will have different implementation of RequrieTarget
         var target = that.RequireTarget();
         
         if (target != null && !that.isDead) {
@@ -41,6 +131,8 @@ GameUnit.prototype.Attack = function() {
             var dmg = Math.max(that.atk - target.def, that.GM.settings.MinDamage);
             // 'that' is refering to the attacker, not target (ry
             target.DealDamage(that, dmg);
+            // Callback interface for unit feature
+            if(that.didAttackedTarget) { that.didAttackedTarget(target, dmg); }
         } else {
             // Stop attacking
             clearInterval(that.attackInterval);
@@ -83,6 +175,16 @@ GameUnit.prototype.DealDamage = function(from, dmg) {
         // The target is still alive
         return false;
     }
+}
+GameUnit.prototype.Heal = function(from, healhp) {
+    // Limit the max hp
+    if(this.maxhp < this.hp + healhp) {
+        this.hp = this.maxhp;
+    } else {
+        this.hp += healhp;
+        console.log(this.name + " heals " + healhp);
+    }
+    
 }
 GameUnit.prototype.Dead = function(killedBy) {
     // This is an abstract method to be override by the child class.

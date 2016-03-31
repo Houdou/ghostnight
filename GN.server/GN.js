@@ -4,7 +4,7 @@ var GhostNight = function(settings) {
     this.SceneMangement = new (require('./Setup/Scene'))(this.GM);
     
     // Player setup
-    this.SetupGhost = require('./Setup/Ghost');
+    // this.SetupGhost = require('./Setup/Ghost');
     // this.SetupHuman = require('./Setup/Human');
     
     // Game object
@@ -17,28 +17,36 @@ var GhostNight = function(settings) {
     this.RoadSign = require('./RoadSystem/RoadSign');
     this.Blocker = require('./Blocker');
     
-    
+    // Sockets
+    this.ghost = null;
+    this.human = null;
     
 };
 
+GhostNight.prototype.StartGame = function() {
+    this.GM.StartTiming();
+}
 
 GhostNight.prototype.createHero = function(type) {
     // Validation: ???
     
-    if(true) {
+    if(this.GM.startTime != -1) {
         var entryJoint = this.GM.entryJoint;
         // Get the class from GNObjects
         var newHero = new (this.GNObjects.GetHeroType(type))(
             entryJoint.transform.x, entryJoint.transform.y, entryJoint, this.GM);
         this.GM.hero = newHero;
         return newHero;
-    } else
+    } else {
+        console.log("The game havn't started.");
         return false;
+    }
+        
 }
 GhostNight.prototype.createUnit = function(type) {
     // Validation: check cooldown time in GameMaster
     
-    if(true) {
+    if(this.GM.startTime != -1) {
         var entryJoint = this.GM.entryJoint;
         // Get the class from GNObjects and create new unit
         var newUnit = new (this.GNObjects.GetUnitType(type))(
@@ -47,8 +55,10 @@ GhostNight.prototype.createUnit = function(type) {
         // Start moving at beginning
         newUnit.Move();
         return newUnit;
-    } else
+    } else {
+        console.log("The game havn't started.");
         return false;
+    }
 }
 GhostNight.prototype.createTower = function(type, slotID) {
     var slot = this.GM.slots[slotID];

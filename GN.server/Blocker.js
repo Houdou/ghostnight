@@ -3,7 +3,7 @@ var Tags = require('./Statics/Tags');
 var Layers = require('./Statics/Layers');
 
 var _Blocker = {
-    hp: 1000, atk: 0, range: 0, rate: 0, def: 10, spd: 0, price: 0, value: 30, layer: Layers.land
+    hp: 1000, atk: 0, range: -1, rate: 0, def: 10, spd: 0, price: 0, value: 30, layer: Layers.land
 }
 
 // Class Blocker : Tower
@@ -14,6 +14,7 @@ var Blocker = function(name, id, x, y, bindJoint, slot, GM) {
     bindJoint.blocker = this;
     // var
     this.slot = slot;
+    this.isBlocker = true;
 }
 Blocker.prototype = new Tower();
 // functions

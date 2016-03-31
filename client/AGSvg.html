@@ -1,0 +1,37 @@
+< !DOCTYPE html >
+    <html>
+    <body>
+        <script type="text/javascript">
+            function A(s) {
+                P = '<svg style="width: 1600px; height: 1600px;"><g fill=none stroke=red transform=translate(800,800)>';
+                Q = [];
+                s = eval(s);
+                S = -800 * s[0][0];
+            
+                function d(c) {
+                    P += '<circle r=' + Math.abs(p = S / c[0]) + ' cx=' + p * c[1] + ' cy=' + p * c[2] + ' />'
+                }
+                
+                for (c = 4; c--; d(s[0]), s.push(s.shift())) {
+                    Q.push(s.slice());
+                }
+                
+                for (; s = Q.shift(); d(c)) {
+                    c = [];
+                    for (i = 4; i--;) {
+                        c[i] = 2 * (s[0][i] + s[1][i] + s[2][i]) - s[3][i];
+                    }
+                    for (i = 6; c[0] < S && i;) {
+                        Q.push([s[i-- % 3], s[i-- % 3], c, s[i % 3]]);
+                        console.log("i: " + i + " s:");
+                        console.log(s);
+                    }
+            
+                }
+                document.body.innerHTML = P;
+            }
+            
+            A('[[-3, 0, 0], [4, 1/3, 0], [12, -3, 0], [13, -8/3, 2]]');
+        </script>
+    </body>
+</html>

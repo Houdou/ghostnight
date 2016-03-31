@@ -7,6 +7,7 @@ var Tower = function (name, id, tag, x, y, bindJoint, hp, atk, range, rate, def,
     // var
     this.unitsInRange = [];
     this.slot = null;
+    this.isBlocker = false;
 }
 Tower.prototype = new GameUnit();
 // functions
