@@ -18,7 +18,7 @@
     <body style="background-color: black" onload="init()">
         <canvas id="canvas" name="canvas" width="1280" height="720" style="background-color: #202020">Your browser doesn't support canvas.</canvas>
         <script>
-            /*global createjs, GN*/ 
+            /*global createjs, GN, socket*/ 
             var canvas, stage;
             var color;
             var colors;
@@ -42,7 +42,7 @@
                 socket = io.connect();
                 
                 stage.on('stagemousedown', function(evt, data){
-                    socket.emit('click', {x: evt.stageX, y: evt.stageY, button: evt.nativeEvent.button});
+                    socket.emit('click', evt.stageX, evt.stageY, evt.nativeEvent.button);
                 })
                 
                 stage.addChild(buildButton("Create Room", 900, 300, 120, 50, function(event) {

@@ -18,36 +18,38 @@ var Room = require('./Room');
 
 router.use(express.static(path.resolve(__dirname, 'client')));
 var sockets = [];
-var rooms = [];
+var rooms = {};
+var roomof = {};
 // rooms.push(new Room('lobby'));
 rooms['lobby'] = new Room('lobby');
 
 io.on('connection', function (socket) {
 	sockets.push(socket);
-	var myRoomNo;
+	
 	socket.join('lobby');
-		
-	socket.on('click', function(click) {
+	
+	socket.on('click', function(x, y, button) {
 	    // click: {x, y, button};
-        console.log(click);
+        console.log(button);
 	});
 	
-	socket.on('create-room', function(roomNo) {
+	socket.on('create-room', function() {
+		var roomNo = 'lobby';
 		while(rooms[roomNo] != undefined) {
 			roomNo = ('000' + Math.floor(1000 * Math.random())).substr(-3, 3);
 		}
 		
 		createRoom(socket, roomNo);
-		myRoomNo = roomNo;
+		roomof[socket.id] = roomNo;
 	});
 	
 	socket.on('join-room', function(roomNo) {
 		joinRoom(socket, roomNo);
-		myRoomNo = roomNo;
+		roomof[socket.id] = roomNo;
 	});
 	
 	socket.on('start-game', function(){
-		startGame(socket, myRoomNo);
+		startGame(socket, roomof[socket.id]);
 	})
 	
 	socket.on('disconnect', function () {
@@ -84,7 +86,6 @@ function joinRoom(socket, roomNo) {
 			if(side == 'human')
 				room.players[playerIndex].side = 0b01;
 			broadcastToRoom(room, "side-chosen", {player: playerIndex, side: side});
-			console.log("choose-side", side);
 		});
 	} else {
 		createRoom(socket, roomNo);
@@ -108,7 +109,6 @@ function startGame(socket, roomNo){
 		}
 		room.GN.StartGame();
 	}
-	
 }
 
 function broadcast(event, data) {
@@ -127,15 +127,19 @@ server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function() 
     console.log("Server listening at", addr.address + ":" + addr.port);
     
     // Test
-    var GN = new GhostNight({MinDamage: 1, TimeLimit: 5});
+    var GN = new GhostNight({MinDamage: 1, TimeLimit: 60});
     
     GN.SceneMangement.LoadMap('m01', function(){
     	
-    	var m = GN.createTower('Snake', 0);
+    	var m = GN.CreateTower('Snake', 0);
     	
     	GN.StartGame();
     	
-    	GN.createUnit("Raiju");
+    	// var a = GN.CreateHero("Ameonna");
+    	GN.CreateUnit("Kappa");
+    	
+    	setTimeout(function() {GN.CreateEnsign("Atk", 14);}, 8000);
+    	setTimeout(function() {GN.MoveHeroTo(22);}, 9000);
     	
     	// m.Buff('rate', 2, 10);
     	
@@ -145,9 +149,9 @@ server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function() 
     
     // GN2.SceneMangement.LoadMap('m01', function(){
     	
-    // 	GN2.createTower('Amaterasu', 0);
+    // 	GN2.CreateTower('Amaterasu', 0);
     	
-    // 	GN2.createUnit("Wanyudo");
+    // 	GN2.CreateUnit("Wanyudo");
     	
     // });
 });

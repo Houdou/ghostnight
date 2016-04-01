@@ -62,7 +62,7 @@ Unit.prototype.Move = function () {
             }
             
             // Get the nearest tower
-            var target = j.GetNearestTower(that.range);
+            var target = j.FindNearestTower(that.range);
             that.target = target;
             if(target != null && !that.isAttacking) {
                 that.Attack();

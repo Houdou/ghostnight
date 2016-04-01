@@ -4,9 +4,10 @@ var Tags = {
     hero: 1,
     tower: 2,
     blocker: 3,
-    roadsign: 4,
-    joint: 5,
-    slot: 6
+    ensign: 4,
+    roadsign: 5,
+    joint: 6,
+    slot: 7
     
 };
 

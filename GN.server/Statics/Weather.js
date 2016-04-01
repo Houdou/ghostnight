@@ -1,7 +1,7 @@
 // Static Class Weather
 var Weather = {
-    Night: 0,
-    Rain: 1
+    night: 0,
+    rain: 1
 
 }
 

@@ -40,8 +40,12 @@ GameUnit.prototype.Nerf = function(property, multiplier, duration){
     // New Method
     if(this[property] != undefined) {
         this[property] *= multiplier;
+        this.GM.LogBuff(that, property, multiplier);
         // Restore the value
-        setTimeout(function(){that[property] /= multiplier;}, duration);
+        setTimeout(function(){
+            that[property] /= multiplier;
+            that.GM.LogBuff(that, property, 1 / multiplier);
+        }, duration);
     } else { console.log("Wrong property type"); }
     
     // Back up
@@ -152,16 +156,19 @@ GameUnit.prototype.DealDamage = function(from, dmg) {
     // DEBUG
     
     if(this.hp < dmg) {
+        dmg = this.hp;
         this.hp = 0;
         
         // DEBUG
         console.log(this.name + " now : " + this.hp + "/" + this.maxhp);
         // DEBUG
+        this.GM.LogDamage(from, this, dmg);
         
         this.isDead = true;
         
         // Handle the death
         this.Dead(from);
+        this.GM.LogDeath(this, from);
         console.log(this.name + " is dead.");
         // The target is dead
         return true;
@@ -171,6 +178,7 @@ GameUnit.prototype.DealDamage = function(from, dmg) {
         // DEBUG
         console.log(this.name + " now : " + this.hp + "/" + this.maxhp);
         // DEBUG
+        this.GM.LogDamage(from, this, dmg);
         
         // The target is still alive
         return false;

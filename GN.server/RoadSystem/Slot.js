@@ -22,6 +22,10 @@ Slot.prototype.BuildTower = function(tower) {
     }
 }
 Slot.prototype.ResetTower = function() {
+    if(this.tower != null) {
+        this.tower.hp = 0;
+        this.tower.isDead = true;
+    }
     this.tower = null;
     this.canBuild = true;
 }

@@ -1,30 +1,34 @@
 var GNObjects = require('../GNObjects');
 
-var SetupGhost = function(socket, GN){
+var SetupGhost = function(socket, GN) {
     
-    socket.on('create-unit', function(type){
-        console.log(type);
-        GN.createUnit(type);
+    socket.on('create-unit', function(type) {
+        GN.CreateUnit(type);
         //broadcast('unit-created', data);
     });
     
-    socket.on('move-hero', function(jid){
-        console.log('move-hero', jid);
-        //GN.GM.hero.moveTo(jid);
+    socket.on('move-hero', function(jid) {
+        GN.MoveHeroTo(jid);
         //broadcast('hero-moved', data);
     });
     
-    socket.on('use-hero-skill', function(skill){
-        console.log('hero-skill', skill);
+    socket.on('use-hero-skill', function(skillID, data) {
+        GN.UseHeroSkill(skillID, data);
         //broadcast();
     });
     
-    socket.on('change-hero', function(type){
-        console.log('change-hero', type)
+    socket.on('change-hero', function(type) {
+        console.log('change-hero', type);
         
     });
     
-    socket.on('switch-roadsign', function(){
+    socket.on('pay-reborn', function() {
+        console.log('pay-reborn');
+        
+    });
+    
+    socket.on('switch-roadsign', function(rid) {
+        GN.GM.roadSigns[rid].Turn();
         console.log('switch-roadsign');
         //broadcast('')
     });

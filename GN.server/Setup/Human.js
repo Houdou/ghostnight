@@ -1,24 +1,21 @@
 var GNObjects = require('../GNObjects');
 
-var SetupHuman = function(socket){
-    socket.on('build-tower', function(type,sid){
-        console.log('build-tower', type);
-        //GN.createUnit(type);
+var SetupHuman = function(socket, GN){
+    socket.on('build-tower', function(type, sid){
+        GN.CreateTower(type, sid);
+        console.log('build-tower ' + type + ' at slot ' + sid);
         //broadcast('build-tower', data);
     })
     
     socket.on('remove-tower', function(sid){
+        GN.RemoveTower(sid);
         console.log('remove-tower', sid);
         //broadcast();
     });
     
-    socket.on('move-ensign', function(jid){
-        console.log('move-ensign', jid);
-        //broadcast('')
-    });
-    
-    socket.on('use-skill', function(skill){
-        console.log('use-skill');
+    socket.on('create-ensign', function(type, jid){
+        GN.CreateEnsign(type, jid);
+        console.log('create-ensign');
         //broadcast('')
     });
     

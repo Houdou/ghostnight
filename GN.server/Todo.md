@@ -38,34 +38,34 @@ Value										|	-/-
 ### Systems
 #### Road system
 Road structure								|	2/26	TPASS
-Unit movement								|	2/28
-Path finding								|	3/6
-RoadSign navigation							|	2/26
+Unit movement								|	2/28    TPASS
+Path finding								|	3/6     TPASS
+RoadSign navigation							|	2/26    TPASS
 Blocker										|	3/21	TPASS
 #### Build system
 Economic									|	-/-
 Create unit									|	3/21	TPASS
+Create hero                                 |   4/1     TPASS
 Create tower								|	3/21	TPASS
+Create ensign                               |   4/1     TPASS
 Termination									|	-/-
 #### Engagement system
 Attack										|	2/24	+3/16   TPASS
 Damage										|	2/24	+3/16   TPASS
-Heal                                        |   3/27
-Buff & Nerf                                 |   3/29
-Dead										|	3/16
+Heal                                        |   3/27    TPASS
+Buff & Nerf                                 |   3/29    TPASS
+Dead										|	3/16    TPASS
 (Unit upgrade)								|	-/-
-(SKill protocol)							|	-/-
+SKill protocol  							|	4/1     TPASS
 #### Hero system
-Build										|	-/-
-Skill										|	-/-
-Movement									|	3/6
+Skill										|	4/1     TPASS
+Movement									|	3/6     +4/1    TPASS
 Rebirth cooldown							|	-/-
-Reselect hero								|	-/-
+Reselect hero								|	4/1
 (Pay rebirth)								|	-/-
 #### Ensign system
-Build										|	-/-
-Movement									|	-/-
-Buff                                        |   -/-
+Movement									|	4/1     RM(4/2)
+Buff                                        |   4/1     TPASS
 #### Single player
 (Simple human AI)							|	-/-
 (Difficulties)								|	-/-
@@ -86,10 +86,11 @@ Load map									|	3/13	+3/16	TPASS
 Load assets									|	-/-
 PreloadJS									|	-/-
 #### Game management
-User action response						|	-/-
+User action interface						|	4/1
 Validation									|	-/-
 Game result									|	-/-
 Termination									|	-/-
+Log system                                  |   4/1     TPASS
 
 ### UI Response
 Main menu									|	-/-
@@ -100,17 +101,14 @@ Yuan or tuoyuan                             |   -/-
 
 ### Characters Features
 #### Hero
-Nekomata									|	-/-
-Nekomata Skill 1							|	-/-
-Nekomata SKill 2							|	-/-
-Ameonna										|	-/-
-Ameonna Skill 1								|	-/-
-Ameonna Skill 2								|	-/-
-Todomeki									|	-/-
-Todomeki SKill 1							|	-/-
-Todomeki SKill 2							|	-/-
+Nekomata Skill 1							|	4/1
+Nekomata SKill 2							|	4/1
+Ameonna Skill 1								|	4/1     TPASS
+Ameonna Skill 2								|	4/1
+Todomeki SKill 1							|	4/1
+Todomeki SKill 2							|	4/1
 #### Unit
-Kappa										|	-/-
+Kappa										|	4/1     TPASS
 Wanyudo										|	3/30    TPASS
 Foxfire										|	3/30    TPASS
 Dojoji										|	3/30    TPASS

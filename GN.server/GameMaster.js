@@ -1,4 +1,6 @@
-var Weather = require('./Statics/Weather.js');
+var Tags = require('./Statics/Tags');
+var Weather = require('./Statics/Weather');
+var Logger = require('./Utils/Logger');
 
 var GameMaster = function(settings){
     this.slotCount = 0;
@@ -11,14 +13,18 @@ var GameMaster = function(settings){
     this.roadSigns= new Array();
     
     this.hero = null;
+    this.heroSelect = "Nekomata";
     
     this.unitCount = 0;
     this.units = new Array();
     
+    this.ensignCount = 0;
+    this.ensigns = new Array();
+    
     this.towerCount = 0;
     this.towers = new Array();
     
-    this.weather = Weather.Night;
+    this.weather = Weather.night;
     this.time = -1;
     this.startTime = -1;
     this.timerInterval = -1;
@@ -26,6 +32,13 @@ var GameMaster = function(settings){
     this.gold = 0;
     
     this.settings = settings;
+    
+    this.ghostTotalDMG = 0;
+    this.ghostKill = 0;
+    this.huamnTotalDMG = 0;
+    this.humanKill = 0;
+    
+    this.logger = new Logger({fileName: "log.txt"});
 };
 GameMaster.prototype.StartTiming = function() {
     var that = this;
@@ -49,6 +62,15 @@ GameMaster.prototype.StartTiming = function() {
         return false;
     }
 }
+GameMaster.prototype.SetWeather = function(newWeather, duration) {
+    this.weather = newWeather;
+    var that = this;
+    this.weatherTimeout = setTimeout(function(){
+        that.weather = Weather.night;
+    }, duration);
+    console.log("The weather is changed to " + this.weather);
+}
+// Unit function
 GameMaster.prototype.findPathTo = function(j, at) {
     var path = new Array();
     
@@ -114,8 +136,39 @@ GameMaster.prototype.assignSignID = function () {
 GameMaster.prototype.assignUnitID = function () {
     return this.unitCount++;
 };
+GameMaster.prototype.assignEnsignID = function () {
+    return this.ensignCount++;
+}
 GameMaster.prototype.assignTowerID = function () {
     return this.towerCount++;
 };
+GameMaster.prototype.LogDamage = function(source, target, dmg) {
+    this.time = (new Date()).getTime() - this.startTime;
+    this.logger.Log(this.time, source.name , ((dmg > 0)?"ATTACK":"HEAL"), 
+        target.name + " " + dmg + " to " + target.hp);
+    
+    // Statistic
+    if(source.tag == Tags.unit || source.tag == Tags.hero) {
+        this.ghostTotalDMG += dmg;
+    } else {
+        this.humanTotalDMG += dmg;
+    }
+}
+GameMaster.prototype.LogDeath = function(source, killedBy) {
+    this.time = (new Date()).getTime() - this.startTime;
+    this.logger.Log(this.time, source.name , "DIE", "killed by " + killedBy.name);
+    
+    // Statistic
+    if(killedBy.Tags == Tags.unit || killedBy.tag == Tags.hero) {
+        this.ghostKill++;
+    } else {
+        this.humanKill++;
+    }
+}
+GameMaster.prototype.LogBuff = function(source, buffType, buffMultiplier) {
+    this.time = (new Date()).getTime() - this.startTime;
+    this.logger.Log(this.time, source.name , ((buffMultiplier > 1)?"BUFF":"NERF"),
+        buffType + " x" + buffMultiplier);
+}
 
 module.exports = GameMaster;

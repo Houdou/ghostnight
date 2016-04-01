@@ -82,7 +82,6 @@ Joint.prototype.findPath = function(from, to) {
         
         if (this.nbs[i] == to)
         {
-            console.log([this, to]);
             return [this, to];
         }
         else if (this.nbs[i] == from)
@@ -101,7 +100,7 @@ Joint.prototype.findPath = function(from, to) {
     return null;
 };
 
-Joint.prototype.GetNearestTower = function(range) {
+Joint.prototype.FindNearestTower = function(range) {
     var tower = null;
     var d = 9999;
     for(var i = 0; i < this.distances.length; i++) {

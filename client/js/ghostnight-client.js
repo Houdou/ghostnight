@@ -10,11 +10,9 @@ var initSocket = function(){
         console.log(roomNo);
         stage.addChild(buildButton('Ghost Side', 900, 500, 120, 50, function(event) {
             socket.emit('choose-side', 'ghost');
-            console.log('choose: ghost');
         }, {}));
         stage.addChild(buildButton('Human Side', 1100, 500, 120, 50, function(event) {
             socket.emit('choose-side', 'human');
-            console.log('choose: human');
         }, {}));
         stage.update();
     });

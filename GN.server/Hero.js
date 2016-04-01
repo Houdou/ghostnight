@@ -6,12 +6,17 @@ var Hero = function(name, id, tag, x, y, destJoint, hp, atk, range, rate, def, s
     GameUnit.call(this, name, id, tag, x, y, destJoint, hp, atk, range, rate, def, spd, layer, price, value, GM);
     // var
     this.target = null;
+    this.canMove = true;
+    this.moveTimeout = -1;
+    
+    this.skillLastTime = [-1, -1];
+    this.skillCDTime = [5000, 5000];
 }
 Hero.prototype = new GameUnit();
 // functions
 Hero.prototype.MoveTo = function(x, y, end) {
     this.transform.MoveTo(x, y);
-    setTimeout(end, 1000 / this.spd);
+    this.moveTimeout = setTimeout(end, 1000 / this.spd);
     
     // createjs.Tween.get(this.transform, {override: true})
     //     .to({x: x, y: y}, 1000 / this.spd)
@@ -23,24 +28,42 @@ Hero.prototype.Move = function(path) {
     this.path = path;
     
     if(this.path.length > 0) {
-        var j = this.path.shift();
+        var j = this.path[0];
         var that = this;
+        
+        // DEBUG
+        console.log(this.name + " will move to " + j.name);
+        // DEBUG
+        
         this.MoveTo(j.transform.x, j.transform.y, function() {
+            if(that.isDead)
+                return false;
+            
+            // DEBUG
+            console.log(that.name + " arrive at " + j.name);
+            // DEBUG
+            
             //Notice the joint
-            j.SteppedBy(that);
+            var blocker = j.SteppedBy(that);
             that.joint = j;
             
-            // Get the nearest tower
-            var target = j.GetNearestTower(that.range);
-            if(target != null) {
-                that.target = target;
-                if(!that.isAttacking)
-                    that.Attack();
+            // If blocked
+            if(blocker != null) {
+                // The unit will stay at the same position
+                that.Move(that.path);
+            } else {
+                // Move to next joint on path
+                if(that.path.length > 0 && that.canMove) {
+                    that.path.shift();
+                    that.Move(that.path);
+                }
             }
             
-            //Move to next joint
-            if(that.path.length > 0) {
-                that.Move(that.path);
+            // Get the nearest tower
+            var target = j.FindNearestTower(that.range);
+            that.target = target;
+            if(target != null && !that.isAttacking) {
+                that.Attack();
             }
         });
     }
@@ -56,5 +79,18 @@ Hero.prototype.Dead = function(killedBy) {
     Re-enable the hero selection function and also UI
     */
 }
+Hero.prototype.Skill = function(skillID, data) {
+    // This is an abstract method to be override by the child class.
+    console.log("Invalid call of abstract method Skill()");
+    return false;
+}
+// Skill cood down control
+Hero.prototype.canUseSkill = function(skillID) {
+    return (new Date().getTime() > this.skillLastTime[skillID] + this.skillCDTime[skillID]);
+}
+Hero.prototype.usedSkill = function(skillID) {
+    this.skillLastTime[skillID] = (new Date()).getTime();
+}
+
 
 module.exports = Hero;
