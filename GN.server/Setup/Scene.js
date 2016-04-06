@@ -3,11 +3,11 @@ var Joint = require('../RoadSystem/Joint');
 var RoadSign = require('../RoadSystem/RoadSign');
 var Blocker = require('../Blocker');
 
-var SceneMangement = function(GM) {
+var Scene = function(GM) {
     this.GM = GM;
 }
 
-SceneMangement.prototype.LoadMap = function(MapID, end) {
+Scene.prototype.LoadMap = function(MapID, end) {
     var map = new Object();
     
     var that = this;
@@ -22,6 +22,10 @@ SceneMangement.prototype.LoadMap = function(MapID, end) {
             } else { return false; }
         }
         map = JSON.parse(data);
+        
+        // Send the map to client
+        if(map != undefined)
+            that.GM.GEM.emit('map-data', map);
         
         // Slot
         // Load the slots into GameMaster
@@ -68,7 +72,7 @@ SceneMangement.prototype.LoadMap = function(MapID, end) {
                 // Get the location from the bound joint
                 var j = that.GM.joints[b.bindJoint];
                 // Create new blocker
-                var newBlocker = new Blocker("Blocker-" + b.id, that.GM.assignTowerID, j.transform.x, j.transform.y, that.GM.joints[b.bindJoint], that.GM.slots[b.useSlot], that.GM);
+                var newBlocker = new Blocker("Blocker-" + b.id, that.GM.assignBlockerID(), j.transform.x, j.transform.y, that.GM.joints[b.bindJoint], that.GM.slots[b.useSlot], that.GM);
                 // Build blocker on slot;
                 that.GM.slots[b.useSlot].BuildTower(newBlocker);
             });
@@ -87,7 +91,7 @@ SceneMangement.prototype.LoadMap = function(MapID, end) {
                     }
                 }
                 // Push new joint
-                that.GM.roadSigns.push(new RoadSign(that.GM.assignJointID(), r.x, r.y, that.GM.joints[r.bindJoint], exclJoints, that.GM));
+                that.GM.roadSigns.push(new RoadSign(that.GM.assignSignID(), r.x, r.y, that.GM.joints[r.bindJoint], exclJoints, that.GM));
             });
         }
         
@@ -108,4 +112,4 @@ SceneMangement.prototype.LoadMap = function(MapID, end) {
     });
 }
 
-module.exports = SceneMangement;
+module.exports = Scene;

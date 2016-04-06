@@ -7,9 +7,9 @@ GN server									|	3/10
 GN server module							|	3/12
 
 #### Map
-Level 1										|	-/-
-Level 2										|	-/-
-Level 3										|	-/-
+Level 1										|	3/24
+Level 2										|	3/24
+Level 3										|	3/24
 #### Slot
 Level 1										|	-/-
 Level 2										|	-/-
@@ -76,15 +76,13 @@ Node.js Setup								|	-/-
 (Framework: Single Page?)					|	-/-
 #### Connection
 Create & Join room							|	3/24
-Two sides setup								|	-/-
+Two sides setup								|	4/3
 #### Communication
-Boardcast									|	-/-
+Boardcast									|	4/3
 Synchronization								|	-/-
 (Failure management)						|	-/-
 #### Scene management
 Load map									|	3/13	+3/16	TPASS
-Load assets									|	-/-
-PreloadJS									|	-/-
 #### Game management
 User action interface						|	4/1
 Validation									|	-/-
@@ -92,9 +90,24 @@ Game result									|	-/-
 Termination									|	-/-
 Log system                                  |   4/1     TPASS
 
-### UI Response
-Main menu									|	-/-
-Room & side selection						|	-/-
+### Client side
+#### Scene
+Load Map									|	4/4		TPASS
+Load assets									|	4/4		TPASS
+PreloadJS									|	4/4		TPASS
+Two-levels async preload					|	4/5		TPASS
+Build Unit									|	4/5		TPASS
+Build Static								|	-/-
+Build Hero									|	-/-
+#### User input
+UI Layout									|	-/-
+Build Button								|	-/-
+Skill Button								|	-/-
+Client input state							|	-/-
+Input calculation							|	-/-
+#### UI Response
+Main menu									|	4/3
+Room & side selection						|	4/3		+4/5
 Navigation									|	-/-
 In-game UI									|	-/-
 Yuan or tuoyuan                             |   -/-
@@ -126,11 +139,11 @@ Amaterasu									|	3/31    TPASS
 ### UI
 #### Main menu
 Buttons										|	-/-
-Background									|	-/-
+Background									|	4/5
 #### In-game
-Buttons										|	-/-
-Panel										|	-/-
-Status										|	-/-
+Buttons										|	4/5
+Panel										|	4/5
+Status										|	4/5
 
 ### Assets
 #### Characters

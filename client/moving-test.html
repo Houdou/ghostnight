@@ -14,8 +14,8 @@
         </style>
         <title>Ghost Night</title>
     </head>
-    <body style="background-color: black" onload="init()">
-        <canvas id="canvas" style="background-image:url(./img/bg/map01.png)" name="canvas" width="1280" height="720" style="background-color: #202020">Your browser doesn't support canvas.</canvas>
+    <body style="background-color: black">
+        <canvas id="canvas" style="background-image:url(./assets/img/bg/m01.png)" name="canvas" width="1280" height="720" style="background-color: #202020">Your browser doesn't support canvas.</canvas>
         <script>
             /*global createjs, GN*/ 
             var canvas, stage;
@@ -23,9 +23,10 @@
             var colors;
             var index;
             var filter;
-            var s;
             
             var socket;
+            
+            document.addEventListener('DOMContentLoaded', init, false);
             
             function init() {
             	canvas = document.getElementById("canvas");
@@ -35,43 +36,69 @@
             	//check to see if we are running in a browser with touch support
             	stage = new createjs.Stage(canvas);
             	stage.autoClear = true;
-            	stage.enableDOMEvents(true);
+            // 	stage.enableDOMEvents(true);
             	
-            	createjs.Touch.enable(stage);
+            // 	createjs.Touch.enable(stage);
             	createjs.Ticker.setFPS(24);
+                createjs.Ticker.addEventListener("tick", stage);
                 
                 socket = io.connect();
                 
-                s = new createjs.Bitmap('./img/char/todomeki.png');
-                s.filters = [new createjs.ColorFilter(1,1,0,0,204,51,0,0)];
-                s.scaleX = 0.25;
-                s.scaleY = 0.25;
-        		s.regX = 96;
-        		s.regY = 144;
-        		
-        		s.x = 100;
-        		s.y = 100;
-        		
-                stage.addChild(s);
+                var img = new Image();
+                img.onload = handleImg;
+                img.src = './assets/img/char/hero/todomeki-s.png';
                 
-                setInterval(function(){
-                    s.rotation = 12 * Math.sin((new Date()).getTime() / 400);
+                function handleImg() {
+                    var s = new createjs.Bitmap(img);
+                    
+                    var c = new createjs.Container();
+                    
+                    s.filters = [new createjs.ColorFilter(1,1,0,1,204,51,0,0)];
+                    // s.filters = [new createjs.BlurFilter(5, 5, 1)];
+            		s.regX = 32;
+            		s.regY = 48;
+            		
+            		s.rotation = -12;
+            		
+            		c.x = 200;
+            		c.y = 200;
+            		
+            // 		s.cache(-0,-0,64,64);
+            		
+            		c.addChild(s);
+            		
+                    stage.addChild(c);
+                    // console.log(s);
+                    // console.log(stage);
                     stage.update();
-                }, 1000/ 20);
+                    
+                    // setInterval(function(){
+                    // s.rotation = 12 * Math.sin((new Date()).getTime() / 400);
+                    //     stage.update();
+                    // }, 1000/ 20);
+                    
+                    createjs.Tween.get(s, {loop: true}, null, {override: true})
+                        .to({rotation: 12}, 800, createjs.Ease.sineInOut)
+                        .to({rotation: -12}, 800, createjs.Ease.sineInOut);
+                        
                 
-                // stage.on('stagemousedown', function(evt, data){
-                //     console.log(evt);
-                //     socket.emit('click', {x: evt.stageX, y: evt.stageY, button: evt.nativeEvent.button});
-                //     createjs.Tween.get(s, {override: true})
-                //         .to({x: evt.stageX, y: evt.stageY}, 700);
-                // })
+                    stage.on('stagemousedown', function(evt, data){
+                        console.log(evt);
+                        socket.emit('click', {x: evt.stageX, y: evt.stageY, button: evt.nativeEvent.button});
+                        createjs.Tween.get(c, {override: true})
+                            .to({x: evt.stageX, y: evt.stageY}, 700);
+                    })
+                }
                 
-                stage.addChild(buildButton("normalDamage", 70, 660, 80, 50, function(event){
-            	   //filter._applyFilter(s.image);
-                    s.cache(0,0,50,50);
-            	}, {}));
+            //     stage.addChild(buildButton("normalDamage", 70, 660, 80, 50, function(event){
+            // 	   //filter._applyFilter(s.image);
+            // 	   var blurFilter = new createjs.BlurFilter(5, 5, 1);
+            // 	   var bounds = blurFilter.getBounds();
+            //         // s.cache(-50+bounds.x, -50+bounds.y, 100+bounds.width, 100+bounds.height);
+            //         s.cache(0,0, 100, 100);
+            // 	}, {}));
             	
-            	stage.update();
+            // 	stage.update();
             }
             
             function buildButton(str, x, y, width, height, onclickFunction, data)

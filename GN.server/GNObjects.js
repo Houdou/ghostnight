@@ -5,16 +5,16 @@ var Weather = require('./Statics/Weather');
 
 
 //Values
-var _HERO = {
+const _HERO = {
     Nekomata: {
-        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 6, price: 100, value: 30, layer: Layers.land },
+        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 1000 / 300, price: 100, value: 30, layer: Layers.land },
     Ameonna: {
-        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 6, price: 100, value: 30, layer: Layers.land },
+        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 1000 / 300, price: 100, value: 30, layer: Layers.land },
     Todomeki: {
-        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 6, price: 100, value: 30, layer: Layers.land }
+        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 1000 / 300, price: 100, value: 30, layer: Layers.land }
 };
 
-var _UNIT = {
+const _UNIT = {
     Kappa: {
         hp: 600, atk: 100, range: 100, rate: 3, def: 10, spd: 1000 / 500, price: 100, value: 30, layer: Layers.land },
     Wanyudo: {
@@ -31,7 +31,7 @@ var _UNIT = {
         hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 1000 / 500, price: 100, value: 30, layer: Layers.sky }
 };
 
-var _ENSIGN = {
+const _ENSIGN = {
     Atk:{
         type: 'atk', radius: 100, duration: 20},
     Def:{
@@ -40,7 +40,7 @@ var _ENSIGN = {
         type: 'range', radius: 100, duration: 20}
 };
 
-var _TOWER = {
+const _TOWER = {
     Miko: {
         hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 1000 / 500, price: 100, value: 30, layer: Layers.land },
     Inari: {
@@ -70,7 +70,7 @@ var GNObjects = function(GM){
     // Class Nekomata : Hero
     // variables
     var Nekomata = function(x, y, joint) {
-        Hero.call(this, "Nekomata", that.GM.assignUnitID(), Tags.hero, x, y, joint, _HERO.Nekomata.hp, _HERO.Nekomata.atk, _HERO.Nekomata.range,
+        Hero.call(this, "Nekomata", that.GM.assignHeroID(), Tags.hero, x, y, joint, _HERO.Nekomata.hp, _HERO.Nekomata.atk, _HERO.Nekomata.range,
             _HERO.Nekomata.rate, _HERO.Nekomata.def, _HERO.Nekomata.spd, _HERO.Nekomata.layer, _HERO.Nekomata.price, _HERO.Nekomata.value, that.GM);
         // var
         this.scratchRadius = this.range * 1.5;
@@ -148,7 +148,7 @@ var GNObjects = function(GM){
     // Class Ameonna : Hero
     // variables
     var Ameonna = function(x, y, joint) {
-        Hero.call(this, "Ameonna", that.GM.assignUnitID(), Tags.hero, x, y, joint, _HERO.Ameonna.hp, _HERO.Ameonna.atk, _HERO.Ameonna.range,
+        Hero.call(this, "Ameonna", that.GM.assignHeroID(), Tags.hero, x, y, joint, _HERO.Ameonna.hp, _HERO.Ameonna.atk, _HERO.Ameonna.range,
             _HERO.Ameonna.rate, _HERO.Ameonna.def, _HERO.Ameonna.spd, _HERO.Ameonna.layer, _HERO.Ameonna.price, _HERO.Ameonna.value, that.GM);
         // var
         this.healAmount = 200;
@@ -215,7 +215,7 @@ var GNObjects = function(GM){
     // Class Todomeki : Hero
     // variables
     var Todomeki = function(x, y, joint) {
-        Hero.call(this, "Todomeki", that.GM.assignUnitID(), Tags.hero, x, y, joint, _HERO.Todomeki.hp, _HERO.Todomeki.atk, _HERO.Todomeki.range,
+        Hero.call(this, "Todomeki", that.GM.assignHeroID(), Tags.hero, x, y, joint, _HERO.Todomeki.hp, _HERO.Todomeki.atk, _HERO.Todomeki.range,
             _HERO.Todomeki.rate, _HERO.Todomeki.def, _HERO.Todomeki.spd, _HERO.Todomeki.layer, _HERO.Todomeki.price, _HERO.Todomeki.value, that.GM);
         // var
         
@@ -772,5 +772,12 @@ GNObjects.prototype.GetTowerType = function(type) {
             return null;
     }
 };
+GNObjects.prototype.GetGameUnitList = function() {
+    var list = ['Nekomata','Ameonna','Todomeki',
+        'Kappa','Wanyudo','Foxfire','Dojoji','Futakuchi','Raiju','Ubume',
+        'Atk','Def','Range',
+        'Miko','Inari','Inugami','Ebisu','Snake','Asura','Amaterasu'];
+    return list;
+}
 
 module.exports = GNObjects;

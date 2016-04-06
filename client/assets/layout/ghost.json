@@ -1,0 +1,93 @@
+[
+	{
+		"name": "Kappa",
+		"srcID": "button-Kappa",
+		"type": "build",
+		"event": "create-unit",
+		"data": {"type": "Kappa"},
+		"input": "none",
+		"x": 680,
+		"y": 640,
+		"width": 52,
+		"height": 48,
+		"buttonStrOffset": 30
+	},
+	{
+		"name": "Wanyudo",
+		"srcID": "button-Wanyudo",
+		"type": "build",
+		"event": "create-unit",
+		"data": {"type": "Wanyudo"},
+		"input": "none",
+		"x": 736,
+		"y": 640,
+		"width": 52,
+		"height": 48,
+		"buttonStrOffset": 30
+	},
+	{
+		"name": "Foxfire",
+		"srcID": "button-Foxfire",
+		"type": "build",
+		"event": "create-unit",
+		"data": {"type": "Foxfire"},
+		"input": "none",
+		"x": 792,
+		"y": 640,
+		"width": 52,
+		"height": 48,
+		"buttonStrOffset": 30
+	},
+	{
+		"name": "Dojoji",
+		"srcID": "button-Dojoji",
+		"type": "build",
+		"event": "create-unit",
+		"data": {"type": "Dojoji"},
+		"input": "none",
+		"x": 848,
+		"y": 640,
+		"width": 52,
+		"height": 48,
+		"buttonStrOffset": 30
+	},
+	{
+		"name": "Futakuchi",
+		"srcID": "button-Futakuchi",
+		"type": "build",
+		"event": "create-unit",
+		"data": {"type": "Futakuchi"},
+		"input": "none",
+		"x": 904,
+		"y": 640,
+		"width": 52,
+		"height": 48,
+		"buttonStrOffset": 30
+	},
+	{
+		"name": "Raiju",
+		"srcID": "button-Raiju",
+		"type": "build",
+		"event": "create-unit",
+		"data": {"type": "Raiju"},
+		"input": "none",
+		"x": 960,
+		"y": 640,
+		"width": 52,
+		"height": 48,
+		"buttonStrOffset": 30
+	},
+	{
+		"name": "Ubume",
+		"srcID": "button-Ubume",
+		"type": "build",
+		"event": "create-unit",
+		"data": {"type": "Ubume"},
+		"input": "none",
+		"x": 1016,
+		"y": 640,
+		"width": 52,
+		"height": 48,
+		"buttonStrOffset": 30
+	}
+]

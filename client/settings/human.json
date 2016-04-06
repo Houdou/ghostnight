@@ -1,0 +1,13 @@
+[
+	{"src": "img/char/tower/miko-s.png", "id": "button-Miko"},
+	{"src": "img/char/tower/inari-s.png", "id": "button-Inari"},
+	{"src": "img/char/tower/inugami-s.png", "id": "button-Inugami"},
+	{"src": "img/char/tower/ebisu-s.png", "id": "button-Ebisu"},
+	{"src": "img/char/tower/snake-s.png", "id": "button-Snake"},
+	{"src": "img/char/tower/asura-s.png", "id": "button-Asura"},
+	{"src": "img/char/tower/amaterasu-s.png", "id": "button-Amaterasu"},
+	{"src": "img/char/ensign/atkensign-s.png", "id": "button-Atkensign"},
+	{"src": "img/char/ensign/defensign-s.png", "id": "button-Defensign"},
+	{"src": "img/char/ensign/rangeensign-s.png", "id": "button-Rangeensign"},
+	{"src": "layout/human.json", "id": "layout-human"}
+]

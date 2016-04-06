@@ -2,7 +2,7 @@ var Tags = require('./Statics/Tags');
 var Weather = require('./Statics/Weather');
 var Logger = require('./Utils/Logger');
 
-var GameMaster = function(settings){
+var GameMaster = function(settings, GEM){
     this.slotCount = 0;
     this.slots = new Array();
     
@@ -12,14 +12,21 @@ var GameMaster = function(settings){
     this.roadSignCount = 0;
     this.roadSigns= new Array();
     
+    this.heroCount = 0;
     this.hero = null;
     this.heroSelect = "Nekomata";
+    
+    this.cdof = [];
+    this.cds = require('./Statics/CD');
     
     this.unitCount = 0;
     this.units = new Array();
     
     this.ensignCount = 0;
     this.ensigns = new Array();
+    
+    this.blockerCount = 0;
+    this.blockers = new Array();
     
     this.towerCount = 0;
     this.towers = new Array();
@@ -31,14 +38,21 @@ var GameMaster = function(settings){
     this.soul = 0;
     this.gold = 0;
     
+    this.mapLoaded = false;
     this.settings = settings;
+    this.GEM = GEM;
     
     this.ghostTotalDMG = 0;
     this.ghostKill = 0;
     this.huamnTotalDMG = 0;
     this.humanKill = 0;
     
-    this.logger = new Logger({fileName: "log.txt"});
+    if(settings.debug != undefined) {
+    	this.debug = false;
+    } else {
+    	this.debug = true;
+    }
+    this.logger = new Logger({fileName: "Room" + this.settings.Room + ".txt"}, {settings: this.settings});
 };
 GameMaster.prototype.StartTiming = function() {
     var that = this;
@@ -62,13 +76,31 @@ GameMaster.prototype.StartTiming = function() {
         return false;
     }
 }
+GameMaster.prototype.ResetCoolDown = function(list) {
+	list.forEach((type) => {
+		this.UpdateCoolDown(type);
+	});
+}
+GameMaster.prototype.CheckCoolDown = function(type) {
+	return ((new Date()).getTime() >= this.cdof[type] + this.cds[type]);
+}
+GameMaster.prototype.UpdateCoolDown = function(type) {
+	var time = (new Date()).getTime();
+	this.cdof[type] = time;
+	this.GEM.emit('button-cd', {type: type, duration: this.cds[type]});
+}
+GameMaster.prototype.CancelCoolDown = function(type) {
+	this.cdof[type] = 0;
+}
 GameMaster.prototype.SetWeather = function(newWeather, duration) {
     this.weather = newWeather;
     var that = this;
     this.weatherTimeout = setTimeout(function(){
         that.weather = Weather.night;
     }, duration);
-    console.log("The weather is changed to " + this.weather);
+    
+    if(this.debug)
+    	console.log("The weather is changed to " + this.weather);
 }
 // Unit function
 GameMaster.prototype.findPathTo = function(j, at) {
@@ -133,6 +165,12 @@ GameMaster.prototype.assignJointID = function () {
 GameMaster.prototype.assignSignID = function () {
     return this.roadSignCount++;
 };
+GameMaster.prototype.assignBlockerID = function () {
+    return this.blockerCount++;
+};
+GameMaster.prototype.assignHeroID = function () {
+    return this.heroCount++;
+};
 GameMaster.prototype.assignUnitID = function () {
     return this.unitCount++;
 };
@@ -142,6 +180,7 @@ GameMaster.prototype.assignEnsignID = function () {
 GameMaster.prototype.assignTowerID = function () {
     return this.towerCount++;
 };
+// Log system
 GameMaster.prototype.LogDamage = function(source, target, dmg) {
     this.time = (new Date()).getTime() - this.startTime;
     this.logger.Log(this.time, source.name , ((dmg > 0)?"ATTACK":"HEAL"), 

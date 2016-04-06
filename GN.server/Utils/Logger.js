@@ -2,7 +2,7 @@ var fs = require('fs');
 var path = require('path')
 var rootPath = path.resolve(__dirname);
 
-var Logger = function(options) {
+var Logger = function(options, data) {
     if(options.fileName != undefined) {
         this.fileName = options.fileName;
         this.absolutePath = rootPath + "/GNLog/" + options.fileName;
@@ -16,6 +16,8 @@ var Logger = function(options) {
             "================================================================================\n" +
             " - File name: " + options.fileName + "\n" +
             " - Create time: " + this.createTime.toLocaleDateString() + " " + this.createTime.toLocaleTimeString() + "\n" + 
+            " - Room Number: " + data.settings.Room + "\n" +
+            // " - Setting: " + data.settings + "\n" +
             "================================================================================\n" +
             " Timestamp | Event source | Event name | Data                                   \n" +
             "--------------------------------------------------------------------------------"

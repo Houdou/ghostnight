@@ -15,6 +15,7 @@ Unit.prototype.MoveTo = function(x, y, end) {
     this.transform.MoveTo(x, y);
     this.moveTimeout = setTimeout(end, 1000 / this.spd);
     
+    this.GM.GEM.emit('unit-moving', {uid: this.id, x: x, y: y, duration: 1000 / this.spd});
     // createjs.Tween.get(this.transform, {override: true})
     //     .to({x: x, y: y}, 1000 / this.spd)
     //     .call(function() {

@@ -1,0 +1,13 @@
+[
+	{"src": "img/char/unit/kappa-s.png", "id": "button-Kappa"},
+	{"src": "img/char/unit/wanyudo-s.png", "id": "button-Wanyudo"},
+	{"src": "img/char/unit/foxfire-s.png", "id": "button-Foxfire"},
+	{"src": "img/char/unit/dojoji-s.png", "id": "button-Dojoji"},
+	{"src": "img/char/unit/futakuchi-s.png", "id": "button-Futakuchi"},
+	{"src": "img/char/unit/raiju-s.png", "id": "button-Raiju"},
+	{"src": "img/char/unit/ubume-s.png", "id": "button-Ubume"},
+	{"src": "img/icons/head-nekomata.png", "id": "button-Nekomata"},
+	{"src": "img/icons/head-ameonna.png", "id": "button-Ameonna"},
+	{"src": "img/icons/head-todomeki.png", "id": "button-Todomeki"},
+	{"src": "layout/ghost.json", "id": "layout-ghost"}
+]

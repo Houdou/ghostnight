@@ -1,0 +1,93 @@
+[
+	{
+		"name": "Miko",
+		"srcID": "button-Miko",
+		"type": "build",
+		"event": "build-tower",
+		"data": {"type": "Miko", "sid": "null"},
+		"input": "sid",
+		"x": 680,
+		"y": 640,
+		"width": 52,
+		"height": 48,
+		"buttonStrOffset": 30
+	},
+	{
+		"name": "Inari",
+		"srcID": "button-Inari",
+		"type": "build",
+		"event": "build-tower",
+		"data": {"type": "Inari", "sid": "null"},
+		"input": "sid",
+		"x": 736,
+		"y": 640,
+		"width": 52,
+		"height": 48,
+		"buttonStrOffset": 30
+	},
+	{
+		"name": "Inugami",
+		"srcID": "button-Inugami",
+		"type": "build",
+		"event": "build-tower",
+		"data": {"type": "Inugami", "sid": "null"},
+		"input": "sid",
+		"x": 792,
+		"y": 640,
+		"width": 52,
+		"height": 48,
+		"buttonStrOffset": 30
+	},
+	{
+		"name": "Ebisu",
+		"srcID": "button-Ebisu",
+		"type": "build",
+		"event": "build-tower",
+		"data": {"type": "Ebisu", "sid": "null"},
+		"input": "sid",
+		"x": 848,
+		"y": 640,
+		"width": 52,
+		"height": 48,
+		"buttonStrOffset": 30
+	},
+	{
+		"name": "Snake",
+		"srcID": "button-Snake",
+		"type": "build",
+		"event": "build-tower",
+		"data": {"type": "Snake", "sid": "null"},
+		"input": "sid",
+		"x": 904,
+		"y": 640,
+		"width": 52,
+		"height": 48,
+		"buttonStrOffset": 30
+	},
+	{
+		"name": "Asura",
+		"srcID": "button-Asura",
+		"type": "build",
+		"event": "build-tower",
+		"data": {"type": "Asura", "sid": "null"},
+		"input": "sid",
+		"x": 960,
+		"y": 640,
+		"width": 52,
+		"height": 48,
+		"buttonStrOffset": 30
+	},
+	{
+		"name": "Amaterasu",
+		"srcID": "button-Amaterasu",
+		"type": "build",
+		"event": "build-tower",
+		"data": {"type": "Amaterasu", "sid": "null"},
+		"input": "sid",
+		"x": 1016,
+		"y": 640,
+		"width": 52,
+		"height": 48,
+		"buttonStrOffset": 30
+	}
+]

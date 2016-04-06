@@ -132,44 +132,4 @@ Joint.prototype.SteppedBy = function(unit) {
     
     return this.blocker;
 }
-
-// function findPathTo(j, at) {
-//     var path = new Array();
-    
-//     GM.joints.forEach(function(joint) {
-//         joint.visited = false;
-//     })
-    
-//     if(at == j) return j;
-//     var list = new Array();
-//     for(var i = 0; i < at.nbs.length; i++) {
-//         if(at.nbs[i] != j)
-//             list.push(at.nbs[i]);
-//         else
-//             return [j];
-//     }
-//     for(var i = 0; i< list.length; i++) {
-//         var p = list[i].findPath(at, j);
-//         list[i].visited = true;
-//         if(p != null)
-//             path = p;
-//     }
-//     return path;
-// }
-
-// function findNearest(at, maxDistance) {
-//     var d = maxDistance;
-//     var j = null;
-    
-//     GM.joints.forEach(function(joint) {
-//         var nd = at.DistanceTo(joint.transform);
-//         if (nd < d) {
-//             j = joint;
-//             d = nd;
-//         }
-//     })
-
-//     return j;
-// }
-
 module.exports = Joint;

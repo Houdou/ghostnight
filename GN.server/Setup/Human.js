@@ -1,10 +1,12 @@
-var GNObjects = require('../GNObjects');
-
-var SetupHuman = function(socket, GN){
-    socket.on('build-tower', function(type, sid){
-        GN.CreateTower(type, sid);
-        console.log('build-tower ' + type + ' at slot ' + sid);
-        //broadcast('build-tower', data);
+var SetupHuman = function(socket, room){
+    var GN = room.GN;
+    
+    socket.on('build-tower', function(data){
+        var tower = GN.CreateTower(data.type, data.sid);
+        if(tower != null) {
+            console.log('build-tower ' + data.type + ' at slot ' + data.sid);
+            room.broadcast('tower-built', data);
+        }
     })
     
     socket.on('remove-tower', function(sid){
