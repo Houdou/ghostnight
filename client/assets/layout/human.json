@@ -1,5 +1,44 @@
 [
 	{
+		"name": "Atk",
+		"srcID": "button-Atk",
+		"type": "build",
+		"event": "build-ensign",
+		"data": {"type": "Atk", "jid": "null"},
+		"input": "jid",
+		"x": 250,
+		"y": 640,
+		"width": 70,
+		"height": 70,
+		"buttonStrOffset": 30
+	},
+	{
+		"name": "Def",
+		"srcID": "button-Def",
+		"type": "build",
+		"event": "build-ensign",
+		"data": {"type": "Def", "jid": "null"},
+		"input": "jid",
+		"x": 330,
+		"y": 640,
+		"width": 70,
+		"height": 70,
+		"buttonStrOffset": 30
+	},
+	{
+		"name": "Range",
+		"srcID": "button-Range",
+		"type": "build",
+		"event": "build-ensign",
+		"data": {"type": "Range", "jid": "null"},
+		"input": "jid",
+		"x": 410,
+		"y": 640,
+		"width": 70,
+		"height": 70,
+		"buttonStrOffset": 30
+	},
+	{
 		"name": "Miko",
 		"srcID": "button-Miko",
 		"type": "build",

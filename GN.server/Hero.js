@@ -18,6 +18,7 @@ Hero.prototype.MoveTo = function(x, y, end) {
     this.transform.MoveTo(x, y);
     this.moveTimeout = setTimeout(end, 1000 / this.spd);
     
+    this.GM.GEM.emit('hero-moving', {uid: this.id, x: x, y: y, duration: 1000 / this.spd});
     // createjs.Tween.get(this.transform, {override: true})
     //     .to({x: x, y: y}, 1000 / this.spd)
     //     .call(function() {
@@ -74,6 +75,9 @@ Hero.prototype.RequireTarget = function() {
 }
 // Override the Dead method
 Hero.prototype.Dead = function(killedBy) {
+    // Econ system
+    this.GM.AddGold(this.value);
+    this.GM.hero = null;
     // TODO
     /*
     Re-enable the hero selection function and also UI
@@ -85,12 +89,16 @@ Hero.prototype.Skill = function(skillID, data) {
     return false;
 }
 // Skill cood down control
+Hero.prototype.ResetSkill = function() {
+    for(var skillID in this.skillCDTime) {
+        this.usedSkill(skillID);
+    }
+}
 Hero.prototype.canUseSkill = function(skillID) {
     return (new Date().getTime() > this.skillLastTime[skillID] + this.skillCDTime[skillID]);
 }
 Hero.prototype.usedSkill = function(skillID) {
     this.skillLastTime[skillID] = (new Date()).getTime();
+    this.GM.GEM.emit('hero-skill-cd', {skillID: +skillID + 1, duration: this.skillCDTime[skillID]});
 }
-
-
 module.exports = Hero;

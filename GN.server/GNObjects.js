@@ -33,11 +33,11 @@ const _UNIT = {
 
 const _ENSIGN = {
     Atk:{
-        type: 'atk', radius: 100, duration: 20},
+        buff: 'atk', radius: 100, duration: 20, price: 200},
     Def:{
-        type: 'def', radius: 100, duration: 20},
+        buff: 'def', radius: 100, duration: 20, price: 200},
     Range:{
-        type: 'range', radius: 100, duration: 20}
+        buff: 'range', radius: 100, duration: 20, price: 200}
 };
 
 const _TOWER = {
@@ -64,6 +64,11 @@ var Ensign = require('./Ensign');
 
 var GNObjects = function(GM){
     this.GM = GM;
+    
+    this._HERO = _HERO;
+    this._UNIT = _UNIT;
+    this._ENSIGN = _ENSIGN;
+    this._TOWER = _TOWER;
     
     var that = this;
     
@@ -121,7 +126,8 @@ var GNObjects = function(GM){
         }
     }
     Nekomata.prototype.Skill = function(skillID, data) {
-        console.log(this.name + " used skill " + skillID);
+        if(this.GM.debug)
+            console.log(this.name + " used skill " + skillID);
         switch (skillID) {
             case 1:
                 if(data.jid == undefined) {
@@ -144,7 +150,6 @@ var GNObjects = function(GM){
     }
     this.Nekomata = Nekomata;
     
-    
     // Class Ameonna : Hero
     // variables
     var Ameonna = function(x, y, joint) {
@@ -163,20 +168,16 @@ var GNObjects = function(GM){
         if(this.canUseSkill(0)) {
             // Set the weather to rain
             this.GM.SetWeather(Weather.rain, this.rainDuration);
-            
-            var that = this;
-            this.GM.units.forEach(function(u) {
+            this.GM.units.forEach((u) => {
+                // No effect for the dead unit
                 if(u.isDead) { return; }
-                
                 // Heal every units
-                u.Heal(that, that.healAmount);
-                
+                u.Heal(this, this.healAmount);
                 // Speed up Kappa
                 if(u instanceof Kappa) {
-                    u.Buff('spd', 2, that.rainDuration / 1000);
+                    u.Buff('spd', 2, this.rainDuration / 1000);
                 }
             });
-            
             this.usedSkill(0);
         } else {
             // Skill not ready
@@ -185,20 +186,19 @@ var GNObjects = function(GM){
     // Skill 1 - Shield
     Ameonna.prototype.Shield = function() {
         if(this.canUseSkill(1)) {
-            var that = this;
-            this.GN.units.forEach(function(u) {
-                if(u.transform.DistanceTo(that.transform) < that.shieldRadius) {
-                    u.Buff('def', 3, that.shieldDuration / 1000);
+            this.GM.units.forEach((u) => {
+                if(u.transform.DistanceTo(this.transform) < this.shieldRadius) {
+                    u.Buff('def', 3, this.shieldDuration / 1000);
                 }
             });
-            
             this.usedSkill(1);
         } else {
             // Skill not ready
         }
     }
     Ameonna.prototype.Skill = function(skillID, data) {
-        console.log(this.name + " used skill " + skillID);
+        if(this.GM.debug)
+            console.log(this.name + " used skill " + skillID);
         switch (skillID) {
             case 1:
                 return this.Rain();
@@ -210,7 +210,6 @@ var GNObjects = function(GM){
         }
     }
     this.Ameonna = Ameonna;
-    
     
     // Class Todomeki : Hero
     // variables
@@ -258,8 +257,9 @@ var GNObjects = function(GM){
             // Skill not ready
         }
     }
-    Nekomata.prototype.Skill = function(skillID, data) {
-        console.log(this.name + " used skill " + skillID);
+    Todomeki.prototype.Skill = function(skillID, data) {
+        if(this.GM.debug)
+            console.log(this.name + " used skill " + skillID);
         switch (skillID) {
             case 1:
                 if(data.jid == undefined) {
@@ -276,7 +276,6 @@ var GNObjects = function(GM){
         }
     }
     this.Todomeki = Todomeki;
-    
     
     /**
      * Unit
@@ -350,7 +349,6 @@ var GNObjects = function(GM){
                         // DEBUG
                         
                     }
-                    
                 }
             });
         }
@@ -510,7 +508,7 @@ var GNObjects = function(GM){
     var AtkEnsign = function(x, y, joint) {
         this.eid = that.GM.assignEnsignID();
         Ensign.call(this, "AtkEnsign-" + this.eid, this.eid, Tags.ensign, x, y, joint,
-            _ENSIGN.Atk.type, _ENSIGN.Atk.radius, _ENSIGN.Atk.duration, that.GM);
+            _ENSIGN.Atk.buff, _ENSIGN.Atk.radius, _ENSIGN.Atk.duration, _ENSIGN.Atk.price, that.GM);
         // var
     }
     AtkEnsign.prototype = new Ensign();
@@ -520,7 +518,7 @@ var GNObjects = function(GM){
     var DefEnsign = function(x, y, joint) {
         this.eid = that.GM.assignEnsignID();
         Ensign.call(this, "DefEnsign-" + this.eid, this.eid, Tags.ensign, x, y, joint,
-            _ENSIGN.Def.type, _ENSIGN.Def.radius, _ENSIGN.Def.duration, that.GM);
+            _ENSIGN.Def.buff, _ENSIGN.Def.radius, _ENSIGN.Def.duration, _ENSIGN.Def.price, that.GM);
         // var
     }
     DefEnsign.prototype = new Ensign();
@@ -530,7 +528,7 @@ var GNObjects = function(GM){
     var RangeEnsign = function(x, y, joint) {
         this.eid = that.GM.assignEnsignID();
         Ensign.call(this, "RangeEnsign-" + this.eid, this.eid, Tags.ensign, x, y, joint,
-            _ENSIGN.Range.type, _ENSIGN.Range.radius, _ENSIGN.Range.duration, that.GM);
+            _ENSIGN.Range.buff, _ENSIGN.Range.radius, _ENSIGN.Range.duration, _ENSIGN.Range.price, that.GM);
         // var
     }
     RangeEnsign.prototype = new Ensign();
@@ -773,7 +771,7 @@ GNObjects.prototype.GetTowerType = function(type) {
     }
 };
 GNObjects.prototype.GetGameUnitList = function() {
-    var list = ['Nekomata','Ameonna','Todomeki',
+    var list = ['Hero',
         'Kappa','Wanyudo','Foxfire','Dojoji','Futakuchi','Raiju','Ubume',
         'Atk','Def','Range',
         'Miko','Inari','Inugami','Ebisu','Snake','Asura','Amaterasu'];

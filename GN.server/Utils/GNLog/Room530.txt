@@ -1,0 +1,22 @@
+================================================================================
+                       - Log file for GhostNight server -                       
+================================================================================
+ - File name: Room530.txt
+ - Create time: 4/7/2016 9:45:22 PM
+ - Room Number: 530
+================================================================================
+ Timestamp | Event source | Event name | Data                                   
+--------------------------------------------------------------------------------
+     16278 |      Ameonna |     ATTACK | Blocker-0 90 to 910
+     16613 |      Ameonna |     ATTACK | Blocker-0 90 to 820
+     16948 |      Ameonna |     ATTACK | Blocker-0 90 to 730
+     17281 |      Ameonna |     ATTACK | Blocker-0 90 to 640
+     17616 |      Ameonna |     ATTACK | Blocker-0 90 to 550
+     17949 |      Ameonna |     ATTACK | Blocker-0 90 to 460
+     18283 |      Ameonna |     ATTACK | Blocker-0 90 to 370
+     18618 |      Ameonna |     ATTACK | Blocker-0 90 to 280
+     18952 |      Ameonna |     ATTACK | Blocker-0 90 to 190
+     19285 |      Ameonna |     ATTACK | Blocker-0 90 to 100
+     19619 |      Ameonna |     ATTACK | Blocker-0 90 to 10
+     19954 |      Ameonna |     ATTACK | Blocker-0 10 to 0
+     19954 |    Blocker-0 |        DIE | killed by Ameonna

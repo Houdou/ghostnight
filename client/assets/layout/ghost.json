@@ -1,5 +1,209 @@
 [
 	{
+		"srcID": "panel-Nekomata",
+		"type": "panel",
+		"children": [
+			{
+				"name": "",
+				"srcID": "button-Nekomata",
+				"type": "static",
+				"x": 42,
+				"y": 48,
+				"width": 84,
+				"height": 82,
+				"buttonStrOffset": 30
+			},
+			{
+				"name": "",
+				"srcID": "button-Nekomata-Skill1",
+				"type": "skill",
+				"event": "use-hero-skill",
+				"data": {"skillID": 1, "data": "null"},
+				"input": "jid",
+				"x": 160,
+				"y": 56,
+				"width": 64,
+				"height": 64,
+				"buttonStrOffset": 30
+			},
+			{
+				"name": "",
+				"srcID": "button-Nekomata-Skill2",
+				"type": "skill",
+				"event": "use-hero-skill",
+				"data": {"skillID": 2, "data": "null"},
+				"input": "jid",
+				"x": 240,
+				"y": 56,
+				"width": 64,
+				"height": 64,
+				"buttonStrOffset": 30
+			}
+		],
+		"x": 210,
+		"y": 600,
+		"width": 300,
+		"height": 120,
+		"active": false
+	},
+	{
+		"srcID": "panel-Ameonna",
+		"type": "panel",
+		"children": [
+			{
+				"name": "",
+				"srcID": "button-Ameonna",
+				"type": "static",
+				"x": 42,
+				"y": 48,
+				"width": 84,
+				"height": 82,
+				"buttonStrOffset": 30
+			},
+			{
+				"name": "",
+				"srcID": "button-Ameonna-Skill1",
+				"type": "skill",
+				"event": "use-hero-skill",
+				"data": {"skillID": 1, "data": "null"},
+				"input": "none",
+				"x": 160,
+				"y": 56,
+				"width": 64,
+				"height": 64,
+				"buttonStrOffset": 30
+			},
+			{
+				"name": "",
+				"srcID": "button-Ameonna-Skill2",
+				"type": "skill",
+				"event": "use-hero-skill",
+				"data": {"skillID": 2, "data": "null"},
+				"input": "none",
+				"x": 240,
+				"y": 56,
+				"width": 64,
+				"height": 64,
+				"buttonStrOffset": 30
+			}
+		],
+		"x": 210,
+		"y": 600,
+		"width": 300,
+		"height": 120,
+		"active": false
+	},
+	{
+		"srcID": "panel-Todomeki",
+		"type": "panel",
+		"children": [
+			{
+				"name": "",
+				"srcID": "button-Todomeki",
+				"type": "static",
+				"x": 42,
+				"y": 48,
+				"width": 84,
+				"height": 82,
+				"buttonStrOffset": 30
+			},
+			{
+				"name": "",
+				"srcID": "button-Todomeki-Skill1",
+				"type": "skill",
+				"event": "use-hero-skill",
+				"data": {"skillID": 1, "data": "null"},
+				"input": "sid",
+				"x": 160,
+				"y": 56,
+				"width": 64,
+				"height": 64,
+				"buttonStrOffset": 30
+			},
+			{
+				"name": "",
+				"srcID": "button-Todomeki-Skill2",
+				"type": "skill",
+				"event": "use-hero-skill",
+				"data": {"skillID": 2, "data": "null"},
+				"input": "none",
+				"x": 240,
+				"y": 56,
+				"width": 64,
+				"height": 64,
+				"buttonStrOffset": 30
+			}
+		],
+		"x": 210,
+		"y": 600,
+		"width": 300,
+		"height": 120,
+		"active": false
+	},
+	{
+		"srcID": "panel-Reborn",
+		"type": "panel",
+		"children": [
+			{
+				"name": "",
+				"srcID": "button-Nekomata",
+				"type": "button",
+				"event": "change-hero",
+				"data": {"type": "Nekomata"},
+				"input": "none",
+				"x": 30,
+				"y": 32,
+				"width": 84,
+				"height": 82,
+				"buttonStrOffset": 40,
+				"scale": 0.7
+			},
+			{
+				"name": "",
+				"srcID": "button-Ameonna",
+				"type": "button",
+				"event": "change-hero",
+				"data": {"type": "Ameonna"},
+				"input": "none",
+				"x": 110,
+				"y": 32,
+				"width": 84,
+				"height": 82,
+				"buttonStrOffset": 40,
+				"scale": 0.7
+			},
+			{
+				"name": "",
+				"srcID": "button-Todomeki",
+				"type": "button",
+				"event": "change-hero",
+				"data": {"type": "Todomeki"},
+				"input": "none",
+				"x": 190,
+				"y": 32,
+				"width": 84,
+				"height": 82,
+				"buttonStrOffset": 40,
+				"scale": 0.7
+			},
+			{
+				"name": "",
+				"srcID": "assets-cirlce",
+				"type": "static",
+				"x": 30,
+				"y": 32,
+				"width": 83,
+				"height": 83,
+				"scale": 0.4
+			}
+		],
+		"x": 220,
+		"y": 610,
+		"width": 270,
+		"height": 100,
+		"active": true
+	},
+	{
 		"name": "Kappa",
 		"srcID": "button-Kappa",
 		"type": "build",

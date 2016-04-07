@@ -1,0 +1,141 @@
+================================================================================
+                       - Log file for GhostNight server -                       
+================================================================================
+ - File name: Room327.txt
+ - Create time: 4/7/2016 10:58:55 PM
+ - Room Number: 327
+================================================================================
+ Timestamp | Event source | Event name | Data                                   
+--------------------------------------------------------------------------------
+     19249 |      Ameonna |     ATTACK | Blocker-0 90 to 910
+     19583 |      Ameonna |     ATTACK | Blocker-0 90 to 820
+     19917 |      Ameonna |     ATTACK | Blocker-0 90 to 730
+     20251 |      Ameonna |     ATTACK | Blocker-0 90 to 640
+     24808 |      Kappa-0 |     ATTACK | Blocker-0 90 to 550
+     25159 |      Kappa-0 |     ATTACK | Blocker-0 90 to 460
+     25495 |      Kappa-0 |     ATTACK | Blocker-0 90 to 370
+     25830 |      Kappa-0 |     ATTACK | Blocker-0 90 to 280
+     26165 |      Kappa-0 |     ATTACK | Blocker-0 90 to 190
+     26500 |      Kappa-0 |     ATTACK | Blocker-0 90 to 100
+     26834 |      Kappa-0 |     ATTACK | Blocker-0 90 to 10
+     27168 |      Kappa-0 |     ATTACK | Blocker-0 10 to 0
+     27168 |    Blocker-0 |        DIE | killed by Kappa-0
+     44092 |       Miko-0 |     ATTACK | Wanyudo-1 90 to 910
+     44426 |       Miko-0 |     ATTACK | Wanyudo-1 90 to 820
+     44760 |       Miko-0 |     ATTACK | Wanyudo-1 90 to 730
+     45094 |       Miko-0 |     ATTACK | Wanyudo-1 90 to 640
+     45427 |       Miko-0 |     ATTACK | Wanyudo-1 90 to 550
+     45761 |       Miko-0 |     ATTACK | Wanyudo-1 90 to 460
+     46098 |       Miko-0 |     ATTACK | Wanyudo-1 90 to 370
+     46432 |       Miko-0 |     ATTACK | Wanyudo-1 90 to 280
+     46766 |       Miko-0 |     ATTACK | Wanyudo-1 90 to 190
+     47102 |       Miko-0 |     ATTACK | Wanyudo-1 90 to 100
+     54572 |       Miko-0 |     ATTACK | Kappa-2 90 to 510
+     54574 |      Kappa-2 |     ATTACK | Miko-0 90 to 910
+     54906 |       Miko-0 |     ATTACK | Kappa-2 90 to 420
+     54910 |      Kappa-2 |     ATTACK | Miko-0 90 to 820
+     55242 |       Miko-0 |     ATTACK | Kappa-2 90 to 330
+     55245 |      Kappa-2 |     ATTACK | Miko-0 90 to 730
+     55578 |       Miko-0 |     ATTACK | Kappa-2 90 to 240
+     55579 |      Kappa-2 |     ATTACK | Miko-0 90 to 640
+     55914 |       Miko-0 |     ATTACK | Kappa-2 90 to 150
+     55914 |      Kappa-2 |     ATTACK | Miko-0 90 to 550
+     56248 |       Miko-0 |     ATTACK | Kappa-2 90 to 60
+     56248 |      Kappa-2 |     ATTACK | Miko-0 90 to 460
+     56583 |       Miko-0 |     ATTACK | Kappa-2 60 to 0
+     56584 |      Kappa-2 |        DIE | killed by Miko-0
+     56918 |       Miko-0 |     ATTACK | Wanyudo-3 90 to 910
+     57251 |       Miko-0 |     ATTACK | Wanyudo-3 90 to 820
+     57478 |    Foxfire-4 |     ATTACK | Miko-0 90 to 370
+     57586 |       Miko-0 |     ATTACK | Wanyudo-3 90 to 730
+     57812 |    Foxfire-4 |     ATTACK | Miko-0 90 to 280
+     57921 |       Miko-0 |     ATTACK | Wanyudo-3 90 to 640
+     58148 |    Foxfire-4 |     ATTACK | Miko-0 90 to 190
+     58261 |       Miko-0 |     ATTACK | Wanyudo-3 90 to 550
+     58483 |    Foxfire-4 |     ATTACK | Miko-0 90 to 100
+     58594 |       Miko-0 |     ATTACK | Wanyudo-3 90 to 460
+     58819 |    Foxfire-4 |     ATTACK | Miko-0 90 to 10
+     58939 |       Miko-0 |     ATTACK | Wanyudo-3 90 to 370
+     59156 |    Foxfire-4 |     ATTACK | Miko-0 10 to 0
+     59159 |       Miko-0 |        DIE | killed by Foxfire-4
+    111666 |      Snake-1 |     ATTACK | Ameonna 90 to 910
+    111667 |      Ameonna |     ATTACK | Snake-1 90 to 910
+    111999 |      Snake-1 |     ATTACK | Ameonna 90 to 820
+    112000 |      Ameonna |     ATTACK | Snake-1 90 to 820
+    112334 |      Snake-1 |     ATTACK | Ameonna 90 to 730
+    112334 |      Ameonna |     ATTACK | Snake-1 90 to 730
+    112668 |      Snake-1 |     ATTACK | Ameonna 90 to 640
+    112668 |      Ameonna |     ATTACK | Snake-1 90 to 640
+    113001 |      Snake-1 |     ATTACK | Ameonna 90 to 550
+    113003 |      Ameonna |     ATTACK | Snake-1 90 to 550
+    113337 |      Snake-1 |     ATTACK | Ameonna 90 to 460
+    113339 |      Ameonna |     ATTACK | Snake-1 90 to 460
+    113674 |      Snake-1 |     ATTACK | Ameonna 90 to 370
+    113675 |      Ameonna |     ATTACK | Snake-1 90 to 370
+    114009 |      Snake-1 |     ATTACK | Ameonna 90 to 280
+    114009 |      Ameonna |     ATTACK | Snake-1 90 to 280
+    114343 |      Snake-1 |     ATTACK | Ameonna 90 to 190
+    114344 |      Ameonna |     ATTACK | Snake-1 90 to 190
+    119307 |      Kappa-0 |       BUFF | spd x2
+    119308 |      Kappa-7 |       BUFF | spd x2
+    125002 |      Snake-1 |     ATTACK | Kappa-7 90 to 510
+    125002 |      Kappa-7 |     ATTACK | Snake-1 90 to 100
+    125336 |      Snake-1 |     ATTACK | Kappa-7 90 to 420
+    125337 |      Kappa-7 |     ATTACK | Snake-1 90 to 10
+    125670 |      Snake-1 |     ATTACK | Kappa-7 90 to 330
+    125670 |      Kappa-7 |     ATTACK | Snake-1 10 to 0
+    125671 |      Snake-1 |        DIE | killed by Kappa-7
+    129307 |      Kappa-0 |       NERF | spd x0.5
+    129307 |      Kappa-7 |       NERF | spd x0.5
+    146365 |      Kappa-0 |       BUFF | spd x2
+    146365 |      Kappa-7 |       BUFF | spd x2
+    146365 |      Kappa-8 |       BUFF | spd x2
+    156365 |      Kappa-0 |       NERF | spd x0.5
+    156365 |      Kappa-7 |       NERF | spd x0.5
+    156365 |      Kappa-8 |       NERF | spd x0.5
+    263517 |    Inugami-2 |     ATTACK | Kappa-9 90 to 510
+    263518 |      Kappa-9 |       NERF | atk x0.5
+    263518 |      Kappa-9 |     ATTACK | Inugami-2 40 to 960
+    263851 |    Inugami-2 |     ATTACK | Kappa-9 90 to 420
+    263852 |      Kappa-9 |       NERF | atk x0.5
+    263852 |      Kappa-9 |     ATTACK | Inugami-2 15 to 945
+    264186 |    Inugami-2 |     ATTACK | Kappa-9 90 to 330
+    264186 |      Kappa-9 |       NERF | atk x0.5
+    264187 |      Kappa-9 |     ATTACK | Inugami-2 2.5 to 942.5
+    264520 |    Inugami-2 |     ATTACK | Kappa-9 90 to 240
+    264520 |      Kappa-9 |       NERF | atk x0.5
+    264523 |      Kappa-9 |     ATTACK | Inugami-2 1 to 941.5
+    264548 |   Foxfire-11 |     ATTACK | Inugami-2 90 to 851.5
+    264854 |    Inugami-2 |     ATTACK | Kappa-9 90 to 150
+    264854 |      Kappa-9 |       NERF | atk x0.5
+    264856 |      Kappa-9 |     ATTACK | Inugami-2 1 to 850.5
+    264882 |   Foxfire-11 |     ATTACK | Inugami-2 90 to 760.5
+    265063 |    Dojoji-12 |     ATTACK | Inugami-2 90 to 670.5
+    265063 |    Inugami-2 |       NERF | def x0.5
+    265067 | Futakuchi-13 |     ATTACK | Inugami-2 95 to 575.5
+    265067 | Futakuchi-13 |     ATTACK | Inugami-2 575.5 to 0
+    265068 |    Inugami-2 |        DIE | killed by Futakuchi-13
+    265068 | Futakuchi-13 |       BUFF | value x2
+    265880 |  Amaterasu-4 |     ATTACK | Foxfire-18 90 to 910
+    266214 |  Amaterasu-4 |     ATTACK | Kappa-19 90 to 510
+    266706 |  Amaterasu-4 |     ATTACK | Kappa-19 90 to 420
+    267040 |  Amaterasu-4 |     ATTACK | Kappa-19 90 to 330
+    267518 |      Kappa-9 |       BUFF | atk x2
+    267852 |      Kappa-9 |       BUFF | atk x2
+    268186 |      Kappa-9 |       BUFF | atk x2
+    268521 |      Kappa-9 |       BUFF | atk x2
+    268855 |      Kappa-9 |       BUFF | atk x2
+    270064 |    Inugami-2 |       BUFF | def x2
+    275068 | Futakuchi-13 |       NERF | value x0.5
+    294663 |      Kappa-0 |       BUFF | spd x2
+    294664 |      Kappa-7 |       BUFF | spd x2
+    294664 |      Kappa-8 |       BUFF | spd x2
+    294664 |      Kappa-9 |       BUFF | spd x2
+    294664 |     Kappa-16 |       BUFF | spd x2
+    294706 |     Kappa-19 |       BUFF | spd x2
+    304665 |      Kappa-7 |       NERF | spd x0.5
+    304665 |      Kappa-9 |       NERF | spd x0.5
+    304665 |      Kappa-8 |       NERF | spd x0.5
+    304664 |      Kappa-0 |       NERF | spd x0.5
+    304705 |     Kappa-16 |       NERF | spd x0.5
+    304706 |     Kappa-19 |       NERF | spd x0.5

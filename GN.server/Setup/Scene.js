@@ -56,10 +56,8 @@ Scene.prototype.LoadMap = function(MapID, end) {
                 // Push new joint
                 that.GM.joints.push(new Joint(that.GM.assignJointID(), j.x, j.y, that.GM));
                 // Connect to the attach joint
-                if(j.attach.length > 0) {
-                    for(var i = 0; i < j.attach.length; i++) {
-                        that.GM.joints[j.id].AttachTo(that.GM.joints[j.attach[i]]);
-                    }
+                for(var i = 0; i < j.attach.length; i++) {
+                    that.GM.joints[j.id].AttachTo(that.GM.joints[j.attach[i]]);
                 }
             });
         }

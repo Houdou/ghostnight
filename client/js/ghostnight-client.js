@@ -19,16 +19,43 @@ var gn = function(stage, socket) {
 	// Game Elements
 	this.units = [];
 	this.hero = null;
+	this.heroName = null;
 	this.towers = [];
 	this.blockers = [];
 	this.ensigns = [];
+	this.gold = 0;
+	this.soul = 0;
 	
 	// UI
 	this.progressBar = null;
 	this.inputState = 'normal';
-	// this.UI = [];
+	this.UI = [];
 	this.panel = [];
+	this.currentPanel = '';
 };
+// UI
+gn.prototype.BuildPanel = function(srcID, x, y, width, height) {
+	var c = new createjs.Container();
+	
+	c.x = x;
+	c.y = y;
+	this.panel[srcID] = c;
+	c.name = srcID;
+	
+	this.stage.addChild(c);
+	return c;
+}
+gn.prototype.TogglePanel = function(panelID) {
+	for(var c in this.panel) {
+		if(c == panelID) {
+			stage.addChild(this.panel[c]);
+			this.currentPanel = panelID;
+		} else {
+			stage.removeChild(this.panel[c]);
+		}
+	}
+	stage.update();
+}
 gn.prototype.BuildButton = function(str, x, y, width, height, onclickFunction, data) {
 	var c = new createjs.Container();
 		
@@ -51,22 +78,47 @@ gn.prototype.BuildButton = function(str, x, y, width, height, onclickFunction, d
 	this.stage.update();
 	return c;
 }
-gn.prototype.BuildImageButton = function(name, srcImgID, x, y, width, height, offset, onclickFunction, eventData) {
+gn.prototype.BuildImage = function(srcImgID, x, y, width, height, offset, onclickFunction, eventData, draw, scale) {
+	var c = new createjs.Bitmap(this.assets[srcImgID]);
+	c.regX = width/2;
+	c.regY = height/2;
+	c.scaleX = scale || 1;
+	c.scaleY = scale || 1;
+	
+	if(onclickFunction)
+		c.on('click', onclickFunction, null, false, eventData);
+
+	c.x = x;
+	c.y = y;
+	
+	this.UI[srcImgID] = c;
+	
+	if(draw) {
+		stage.addChild(c);
+		stage.update();
+	}
+	
+	return c;
+}
+gn.prototype.BuildImageButton = function(name, srcImgID, x, y, width, height, offset, onclickFunction, eventData, draw, scale) {
 	var c = new createjs.Container();
 		
 	var button = new createjs.Bitmap(this.assets[srcImgID]);
 	button.regX = width/2;
 	button.regY = height/2;
+	button.scaleX = scale || 1;
+	button.scaleY = scale || 1;
 	button.cache(0, 0, width, height);
 	
 	var cover = new createjs.Shape();
-	cover.graphics.clear().beginFill("rgba(60, 60, 60, 0.80)").drawRect(0, 0, width, height);
-	// cover.graphics.clear().beginFill("rgba(60, 60, 60, 0.85)").moveTo(0, 0).arc(0, 0, 0.32 * width, (1.5 - 2 * 1) * Math.PI, -0.5 * Math.PI, false).lineTo(0, 0);
+	cover.graphics.clear().beginFill("rgba(50, 50, 50, 0.90)").drawRect(0, 0, width, height);
+	// cover.graphics.clear().beginFill("rgba(50, 50, 50, 0.85)").moveTo(0, 0).arc(0, 0, 0.32 * width, (1.5 - 2 * 1) * Math.PI, -0.5 * Math.PI, false).lineTo(0, 0);
 	cover.regX = width/2;
 	cover.regY = height/2;
+	cover.scaleX = scale || 1;
+	cover.scaleY = scale || 1;
 	cover.filters = [new createjs.AlphaMaskFilter(button.cacheCanvas)];
 	cover.cache(0, 0, width, height);
-	
 	
 	var buttonStr = new createjs.Text(name, "12px Arial", "#777777");
 	buttonStr.textAlign = 'center';
@@ -83,11 +135,116 @@ gn.prototype.BuildImageButton = function(name, srcImgID, x, y, width, height, of
 	c.y = y;
 	// c.cache(-width/2, -height/2, width, height + offset + 10);
 	
-	this.panel[srcImgID] = c;
+	this.UI[srcImgID] = c;
 	
-	stage.addChild(c);
-	stage.update();
+	if(draw) {
+		stage.addChild(c);
+		stage.update();
+	}
+	
 	return c;
+}
+gn.prototype.ParseLayout = function(element, draw) {
+	switch (element.type) {
+		case 'panel':
+			var c = this.BuildPanel(element.srcID, element.x, element.y, element.width, element.height);
+			element.children.forEach((child) => {
+				var button = this.ParseLayout(child, false);
+				if(button != undefined) {
+					c.addChild(button);
+				}
+			});
+			this.panel[element.srcID] = c;
+			
+			if(element.active) {
+				this.TogglePanel(element.srcID);
+			}
+			
+			return c;
+		case 'build':
+			switch (element.input) {
+				case 'none':
+					return this.BuildImageButton(element.name, element.srcID, element.x, element.y,
+						element.width, element.height, element.buttonStrOffset, (event, DATA) => {
+							this.socket.emit(element.event, DATA);
+					}, element.data, draw, element.scale);
+				case 'jid':
+					return this.BuildImageButton(element.name, element.srcID, element.x, element.y,
+						element.width, element.height, element.buttonStrOffset, (event, DATA) => {
+							console.log('client state: input for joint');
+							this.inputState = 'joint';
+							this.stage.on('stagemousedown', (event, data) => {
+								console.log('client state: normal');
+								this.inputState = 'normal';
+								DATA.jid = this.FindNearestJoint(event.stageX, event.stageY, data.maxDistance);
+								console.log(DATA.jid);
+								this.socket.emit(element.event, DATA)
+							}, null, true, {maxDistance: 50})
+					}, element.data, draw, element.scale);
+				case 'sid':
+					return this.BuildImageButton(element.name, element.srcID, element.x, element.y,
+						element.width, element.height, element.buttonStrOffset, (event, DATA) => {
+							console.log('client state: input for slot');
+							this.inputState = 'slot';
+							this.stage.on('stagemousedown', (event, data) => {
+								console.log('client state: normal');
+								this.inputState = 'normal';
+								console.log(event.stageX + ', ' + event.stageY);
+								DATA.sid = this.FindNearestSlot(event.stageX, event.stageY, data.maxDistance);
+								console.log(DATA.sid);
+								this.socket.emit(element.event, DATA)
+							}, null, true, {maxDistance: 70})
+					}, element.data, draw, element.scale);
+				default: break;
+			}
+			break;
+		case 'skill':
+			switch (element.input) {
+				case 'none':
+					return this.BuildImageButton(element.name, element.srcID, element.x, element.y,
+						element.width, element.height, element.buttonStrOffset, (event, DATA) => {
+							this.socket.emit(element.event, DATA);
+					}, element.data, draw, element.scale);
+				case 'jid':
+					return this.BuildImageButton(element.name, element.srcID, element.x, element.y,
+						element.width, element.height, element.buttonStrOffset, (event, DATA) => {
+							console.log('client state: input for joint');
+							this.inputState = 'joint';
+							this.stage.on('stagemousedown', (event, data) => {
+								console.log('client state: normal');
+								this.inputState = 'normal';
+								DATA.jid = this.FindNearestJoint(event.stageX, event.stageY, data.maxDistance);
+								console.log(DATA.jid);
+								this.socket.emit(element.event, DATA)
+							}, null, true, {maxDistance: 50})
+					}, element.data, draw, element.scale);
+				case 'sid':
+					return this.BuildImageButton(element.name, element.srcID, element.x, element.y,
+						element.width, element.height, element.buttonStrOffset, (event, DATA) => {
+							console.log('client state: input for slot');
+							this.inputState = 'slot';
+							this.stage.on('stagemousedown', (event, data) => {
+								console.log('client state: normal');
+								this.inputState = 'normal';
+								console.log(event.stageX + ', ' + event.stageY);
+								DATA.sid = this.FindNearestSlot(event.stageX, event.stageY, data.maxDistance);
+								console.log(DATA.sid);
+								this.socket.emit(element.event, DATA)
+							}, null, true, {maxDistance: 70})
+					}, element.data, draw, element.scale);
+				default: break;
+			}
+			break;
+		case 'button':
+			return this.BuildImage(element.srcID, element.x, element.y,
+				element.width, element.height, element.buttonStrOffset, (event, DATA) => {
+					this.socket.emit(element.event, DATA);
+				}, element.data, draw, element.scale);
+		case 'static':
+			return this.BuildImage(element.srcID, element.x, element.y,
+				element.width, element.height, element.buttonStrOffset, null, null, draw, element.scale);
+		default: break;
+	}
 }
 gn.prototype.BuildProgressBar = function() {
 	var progressBar = new createjs.Shape();
@@ -100,6 +257,7 @@ gn.prototype.BuildProgressBar = function() {
 	stage.addChild(this.progressBar);
 	stage.update();
 }
+
 // Build
 gn.prototype.BuildScene = function() {
 	
@@ -136,6 +294,59 @@ gn.prototype.BuildUnit = function(data) {
 	stage.addChild(c);
 	stage.update();
 }
+gn.prototype.DrawHeroSelection = function(data) {
+	if(this.currentPanel == 'panel-Reborn') {
+		var circle = this.panel['panel-Reborn'].getChildAt(3);
+		switch (data.type) {
+			case 'Nekomata':
+				circle.x = 30;
+				break;
+			case 'Ameonna':
+				circle.x = 110;
+				break;
+			case 'Todomeki':
+				circle.x = 190;
+				break;
+			default:
+				break;
+		}
+	}
+}
+gn.prototype.BuildHero = function(data) {
+	var img = this.assets['assets-' + data.type];
+	var unit = new createjs.Bitmap(img);
+	var c = new createjs.Container();
+	
+	unit.regX = 32;
+	unit.regY = 48;
+	
+	unit.cache(0, 0, 64, 64);
+	
+	unit.rotation = -8;
+	createjs.Tween.get(unit, {loop: true}, null, {override: true})
+		.to({rotation: 8}, 1200, createjs.Ease.sineInOut)
+		.to({rotation: -8}, 1200, createjs.Ease.sineInOut);
+	
+	c.addChild(unit);
+	
+	c.x = data.x;
+	c.y = data.y;
+	
+	this.hero = c;
+	this.heroName = data.type;
+	
+	if(this.side == 'ghost') {
+		this.heroMovement = stage.on('stagemousedown', (event, data) => {
+			var jid = this.FindNearestJoint(event.stageX, event.stageY, 50);
+			if(jid != -1) {
+				this.socket.emit('move-hero', {jid: jid});
+			}
+		});
+	}
+	
+	stage.addChild(c);
+	stage.update();
+}
 gn.prototype.BuildTower = function(data) {
 	var img = this.assets['assets-' + data.type];
 	var unit = new createjs.Bitmap(img);
@@ -155,6 +366,32 @@ gn.prototype.BuildTower = function(data) {
 	stage.addChild(c);
 	stage.update();
 }
+gn.prototype.BuildEnsign = function(data) {
+	var img = this.assets['assets-' + data.type];
+	var unit = new createjs.Bitmap(img);
+	var c = new createjs.Container();
+	
+	unit.regX = 15;
+	unit.regY = 176;
+	unit.scaleX = 0.5;
+	unit.scaleY = 0.5;
+	
+	unit.cache(0, 0, 70, 192);
+	
+	unit.rotation = -2;
+	createjs.Tween.get(unit, {loop: true}, null, {override: true})
+		.to({rotation: 4}, 1500, createjs.Ease.sineInOut)
+		.to({rotation: -2}, 1500, createjs.Ease.sineInOut);
+	
+	c.addChild(unit);
+	
+	c.x = this.mapData.joints[+data.jid].x;
+	c.y = this.mapData.joints[+data.jid].y;
+	
+	this.towers.push(c);
+	stage.addChild(c);
+	stage.update();
+}
 gn.prototype.BuildBlocker = function(data) {
 	
 }
@@ -167,11 +404,14 @@ gn.prototype.MoveUnitTo = function(data) {
 			.to({x: data.x, y: data.y}, data.duration);
 	}
 }
-gn.prototype.MoveHeroTo = function() {
-	
+gn.prototype.MoveHeroTo = function(data) {
+	if(this.hero != undefined) {
+		createjs.Tween.get(this.hero, {override: true})
+			.to({x: data.x, y: data.y}, data.duration);
+	}
 }
 
-// Removes
+// Remove
 gn.prototype.RemoveUnit = function(data) {
 	// {uid}
 	
@@ -181,38 +421,46 @@ gn.prototype.RemoveHero = function(data) {
 	// {}
 }
 
+gn.prototype.RemoveTower = function(data) {
+	
+}
+
 // Effects
 gn.prototype.DamageEffect = function() {
 	
 }
 gn.prototype.CoolDownEffect = function(data) {
 	// Check if the corresponding button exists.
-	if(this.panel['button-' + data.type] != undefined) {
+	if(this.UI['button-' + data.type] != undefined) {
 		// Start the cool down timing (This time is a little bit late than server)
 		var startTime = (new Date()).getTime();
 		// Find the Cover effect layer
-		var cover = this.panel['button-' + data.type].getChildAt(1);
-		const width = cover.getBounds().width;
-		const height = cover.getBounds().height;
-		// Bind the animation to tick event
-		cover._onTick = cover.on('tick', function(event, data){
-			// Each tick
-			var time = (new Date()).getTime();
-			// Stop the animation if time out
-			if(time >= data.startTime + data.duration) {
-				// Remove the tick listener
-				cover.off('tick', cover._onTick);
-				// Make sure the mask is removed
+		var cover = this.UI['button-' + data.type].getChildAt(1);
+		if(cover.graphics != undefined) {
+			const width = cover.getBounds().width;
+			const height = cover.getBounds().height;
+			// Bind the animation to tick event
+			cover._onTick = cover.on('tick', function(event, DATA){
+				// Each tick
+				var time = (new Date()).getTime();
+				// Stop the animation if time out
+				if(time >= DATA.startTime + DATA.duration) {
+					// Remove the tick listener
+					cover.off('tick', cover._onTick);
+					// Make sure the mask is removed
+					cover.updateCache();
+					stage.update();
+				}
+				// Calculate the length of mask
+				var percentage = (time - DATA.startTime)/(DATA.duration);
+				// Draw the mask
+				cover.graphics.clear().beginFill("rgba(50, 50, 50, 0.90)").drawRect(0, height * percentage, width, height * (1 - percentage));
+				// Update cache to display it
 				cover.updateCache();
-				stage.update();
-			}
-			// Calculate the length of mask
-			var percentage = (time - data.startTime)/(data.duration);
-			// Draw the mask
-			cover.graphics.clear().beginFill("rgba(60, 60, 60, 0.80)").drawRect(0, height * percentage, width, height * (1 - percentage));
-			// Update cache to display it
-			cover.updateCache();
-		}, null, false, {startTime: startTime, duration: data.duration});
+			}, null, false, {startTime: startTime, duration: data.duration});
+		} else {
+			console.log('Unable to find button-' + data.type);
+		}
 	}
 }
 
@@ -374,6 +622,7 @@ function initGame(socket){
 				break;
 			case createjs.AbstractLoader.JSON:
 				if(event.item.id.substr(0, 6) == 'layout') {
+					// console.log(event);
 					gnclient.layout = event.result;
 				}
 			default:
@@ -394,68 +643,10 @@ function initGame(socket){
 		stage.addChild(bg);
 		
 		// UI
+		// console.log(gnclient.layout);
 		gnclient.layout.forEach(function(element) {
-			switch (element.type) {
-				case 'build':
-					switch (element.input) {
-						case 'none':
-							gnclient.BuildImageButton(element.name, element.srcID, element.x, element.y,
-								element.width, element.height, element.buttonStrOffset, function(event, DATA){
-									socket.emit(element.event, DATA);
-							}, element.data);
-							break;
-						case 'jid':
-							gnclient.BuildImageButton(element.name, element.srcID, element.x, element.y,
-								element.width, element.height, element.buttonStrOffset, function(event, DATA){
-									console.log('client state: input for joint');
-									gnclient.inputState = 'joint';
-									stage.on('stagemousedown', function(event, data){
-										console.log('client state: normal');
-										gnclient.inputState = 'normal';
-										DATA.jid = gnclient.FindNearestJoint(event.stageX, event.stageY, data.maxDistance);
-										console.log(DATA.jid);
-										socket.emit(element.event, DATA)
-									}, null, true, {maxDistance: 50})
-							}, element.data);
-							break;
-						case 'sid':
-							gnclient.BuildImageButton(element.name, element.srcID, element.x, element.y,
-								element.width, element.height, element.buttonStrOffset, function(event, DATA){
-									console.log('client state: input for slot');
-									gnclient.inputState = 'slot';
-									stage.on('stagemousedown', function(event, data){
-										console.log('client state: normal');
-										gnclient.inputState = 'normal';
-										console.log(event.stageX + ', ' + event.stageY);
-										DATA.sid = gnclient.FindNearestSlot(event.stageX, event.stageY, data.maxDistance);
-										console.log(DATA.sid);
-										socket.emit(element.event, DATA)
-									}, null, true, {maxDistance: 70})
-							}, element.data);
-							break;
-						default: break;
-					}
-					break;
-				case 'skill':
-					switch (element.input) {
-						case 'none':
-							break;
-						case 'jid':
-							break;
-						case 'sid':
-							break;
-						default: break;
-					}
-					break;
-				default: break;
-			}
-		})
-		
-		
-		// Buttons
-		// gnclient.BuildButton('Kappa', 720, 630, 40, 40, function(){
-		//     socket.emit('create-unit', {type: 'Kappa'});
-		// }, {});
+			gnclient.ParseLayout(element, true);
+		});
 		
 		stage.update();
 		console.log("loading-complete");
@@ -469,8 +660,8 @@ function initGame(socket){
 		manifest.push({src: 'img/bg/' + gnclient.map + '.png', id:'assets-map'});
 		
 		preload.on('progress', handleProgress);
-		preload.on("complete", handleComplete);
 		preload.on("fileload", handleAssetsLoad);
+		preload.on("complete", handleComplete);
 		
 		stage.removeAllChildren();
 		stage.clear();
@@ -502,6 +693,15 @@ function initGame(socket){
 		gnclient.CoolDownEffect(data);
 	});
 	
+	socket.on('hero-reborn-cd', function(data) {
+		
+	});
+	
+	socket.on('hero-skill-cd', function(data) {
+		data.type = gnclient.heroName + '-Skill' + data.skillID;
+	    gnclient.CoolDownEffect(data);
+	});
+	
 	socket.on('map-data', function(data) {
 		gnclient.mapData = data;
 	})
@@ -514,91 +714,94 @@ function initGame(socket){
 	
 	socket.on('game-end', function(){
 		console.log('');
-		//broadcast('')
+	});
+	
+	socket.on('soul-update', function(data){
+		if (gnclient.side == 'ghost'){
+			console.log("soul-update", data.soul);
+			gnclient.soul = data.soul;
+			if (!data.ok){
+				console.log('Insufficient money');
+			}
+		}
+	});
+	
+	socket.on('gold-update', function(data){
+		if (gnclient.side == 'human'){
+			console.log("gold-update", data.gold);
+			gnclient.soul = data.gold;
+			if (!data.ok){
+				console.log('Insufficient money');
+			}
+		}
 	});
 	
 	socket.on('unit-created', function(data){
-		console.log('unit-created ' + data.type);
 		gnclient.BuildUnit(data);
-		//broadcast('')
 	});
 	
 	socket.on('unit-moving', function(data){
-		// console.log('unit-moving');
 		gnclient.MoveUnitTo(data);
-		//broadcast('')
 	});
-	
-	// socket.on('unit-arrived', function(){
-	//     console.log('');
-	//     //broadcast('')
-	// });
 	
 	socket.on('unit-attack', function(){
 		console.log('');
-		//broadcast('')
 	});
 	
 	socket.on('unit-hp-update', function(uid, hp){
 		console.log('');
-		//broadcast('')
 	});
 	
 	socket.on('unit-nerf', function(uid, attr){
 		console.log('');
-		//broadcast('')
 	});
 	
 	socket.on('unit-dead', function(data){
 		console.log('unit-dead', data);
 		gnclient.RemoveUnit(data);
-		//broadcast('')
 	});
 	
 	socket.on('unit-destroyed', function(uid){
 		console.log('');
-		//broadcast('')
 	});
 	
-	socket.on('hero-moving', function(jid){
-		console.log('');
-		//broadcast('')
+	socket.on('hero-moving', function(data){
+		gnclient.MoveHeroTo(data);
 	});
 	
 	// socket.on('hero-arrived', function(){
 	//     console.log('');
-	//     //broadcast('')
 	// });
 	
 	socket.on('hero-skill', function(skill, target){
 		console.log('');
-		//broadcast('')
 	});
 	
 	socket.on('hero-attack', function(){
 		console.log('');
-		//broadcast('')
 	});
 	
 	socket.on('hero-hp-update', function(){
 		console.log('');
-		//broadcast('')
 	});
 	
 	socket.on('hero-nerf', function(){
 		console.log('');
-		//broadcast('')
 	});
 	
 	socket.on('hero-dead', function(data){
 		console.log('hero-dead', data);
 		gnclient.RemoveHero(data);
-		//broadcast('')
 	});
 	
-	socket.on('hero-reborn', function(){
-		console.log('');
-		//broadcast('')
+	socket.on('hero-select', function(data){
+		gnclient.DrawHeroSelection(data);
+	})
+	
+	socket.on('hero-reborn', function(data){
+		console.log('hero-reborn', data);
+		gnclient.BuildHero(data);
+		gnclient.TogglePanel('panel-' + data.type);
 	});
 	
 	socket.on('tower-built', function(data){
@@ -607,36 +810,29 @@ function initGame(socket){
 	
 	socket.on('tower-removed', function(){
 		console.log('');
-		//broadcast('')
 	});
 	
 	socket.on('tower-attack', function(){
 		console.log('');
-		//broadcast('')
 	});
 	
 	socket.on('tower-hp-update', function(){
 		console.log('');
-		//broadcast('')
 	});
 	
 	socket.on('tower-nerf', function(){
 		console.log('');
-		//broadcast('')
 	});
 	
-	socket.on('ensign-planted', function(){
-		console.log('');
-		//broadcast('')
+	socket.on('ensign-built', function(data) {
+		gnclient.BuildEnsign(data)
 	});
 	
 	socket.on('ensign-removed', function(){
 		console.log('');
-		//broadcast('')
 	});
 	
 	// socket.on('', function(){
 	//     console.log('');
-	//     //broadcast('')
 	// });
 }

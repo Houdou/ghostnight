@@ -33,6 +33,9 @@ Tower.prototype.RequireTarget = function() {
 };
 // Override the Dead method
 Tower.prototype.Dead = function(killedBy) {
+    // Econ system
+    this.GM.AddSoul(this.value);
+    
     this.slot.ResetTower();
 }
 

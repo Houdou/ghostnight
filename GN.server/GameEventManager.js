@@ -21,7 +21,15 @@ var GameEventManager = function(room) {
     
     this.on('button-cd', function(data){
     	room.broadcast('button-cd', data);
-    })
+    });
+    
+    this.on('soul-update', function(data){
+    	room.broadcast('soul-update', data);
+    });
+    
+    this.on('gold-update', function(data){
+    	room.broadcast('gold-update', data);
+    });
     
     this.on('unit-moving', function(data){
         room.broadcast('unit-moving', data);
@@ -62,10 +70,8 @@ var GameEventManager = function(room) {
         
     });
     
-    this.on('hero-moving', function(jid){
-        room.broadcast('hero-moving');
-        console.log('');
-        
+    this.on('hero-moving', function(data){
+        room.broadcast('hero-moving', data);
     });
     
     // this.on('hero-arrived', function(){
@@ -74,10 +80,14 @@ var GameEventManager = function(room) {
         
     // });
     
-    this.on('hero-skill', function(skill, target){
+    this.on('hero-skill', function(data){
         room.broadcast('hero-skill');
         console.log('');
         
+    });
+    
+    this.on('hero-skill-cd', function(data){
+        room.broadcast('hero-skill-cd', data);	
     });
     
     this.on('hero-attack', function(){
@@ -104,10 +114,12 @@ var GameEventManager = function(room) {
         
     });
     
-    this.on('hero-reborn', function(){
-        room.broadcast('hero-reborn');
-        console.log('');
-        
+    this.on('hero-select', function(data){
+    	room.broadcast('hero-select', data);
+    })
+    
+    this.on('hero-reborn', function(data){
+        room.broadcast('hero-reborn', data);
     });
     
     this.on('tower-built', function(){

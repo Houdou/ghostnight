@@ -12,7 +12,7 @@ var SetupGhost = function(socket, room) {
     
     socket.on('move-hero', function(data) {
         GN.MoveHeroTo(data.jid);
-        //broadcast('hero-moved', data);
+        console.log('move-hero', data);
     });
     
     socket.on('use-hero-skill', function(data) {

@@ -33,10 +33,12 @@ var GameMaster = function(settings, GEM){
     
     this.weather = Weather.night;
     this.time = -1;
+    this.tickNumber = -1;
     this.startTime = -1;
     this.timerInterval = -1;
-    this.soul = 0;
-    this.gold = 0;
+    this.soul = settings.soul || 0;
+    this.gold = settings.gold || 0;
+    this.soulIncreasing = settings.soulIncreasing || {value: 1000, interval: 10};
     
     this.mapLoaded = false;
     this.settings = settings;
@@ -47,11 +49,8 @@ var GameMaster = function(settings, GEM){
     this.huamnTotalDMG = 0;
     this.humanKill = 0;
     
-    if(settings.debug != undefined) {
-    	this.debug = false;
-    } else {
-    	this.debug = true;
-    }
+    this.debug = settings.debug || false;
+    
     this.logger = new Logger({fileName: "Room" + this.settings.Room + ".txt"}, {settings: this.settings});
 };
 GameMaster.prototype.StartTiming = function() {
@@ -61,10 +60,19 @@ GameMaster.prototype.StartTiming = function() {
         this.time = 0;
         this.startTime = (new Date()).getTime();
         
+        this.tickNumber = 0;
+        
         this.timerInterval = setInterval(function(){
             that.time = (new Date()).getTime() - that.startTime;
             
-            console.log(that.time);
+            // Econ system
+            that.tickNumber++;
+            if (that.tickNumber % that.soulIncreasing.interval == 0) {
+            	
+            	that.AddSoul(that.soulIncreasing.value);
+            }
+            // console.log("tickNumber", that.tickNumber);
+            // console.log(that.time);
             
             if(that.time >= that.settings.TimeLimit * 1000) {
                 console.log("Time out");
@@ -76,6 +84,46 @@ GameMaster.prototype.StartTiming = function() {
         return false;
     }
 }
+
+// Econ system
+GameMaster.prototype.AddSoul = function (value) {
+	if (this.debug) console.log('AddSoul', value);
+	this.soul += value;
+	this.GEM.emit('soul-update', {ok: true, soul: this.soul});
+	return this.soul;
+}
+GameMaster.prototype.SubSoul = function (value) {
+	if (value > this.soul) {
+		if (this.debug) console.log('Soul not enough', value);
+		this.GEM.emit('soul-update', {ok: false, soul: this.soul});
+		return -1;
+	} else {
+		if (this.debug) console.log('SubSoul', value);
+		this.soul -= value;
+		this.GEM.emit('soul-update', {ok: true, soul: this.soul});
+		return this.soul;
+	}
+}
+GameMaster.prototype.AddGold = function (value) {
+	if (this.debug) console.log('AddGold', value);
+	this.gold += value;
+	this.GEM.emit('gold-update', {ok: true, gold: this.gold});
+	return this.gold;
+}
+GameMaster.prototype.SubGold = function (value) {
+	if (value > this.gold) {
+		if (this.debug) console.log('Gold not enough', value);
+		this.GEM.emit('gold-update', {ok: false, gold: this.gold});
+		return -1;
+	} else {
+		if (this.debug) console.log('SubGold', value);
+		this.gold -= value;
+		this.GEM.emit('gold-update', {ok: true, gold: this.gold});
+		return this.gold;
+	}
+}
+
+// CD system
 GameMaster.prototype.ResetCoolDown = function(list) {
 	list.forEach((type) => {
 		this.UpdateCoolDown(type);

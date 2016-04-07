@@ -120,6 +120,18 @@
 			
 		}
 		
+	event: 'soul-update',
+	data: {
+			ok: <bool>
+			soul: <int>
+		}
+		
+	event: 'gold-update',
+	data: {
+			ok: <bool>
+			gold: <int>
+		}
+		
 ## Unit controller
 
 	event: 'unit-created',
@@ -127,6 +139,11 @@
 			type: ''
 			jid: 0 / <int> [1, -)
 			uid: <int> [0, -)
+		}
+		
+	event: 'button-cd',
+	data: {
+			uid: 
 		}
 		
 	event: 'unit-moving',
@@ -186,8 +203,13 @@
 		
 	event: 'hero-skill',
 	data: {
+			skillID:  
+			data: 
+		}
+		
+	event: 'hero-skill-cd',
+	data: {
 			skillID: 
-			target: 
 			data: 
 		}
 		

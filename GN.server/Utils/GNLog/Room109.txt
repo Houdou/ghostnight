@@ -1,0 +1,626 @@
+================================================================================
+                       - Log file for GhostNight server -                       
+================================================================================
+ - File name: Room109.txt
+ - Create time: 4/7/2016 11:20:15 PM
+ - Room Number: 109
+================================================================================
+ Timestamp | Event source | Event name | Data                                   
+--------------------------------------------------------------------------------
+     15876 |     Todomeki |     ATTACK | Blocker-0 90 to 910
+     16214 |     Todomeki |     ATTACK | Blocker-0 90 to 820
+     16602 |     Todomeki |     ATTACK | Blocker-0 90 to 730
+     16939 |     Todomeki |     ATTACK | Blocker-0 90 to 640
+     17277 |     Todomeki |     ATTACK | Blocker-0 90 to 550
+     17612 |     Todomeki |     ATTACK | Blocker-0 90 to 460
+     17948 |     Todomeki |     ATTACK | Blocker-0 90 to 370
+     18283 |     Todomeki |     ATTACK | Blocker-0 90 to 280
+     18619 |     Todomeki |     ATTACK | Blocker-0 90 to 190
+     18956 |     Todomeki |     ATTACK | Blocker-0 90 to 100
+     19293 |     Todomeki |     ATTACK | Blocker-0 90 to 10
+     19629 |     Todomeki |     ATTACK | Blocker-0 10 to 0
+     19629 |    Blocker-0 |        DIE | killed by Todomeki
+     19967 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     19967 |    Blocker-0 |        DIE | killed by Todomeki
+     20306 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     20306 |    Blocker-0 |        DIE | killed by Todomeki
+     20651 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     20651 |    Blocker-0 |        DIE | killed by Todomeki
+     20990 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     20990 |    Blocker-0 |        DIE | killed by Todomeki
+     21329 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     21329 |    Blocker-0 |        DIE | killed by Todomeki
+     21667 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     21668 |    Blocker-0 |        DIE | killed by Todomeki
+     22003 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     22003 |    Blocker-0 |        DIE | killed by Todomeki
+     22336 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     22337 |    Blocker-0 |        DIE | killed by Todomeki
+     22671 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     22671 |    Blocker-0 |        DIE | killed by Todomeki
+     23005 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     23006 |    Blocker-0 |        DIE | killed by Todomeki
+     23340 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     23340 |    Blocker-0 |        DIE | killed by Todomeki
+     23674 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     23674 |    Blocker-0 |        DIE | killed by Todomeki
+     24013 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     24013 |    Blocker-0 |        DIE | killed by Todomeki
+     24347 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     24347 |    Blocker-0 |        DIE | killed by Todomeki
+     24682 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     24682 |    Blocker-0 |        DIE | killed by Todomeki
+     25017 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     25017 |    Blocker-0 |        DIE | killed by Todomeki
+     25353 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     25353 |    Blocker-0 |        DIE | killed by Todomeki
+     25688 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     25689 |    Blocker-0 |        DIE | killed by Todomeki
+     26023 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     26023 |    Blocker-0 |        DIE | killed by Todomeki
+     26358 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     26358 |    Blocker-0 |        DIE | killed by Todomeki
+     26694 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     26694 |    Blocker-0 |        DIE | killed by Todomeki
+     27030 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     27030 |    Blocker-0 |        DIE | killed by Todomeki
+     27365 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     27365 |    Blocker-0 |        DIE | killed by Todomeki
+     27701 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     27701 |    Blocker-0 |        DIE | killed by Todomeki
+     28035 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     28035 |    Blocker-0 |        DIE | killed by Todomeki
+     28373 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     28373 |    Blocker-0 |        DIE | killed by Todomeki
+     28706 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     28707 |    Blocker-0 |        DIE | killed by Todomeki
+     29041 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     29042 |    Blocker-0 |        DIE | killed by Todomeki
+     29377 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     29377 |    Blocker-0 |        DIE | killed by Todomeki
+     29711 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     29711 |    Blocker-0 |        DIE | killed by Todomeki
+     30046 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     30047 |    Blocker-0 |        DIE | killed by Todomeki
+     30384 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     30384 |    Blocker-0 |        DIE | killed by Todomeki
+     30718 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     30719 |    Blocker-0 |        DIE | killed by Todomeki
+     31053 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     31054 |    Blocker-0 |        DIE | killed by Todomeki
+     31388 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     31388 |    Blocker-0 |        DIE | killed by Todomeki
+     31722 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     31722 |    Blocker-0 |        DIE | killed by Todomeki
+     32057 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     32057 |    Blocker-0 |        DIE | killed by Todomeki
+     32394 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     32394 |    Blocker-0 |        DIE | killed by Todomeki
+     32730 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     32730 |    Blocker-0 |        DIE | killed by Todomeki
+     33068 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     33068 |    Blocker-0 |        DIE | killed by Todomeki
+     33404 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     33404 |    Blocker-0 |        DIE | killed by Todomeki
+     33737 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     33738 |    Blocker-0 |        DIE | killed by Todomeki
+     34082 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     34083 |    Blocker-0 |        DIE | killed by Todomeki
+     34428 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     34428 |    Blocker-0 |        DIE | killed by Todomeki
+     34762 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     34762 |    Blocker-0 |        DIE | killed by Todomeki
+     35097 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     35097 |    Blocker-0 |        DIE | killed by Todomeki
+     35433 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     35433 |    Blocker-0 |        DIE | killed by Todomeki
+     35767 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     35767 |    Blocker-0 |        DIE | killed by Todomeki
+     36101 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     36101 |    Blocker-0 |        DIE | killed by Todomeki
+     36437 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     36437 |    Blocker-0 |        DIE | killed by Todomeki
+     36770 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     36770 |    Blocker-0 |        DIE | killed by Todomeki
+     37105 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     37106 |    Blocker-0 |        DIE | killed by Todomeki
+     37440 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     37440 |    Blocker-0 |        DIE | killed by Todomeki
+     37776 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     37776 |    Blocker-0 |        DIE | killed by Todomeki
+     38112 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     38112 |    Blocker-0 |        DIE | killed by Todomeki
+     38446 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     38446 |    Blocker-0 |        DIE | killed by Todomeki
+     38779 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     38779 |    Blocker-0 |        DIE | killed by Todomeki
+     39114 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     39114 |    Blocker-0 |        DIE | killed by Todomeki
+     39449 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     39449 |    Blocker-0 |        DIE | killed by Todomeki
+     39785 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     39786 |    Blocker-0 |        DIE | killed by Todomeki
+     40125 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     40125 |    Blocker-0 |        DIE | killed by Todomeki
+     40461 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     40462 |    Blocker-0 |        DIE | killed by Todomeki
+     40797 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     40798 |    Blocker-0 |        DIE | killed by Todomeki
+     41133 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     41134 |    Blocker-0 |        DIE | killed by Todomeki
+     41468 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     41468 |    Blocker-0 |        DIE | killed by Todomeki
+     41807 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     41807 |    Blocker-0 |        DIE | killed by Todomeki
+     42149 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     42149 |    Blocker-0 |        DIE | killed by Todomeki
+     42497 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     42497 |    Blocker-0 |        DIE | killed by Todomeki
+     42833 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     42833 |    Blocker-0 |        DIE | killed by Todomeki
+     43169 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     43170 |    Blocker-0 |        DIE | killed by Todomeki
+     43506 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     43506 |    Blocker-0 |        DIE | killed by Todomeki
+     43840 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     43840 |    Blocker-0 |        DIE | killed by Todomeki
+     44175 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     44175 |    Blocker-0 |        DIE | killed by Todomeki
+     44510 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     44510 |    Blocker-0 |        DIE | killed by Todomeki
+     44845 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     44845 |    Blocker-0 |        DIE | killed by Todomeki
+     45178 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     45178 |    Blocker-0 |        DIE | killed by Todomeki
+     45513 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     45513 |    Blocker-0 |        DIE | killed by Todomeki
+     45848 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     45848 |    Blocker-0 |        DIE | killed by Todomeki
+     46183 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     46183 |    Blocker-0 |        DIE | killed by Todomeki
+     46517 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     46517 |    Blocker-0 |        DIE | killed by Todomeki
+     46850 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     46851 |    Blocker-0 |        DIE | killed by Todomeki
+     47184 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     47185 |    Blocker-0 |        DIE | killed by Todomeki
+     47518 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     47519 |    Blocker-0 |        DIE | killed by Todomeki
+     47853 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     47853 |    Blocker-0 |        DIE | killed by Todomeki
+     48186 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     48187 |    Blocker-0 |        DIE | killed by Todomeki
+     48521 |    Blocker-0 |        DIE | killed by Todomeki
+     48520 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     48855 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     48855 |    Blocker-0 |        DIE | killed by Todomeki
+     49189 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     49189 |    Blocker-0 |        DIE | killed by Todomeki
+     49522 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     49523 |    Blocker-0 |        DIE | killed by Todomeki
+     49860 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     49861 |    Blocker-0 |        DIE | killed by Todomeki
+     50194 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     50194 |    Blocker-0 |        DIE | killed by Todomeki
+     50528 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     50529 |    Blocker-0 |        DIE | killed by Todomeki
+     50863 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     50863 |    Blocker-0 |        DIE | killed by Todomeki
+     51198 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     51199 |    Blocker-0 |        DIE | killed by Todomeki
+     51534 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     51534 |    Blocker-0 |        DIE | killed by Todomeki
+     51869 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     51869 |    Blocker-0 |        DIE | killed by Todomeki
+     52202 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     52203 |    Blocker-0 |        DIE | killed by Todomeki
+     52537 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     52537 |    Blocker-0 |        DIE | killed by Todomeki
+     52870 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     52870 |    Blocker-0 |        DIE | killed by Todomeki
+     53204 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     53205 |    Blocker-0 |        DIE | killed by Todomeki
+     53538 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     53539 |    Blocker-0 |        DIE | killed by Todomeki
+     53873 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     53873 |    Blocker-0 |        DIE | killed by Todomeki
+     54207 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     54207 |    Blocker-0 |        DIE | killed by Todomeki
+     54541 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     54541 |    Blocker-0 |        DIE | killed by Todomeki
+     54879 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     54879 |    Blocker-0 |        DIE | killed by Todomeki
+     55217 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     55217 |    Blocker-0 |        DIE | killed by Todomeki
+     55561 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     55561 |    Blocker-0 |        DIE | killed by Todomeki
+     55899 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     55899 |    Blocker-0 |        DIE | killed by Todomeki
+     56234 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     56234 |    Blocker-0 |        DIE | killed by Todomeki
+     56572 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     56573 |    Blocker-0 |        DIE | killed by Todomeki
+     56907 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     56907 |    Blocker-0 |        DIE | killed by Todomeki
+     57255 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     57256 |    Blocker-0 |        DIE | killed by Todomeki
+     57598 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     57598 |    Blocker-0 |        DIE | killed by Todomeki
+     57933 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     57933 |    Blocker-0 |        DIE | killed by Todomeki
+     58269 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     58269 |    Blocker-0 |        DIE | killed by Todomeki
+     58606 |    Blocker-0 |        DIE | killed by Todomeki
+     58605 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     58940 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     58941 |    Blocker-0 |        DIE | killed by Todomeki
+     59276 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     59277 |    Blocker-0 |        DIE | killed by Todomeki
+     59614 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     59614 |    Blocker-0 |        DIE | killed by Todomeki
+     59949 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     59949 |    Blocker-0 |        DIE | killed by Todomeki
+     60284 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     60284 |    Blocker-0 |        DIE | killed by Todomeki
+     60618 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     60618 |    Blocker-0 |        DIE | killed by Todomeki
+     60952 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     60952 |    Blocker-0 |        DIE | killed by Todomeki
+     61170 |    Inugami-3 |       BUFF | atk x2
+     61286 |    Blocker-0 |        DIE | killed by Todomeki
+     61285 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     61621 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     61621 |    Blocker-0 |        DIE | killed by Todomeki
+     61956 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     61956 |    Blocker-0 |        DIE | killed by Todomeki
+     62291 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     62291 |    Blocker-0 |        DIE | killed by Todomeki
+     62627 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     62627 |    Blocker-0 |        DIE | killed by Todomeki
+     62961 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     62961 |    Blocker-0 |        DIE | killed by Todomeki
+     63295 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     63296 |    Blocker-0 |        DIE | killed by Todomeki
+     63632 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     63633 |    Blocker-0 |        DIE | killed by Todomeki
+     63966 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     63967 |    Blocker-0 |        DIE | killed by Todomeki
+     64301 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     64301 |    Blocker-0 |        DIE | killed by Todomeki
+     64634 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     64635 |    Blocker-0 |        DIE | killed by Todomeki
+     64969 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     64969 |    Blocker-0 |        DIE | killed by Todomeki
+     65303 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     65303 |    Blocker-0 |        DIE | killed by Todomeki
+     65641 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     65641 |    Blocker-0 |        DIE | killed by Todomeki
+     66136 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     66137 |    Blocker-0 |        DIE | killed by Todomeki
+     66493 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     66493 |    Blocker-0 |        DIE | killed by Todomeki
+     66845 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     66845 |    Blocker-0 |        DIE | killed by Todomeki
+     67188 |     Todomeki |       HEAL | Blocker-0 0 to 0
+     67188 |    Blocker-0 |        DIE | killed by Todomeki
+     67524 |     Todomeki |     ATTACK | Inugami-3 90 to 910
+     67709 |    Inugami-3 |     ATTACK | Todomeki 190 to 810
+     67710 |     Todomeki |       NERF | atk x0.5
+     67858 |     Todomeki |     ATTACK | Inugami-3 40 to 870
+     68045 |    Inugami-3 |     ATTACK | Todomeki 190 to 620
+     68046 |     Todomeki |       NERF | atk x0.5
+     68193 |     Todomeki |     ATTACK | Inugami-3 15 to 855
+     68384 |    Inugami-3 |     ATTACK | Todomeki 190 to 430
+     68384 |     Todomeki |       NERF | atk x0.5
+     68532 |     Todomeki |     ATTACK | Inugami-3 2.5 to 852.5
+     68721 |    Inugami-3 |     ATTACK | Todomeki 190 to 240
+     68721 |     Todomeki |       NERF | atk x0.5
+     68870 |     Todomeki |     ATTACK | Inugami-3 1 to 851.5
+     69055 |    Inugami-3 |     ATTACK | Todomeki 190 to 50
+     69055 |     Todomeki |       NERF | atk x0.5
+     69207 |     Todomeki |     ATTACK | Inugami-3 1 to 850.5
+     69390 |    Inugami-3 |     ATTACK | Todomeki 50 to 0
+     69391 |     Todomeki |        DIE | killed by Inugami-3
+     69391 |     Todomeki |       NERF | atk x0.5
+     71712 |     Todomeki |       BUFF | atk x2
+     72046 |     Todomeki |       BUFF | atk x2
+     72385 |     Todomeki |       BUFF | atk x2
+     72724 |     Todomeki |       BUFF | atk x2
+     73056 |     Todomeki |       BUFF | atk x2
+     73396 |     Todomeki |       BUFF | atk x2
+     81172 |    Inugami-3 |       NERF | atk x0.5
+    115374 |    Inugami-3 |     ATTACK | Kappa-0 90 to 510
+    115374 |      Kappa-0 |       NERF | atk x0.5
+    115456 |      Kappa-0 |     ATTACK | Inugami-3 40 to 810.5
+    115713 |    Inugami-3 |     ATTACK | Kappa-0 90 to 420
+    115713 |      Kappa-0 |       NERF | atk x0.5
+    115804 |      Kappa-0 |     ATTACK | Inugami-3 15 to 795.5
+    116057 |    Inugami-3 |     ATTACK | Kappa-0 90 to 330
+    116057 |      Kappa-0 |       NERF | atk x0.5
+    116143 |      Kappa-0 |     ATTACK | Inugami-3 2.5 to 793
+    116391 |    Inugami-3 |     ATTACK | Kappa-0 90 to 240
+    116391 |      Kappa-0 |       NERF | atk x0.5
+    116477 |      Kappa-0 |     ATTACK | Inugami-3 1 to 792
+    116726 |    Inugami-3 |     ATTACK | Kappa-0 90 to 150
+    116727 |      Kappa-0 |       NERF | atk x0.5
+    116813 |      Kappa-0 |     ATTACK | Inugami-3 1 to 791
+    117063 |    Inugami-3 |     ATTACK | Kappa-0 90 to 60
+    117063 |      Kappa-0 |       NERF | atk x0.5
+    117149 |      Kappa-0 |     ATTACK | Inugami-3 1 to 790
+    117397 |    Inugami-3 |     ATTACK | Kappa-0 60 to 0
+    117398 |      Kappa-0 |        DIE | killed by Inugami-3
+    117399 |      Kappa-0 |       NERF | atk x0.5
+    118494 |    Inugami-3 |     ATTACK | Kappa-1 90 to 510
+    118494 |      Kappa-1 |       NERF | atk x0.5
+    118494 |      Kappa-1 |     ATTACK | Inugami-3 40 to 750
+    118828 |    Inugami-3 |     ATTACK | Kappa-1 90 to 420
+    118829 |      Kappa-1 |       NERF | atk x0.5
+    118829 |      Kappa-1 |     ATTACK | Inugami-3 15 to 735
+    119162 |      Kappa-1 |       NERF | atk x0.5
+    119162 |    Inugami-3 |     ATTACK | Kappa-1 90 to 330
+    119163 |      Kappa-1 |     ATTACK | Inugami-3 2.5 to 732.5
+    119375 |      Kappa-0 |       BUFF | atk x2
+    119497 |    Inugami-3 |     ATTACK | Kappa-1 90 to 240
+    119497 |      Kappa-1 |       NERF | atk x0.5
+    119498 |      Kappa-1 |     ATTACK | Inugami-3 1 to 731.5
+    119714 |      Kappa-0 |       BUFF | atk x2
+    119837 |    Inugami-3 |     ATTACK | Kappa-1 90 to 150
+    119837 |      Kappa-1 |       NERF | atk x0.5
+    119840 |      Kappa-1 |     ATTACK | Inugami-3 1 to 730.5
+    120057 |      Kappa-0 |       BUFF | atk x2
+    120180 |    Inugami-3 |     ATTACK | Kappa-1 90 to 60
+    120181 |      Kappa-1 |       NERF | atk x0.5
+    120181 |      Kappa-1 |     ATTACK | Inugami-3 1 to 729.5
+    120392 |      Kappa-0 |       BUFF | atk x2
+    120519 |    Inugami-3 |     ATTACK | Kappa-1 60 to 0
+    120528 |      Kappa-1 |        DIE | killed by Inugami-3
+    120528 |      Kappa-1 |       NERF | atk x0.5
+    120729 |      Kappa-0 |       BUFF | atk x2
+    121069 |      Kappa-0 |       BUFF | atk x2
+    121400 |      Kappa-0 |       BUFF | atk x2
+    121675 |    Inugami-3 |     ATTACK | Kappa-2 90 to 510
+    121675 |      Kappa-2 |       NERF | atk x0.5
+    121676 |      Kappa-2 |     ATTACK | Inugami-3 40 to 689.5
+    122013 |    Inugami-3 |     ATTACK | Kappa-2 90 to 420
+    122013 |      Kappa-2 |       NERF | atk x0.5
+    122014 |      Kappa-2 |     ATTACK | Inugami-3 15 to 674.5
+    122347 |    Inugami-3 |     ATTACK | Kappa-2 90 to 330
+    122347 |      Kappa-2 |       NERF | atk x0.5
+    122348 |      Kappa-2 |     ATTACK | Inugami-3 2.5 to 672
+    122494 |      Kappa-1 |       BUFF | atk x2
+    122682 |    Inugami-3 |     ATTACK | Kappa-2 90 to 240
+    122682 |      Kappa-2 |       NERF | atk x0.5
+    122682 |      Kappa-2 |     ATTACK | Inugami-3 1 to 671
+    122828 |      Kappa-1 |       BUFF | atk x2
+    123018 |    Inugami-3 |     ATTACK | Kappa-2 90 to 150
+    123018 |      Kappa-2 |       NERF | atk x0.5
+    123018 |      Kappa-2 |     ATTACK | Inugami-3 1 to 670
+    123163 |      Kappa-1 |       BUFF | atk x2
+    123353 |    Inugami-3 |     ATTACK | Kappa-2 90 to 60
+    123353 |      Kappa-2 |       NERF | atk x0.5
+    123354 |      Kappa-2 |     ATTACK | Inugami-3 1 to 669
+    123498 |      Kappa-1 |       BUFF | atk x2
+    123688 |    Inugami-3 |     ATTACK | Kappa-2 60 to 0
+    123689 |      Kappa-2 |        DIE | killed by Inugami-3
+    123690 |      Kappa-2 |       NERF | atk x0.5
+    123840 |      Kappa-1 |       BUFF | atk x2
+    124181 |      Kappa-1 |       BUFF | atk x2
+    124528 |      Kappa-1 |       BUFF | atk x2
+    125679 |      Kappa-2 |       BUFF | atk x2
+    126013 |      Kappa-2 |       BUFF | atk x2
+    126079 |    Inugami-3 |     ATTACK | Kappa-3 90 to 510
+    126080 |      Kappa-3 |       NERF | atk x0.5
+    126083 |      Kappa-3 |     ATTACK | Inugami-3 40 to 629
+    126348 |      Kappa-2 |       BUFF | atk x2
+    126428 |    Inugami-3 |     ATTACK | Kappa-3 90 to 420
+    126431 |      Kappa-3 |       NERF | atk x0.5
+    126434 |      Kappa-3 |     ATTACK | Inugami-3 15 to 614
+    126684 |      Kappa-2 |       BUFF | atk x2
+    126772 |    Inugami-3 |     ATTACK | Kappa-3 90 to 330
+    126772 |      Kappa-3 |       NERF | atk x0.5
+    126773 |      Kappa-3 |     ATTACK | Inugami-3 2.5 to 611.5
+    127019 |      Kappa-2 |       BUFF | atk x2
+    127107 |    Inugami-3 |     ATTACK | Kappa-3 90 to 240
+    127107 |      Kappa-3 |       NERF | atk x0.5
+    127108 |      Kappa-3 |     ATTACK | Inugami-3 1 to 610.5
+    127354 |      Kappa-2 |       BUFF | atk x2
+    127443 |    Inugami-3 |     ATTACK | Kappa-3 90 to 150
+    127443 |      Kappa-3 |       NERF | atk x0.5
+    127443 |      Kappa-3 |     ATTACK | Inugami-3 1 to 609.5
+    127692 |      Kappa-2 |       BUFF | atk x2
+    127781 |    Inugami-3 |     ATTACK | Kappa-3 90 to 60
+    127782 |      Kappa-3 |       NERF | atk x0.5
+    127787 |      Kappa-3 |     ATTACK | Inugami-3 1 to 608.5
+    128126 |    Inugami-3 |     ATTACK | Kappa-3 60 to 0
+    128133 |      Kappa-3 |        DIE | killed by Inugami-3
+    128134 |      Kappa-3 |       NERF | atk x0.5
+    130117 |      Kappa-3 |       BUFF | atk x2
+    130266 |    Inugami-3 |     ATTACK | Kappa-4 90 to 510
+    130267 |      Kappa-4 |       NERF | atk x0.5
+    130431 |      Kappa-3 |       BUFF | atk x2
+    130451 |      Kappa-4 |     ATTACK | Inugami-3 40 to 568.5
+    130603 |    Inugami-3 |     ATTACK | Kappa-4 90 to 420
+    130603 |      Kappa-4 |       NERF | atk x0.5
+    130773 |      Kappa-3 |       BUFF | atk x2
+    130788 |      Kappa-4 |     ATTACK | Inugami-3 15 to 553.5
+    130938 |    Inugami-3 |     ATTACK | Kappa-4 90 to 330
+    130938 |      Kappa-4 |       NERF | atk x0.5
+    131109 |      Kappa-3 |       BUFF | atk x2
+    131124 |      Kappa-4 |     ATTACK | Inugami-3 2.5 to 551
+    131276 |    Inugami-3 |     ATTACK | Kappa-4 90 to 240
+    131276 |      Kappa-4 |       NERF | atk x0.5
+    131444 |      Kappa-3 |       BUFF | atk x2
+    131460 |      Kappa-4 |     ATTACK | Inugami-3 1 to 550
+    131613 |    Inugami-3 |     ATTACK | Kappa-4 90 to 150
+    131614 |      Kappa-4 |       NERF | atk x0.5
+    131784 |      Kappa-3 |       BUFF | atk x2
+    131798 |      Kappa-4 |     ATTACK | Inugami-3 1 to 549
+    131953 |    Inugami-3 |     ATTACK | Kappa-4 90 to 60
+    131954 |      Kappa-4 |       NERF | atk x0.5
+    132143 |      Kappa-3 |       BUFF | atk x2
+    132161 |      Kappa-4 |     ATTACK | Inugami-3 1 to 548
+    132303 |    Inugami-3 |     ATTACK | Kappa-4 60 to 0
+    132304 |      Kappa-4 |        DIE | killed by Inugami-3
+    132304 |      Kappa-4 |       NERF | atk x0.5
+    134267 |      Kappa-4 |       BUFF | atk x2
+    134604 |      Kappa-4 |       BUFF | atk x2
+    134937 |      Kappa-4 |       BUFF | atk x2
+    135277 |      Kappa-4 |       BUFF | atk x2
+    135614 |      Kappa-4 |       BUFF | atk x2
+    135954 |      Kappa-4 |       BUFF | atk x2
+    136305 |      Kappa-4 |       BUFF | atk x2
+    138278 |    Inugami-3 |     ATTACK | Kappa-5 90 to 510
+    138279 |      Kappa-5 |       NERF | atk x0.5
+    138287 |      Kappa-5 |     ATTACK | Inugami-3 40 to 508
+    138616 |    Inugami-3 |     ATTACK | Kappa-5 90 to 420
+    138616 |      Kappa-5 |       NERF | atk x0.5
+    138627 |      Kappa-5 |     ATTACK | Inugami-3 15 to 493
+    139119 |    Inugami-3 |     ATTACK | Kappa-5 90 to 330
+    139119 |      Kappa-5 |       NERF | atk x0.5
+    139135 |      Kappa-5 |     ATTACK | Inugami-3 2.5 to 490.5
+    139455 |    Inugami-3 |     ATTACK | Kappa-5 90 to 240
+    139456 |      Kappa-5 |       NERF | atk x0.5
+    139475 |      Kappa-5 |     ATTACK | Inugami-3 1 to 489.5
+    139796 |    Inugami-3 |     ATTACK | Kappa-5 90 to 150
+    139797 |      Kappa-5 |       NERF | atk x0.5
+    139810 |      Kappa-5 |     ATTACK | Inugami-3 1 to 488.5
+    140132 |    Inugami-3 |     ATTACK | Kappa-5 90 to 60
+    140133 |      Kappa-5 |       NERF | atk x0.5
+    140145 |      Kappa-5 |     ATTACK | Inugami-3 1 to 487.5
+    140466 |    Inugami-3 |     ATTACK | Kappa-5 60 to 0
+    140467 |      Kappa-5 |        DIE | killed by Inugami-3
+    140467 |      Kappa-5 |       NERF | atk x0.5
+    140802 |    Inugami-3 |     ATTACK | Wanyudo-6 90 to 910
+    140802 |    Wanyudo-6 |       NERF | atk x0.5
+    141135 |    Inugami-3 |     ATTACK | Wanyudo-6 90 to 820
+    141136 |    Wanyudo-6 |       NERF | atk x0.5
+    141470 |    Inugami-3 |     ATTACK | Wanyudo-6 90 to 730
+    141470 |    Wanyudo-6 |       NERF | atk x0.5
+    141806 |    Inugami-3 |     ATTACK | Wanyudo-6 90 to 640
+    141806 |    Wanyudo-6 |       NERF | atk x0.5
+    142142 |    Inugami-3 |     ATTACK | Wanyudo-6 90 to 550
+    142142 |    Wanyudo-6 |       NERF | atk x0.5
+    142319 |      Kappa-5 |       BUFF | atk x2
+    142529 |    Inugami-3 |     ATTACK | Wanyudo-6 90 to 460
+    142529 |    Wanyudo-6 |       NERF | atk x0.5
+    142620 |      Kappa-5 |       BUFF | atk x2
+    142911 |    Inugami-3 |     ATTACK | Wanyudo-6 90 to 370
+    142912 |    Wanyudo-6 |       NERF | atk x0.5
+    143120 |      Kappa-5 |       BUFF | atk x2
+    143269 |    Inugami-3 |     ATTACK | Wanyudo-6 90 to 280
+    143270 |    Wanyudo-6 |       NERF | atk x0.5
+    143456 |      Kappa-5 |       BUFF | atk x2
+    143648 |    Inugami-3 |     ATTACK | Wanyudo-6 90 to 190
+    143648 |    Wanyudo-6 |       NERF | atk x0.5
+    143832 |      Kappa-5 |       BUFF | atk x2
+    143985 |    Inugami-3 |     ATTACK | Wanyudo-6 90 to 100
+    143985 |    Wanyudo-6 |       NERF | atk x0.5
+    144136 |      Kappa-5 |       BUFF | atk x2
+    144321 |    Inugami-3 |     ATTACK | Wanyudo-6 90 to 10
+    144322 |    Wanyudo-6 |       NERF | atk x0.5
+    144499 |      Kappa-5 |       BUFF | atk x2
+    144802 |    Wanyudo-6 |       BUFF | atk x2
+    145136 |    Wanyudo-6 |       BUFF | atk x2
+    145471 |    Wanyudo-6 |       BUFF | atk x2
+    145808 |    Wanyudo-6 |       BUFF | atk x2
+    146146 |    Wanyudo-6 |       BUFF | atk x2
+    146533 |    Wanyudo-6 |       BUFF | atk x2
+    146913 |    Wanyudo-6 |       BUFF | atk x2
+    147337 |    Wanyudo-6 |       BUFF | atk x2
+    147656 |    Wanyudo-6 |       BUFF | atk x2
+    147894 |  Amaterasu-0 |     ATTACK | Wanyudo-6 10 to 0
+    147895 |    Wanyudo-6 |        DIE | killed by Amaterasu-0
+    147989 |    Wanyudo-6 |       BUFF | atk x2
+    148325 |    Wanyudo-6 |       BUFF | atk x2
+    293713 |      Kappa-7 |       NERF | atk x0.5
+    293713 |    Inugami-3 |     ATTACK | Kappa-7 90 to 510
+    293713 |      Kappa-7 |     ATTACK | Inugami-3 40 to 447.5
+    294046 |    Inugami-3 |     ATTACK | Kappa-7 90 to 420
+    294046 |      Kappa-7 |       NERF | atk x0.5
+    294047 |      Kappa-7 |     ATTACK | Inugami-3 15 to 432.5
+    294380 |    Inugami-3 |     ATTACK | Kappa-7 90 to 330
+    294381 |      Kappa-7 |       NERF | atk x0.5
+    294382 |      Kappa-7 |     ATTACK | Inugami-3 2.5 to 430
+    294715 |    Inugami-3 |     ATTACK | Kappa-7 90 to 240
+    294715 |      Kappa-7 |       NERF | atk x0.5
+    294715 |      Kappa-7 |     ATTACK | Inugami-3 1 to 429
+    294798 |     Dojoji-9 |     ATTACK | Inugami-3 90 to 339
+    295048 |    Inugami-3 |     ATTACK | Kappa-7 90 to 150
+    295049 |      Kappa-7 |       NERF | atk x0.5
+    295049 |      Kappa-7 |     ATTACK | Inugami-3 1 to 338
+    295132 |     Dojoji-9 |     ATTACK | Inugami-3 90 to 248
+    295133 |    Inugami-3 |       NERF | def x0.5
+    295179 | Futakuchi-10 |     ATTACK | Inugami-3 95 to 153
+    295180 | Futakuchi-10 |     ATTACK | Inugami-3 153 to 0
+    295181 |    Inugami-3 |        DIE | killed by Futakuchi-10
+    295181 | Futakuchi-10 |       BUFF | value x2
+    297713 |      Kappa-7 |       BUFF | atk x2
+    298046 |      Kappa-7 |       BUFF | atk x2
+    298381 |      Kappa-7 |       BUFF | atk x2
+    298715 |      Kappa-7 |       BUFF | atk x2
+    299049 |      Kappa-7 |       BUFF | atk x2
+    300133 |    Inugami-3 |       BUFF | def x2
+    300723 |  Amaterasu-0 |     ATTACK | Kappa-7 90 to 60
+    301057 |  Amaterasu-0 |     ATTACK | Kappa-7 60 to 0
+    301057 |      Kappa-7 |        DIE | killed by Amaterasu-0
+    301224 |      Asura-1 |     ATTACK | Wanyudo-8 90 to 910
+    301391 |  Amaterasu-0 |     ATTACK | Wanyudo-8 90 to 820
+    301558 |      Asura-1 |     ATTACK | Wanyudo-8 90 to 730
+    301725 |  Amaterasu-0 |     ATTACK | Wanyudo-8 90 to 640
+    301892 |      Asura-1 |     ATTACK | Wanyudo-8 90 to 550
+    302059 |  Amaterasu-0 |     ATTACK | Wanyudo-8 90 to 460
+    302226 |      Asura-1 |     ATTACK | Wanyudo-8 90 to 370
+    302307 |     Dojoji-9 |     ATTACK | Asura-1 90 to 910
+    302307 |      Asura-1 |       NERF | def x0.5
+    302394 |  Amaterasu-0 |     ATTACK | Wanyudo-8 90 to 280
+    302561 |      Asura-1 |     ATTACK | Wanyudo-8 90 to 190
+    302641 |     Dojoji-9 |     ATTACK | Asura-1 95 to 815
+    302642 |      Asura-1 |       NERF | def x0.5
+    302693 | Futakuchi-10 |     ATTACK | Asura-1 97.5 to 717.5
+    302729 |  Amaterasu-0 |     ATTACK | Wanyudo-8 90 to 100
+    302895 |      Asura-1 |     ATTACK | Wanyudo-8 90 to 10
+    302976 |     Dojoji-9 |     ATTACK | Asura-1 97.5 to 620
+    302976 |      Asura-1 |       NERF | def x0.5
+    303027 | Futakuchi-10 |     ATTACK | Asura-1 98.75 to 521.25
+    303064 |  Amaterasu-0 |     ATTACK | Wanyudo-8 10 to 0
+    303065 |    Wanyudo-8 |        DIE | killed by Amaterasu-0
+    303163 |     Raiju-11 |     ATTACK | Asura-1 98.75 to 422.5
+    303231 |      Asura-1 |     ATTACK | Dojoji-9 90 to 910
+    303312 |     Dojoji-9 |     ATTACK | Asura-1 98.75 to 323.75
+    303361 | Futakuchi-10 |     ATTACK | Asura-1 98.75 to 225
+    303399 |  Amaterasu-0 |     ATTACK | Dojoji-9 90 to 820
+    303498 |     Raiju-11 |     ATTACK | Asura-1 98.75 to 126.25
+    303566 |      Asura-1 |     ATTACK | Dojoji-9 90 to 730
+    303631 |     Ubume-12 |     ATTACK | Asura-1 98.75 to 27.5
+    303647 |     Dojoji-9 |     ATTACK | Asura-1 27.5 to 0
+    303648 |      Asura-1 |        DIE | killed by Dojoji-9
+    303732 |  Amaterasu-0 |     ATTACK | Dojoji-9 90 to 640
+    304067 |  Amaterasu-0 |     ATTACK | Dojoji-9 90 to 550
+    304400 |  Amaterasu-0 |     ATTACK | Dojoji-9 90 to 460
+    304734 |  Amaterasu-0 |     ATTACK | Dojoji-9 90 to 370
+    304811 |     Dojoji-9 |     ATTACK | Amaterasu-0 90 to 910
+    305069 |  Amaterasu-0 |     ATTACK | Dojoji-9 90 to 280
+    305146 |     Dojoji-9 |     ATTACK | Amaterasu-0 90 to 820
+    305146 |  Amaterasu-0 |       NERF | def x0.5
+    305182 | Futakuchi-10 |       NERF | value x0.5
+    305199 | Futakuchi-10 |     ATTACK | Amaterasu-0 95 to 725
+    305405 |  Amaterasu-0 |     ATTACK | Dojoji-9 90 to 190
+    305481 |     Dojoji-9 |     ATTACK | Amaterasu-0 95 to 630
+    305481 |  Amaterasu-0 |       NERF | def x0.5
+    305534 | Futakuchi-10 |     ATTACK | Amaterasu-0 97.5 to 532.5
+    305667 |     Raiju-11 |     ATTACK | Amaterasu-0 97.5 to 435
+    305740 |  Amaterasu-0 |     ATTACK | Dojoji-9 90 to 100
+    305814 |     Dojoji-9 |     ATTACK | Amaterasu-0 97.5 to 337.5
+    305867 | Futakuchi-10 |     ATTACK | Amaterasu-0 97.5 to 240
+    306001 |     Raiju-11 |     ATTACK | Amaterasu-0 97.5 to 142.5
+    306074 |  Amaterasu-0 |     ATTACK | Dojoji-9 90 to 10
+    306136 |     Ubume-12 |     ATTACK | Amaterasu-0 97.5 to 45
+    306149 |     Dojoji-9 |     ATTACK | Amaterasu-0 45 to 0
+    306150 |  Amaterasu-0 |        DIE | killed by Dojoji-9
+    306150 |  Amaterasu-0 |       NERF | def x0.5
+    307308 |      Asura-1 |       BUFF | def x2
+    307642 |      Asura-1 |       BUFF | def x2
+    307976 |      Asura-1 |       BUFF | def x2
+    310147 |  Amaterasu-0 |       BUFF | def x2
+    310481 |  Amaterasu-0 |       BUFF | def x2
+    311150 |  Amaterasu-0 |       BUFF | def x2

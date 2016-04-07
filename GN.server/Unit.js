@@ -81,7 +81,8 @@ Unit.prototype.RequireTarget = function() {
 // Override the Dead method
 Unit.prototype.Dead = function() {
     this.canMove = false;
-    // TODO
-    // Currency for the enemy
+    // Econ system
+    this.GM.AddGold(this.value);
+    
 }
 module.exports = Unit;

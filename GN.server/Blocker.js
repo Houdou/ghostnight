@@ -15,6 +15,12 @@ var Blocker = function(name, id, x, y, bindJoint, slot, GM) {
     // var
     this.slot = slot;
     this.isBlocker = true;
+    
+    this.inspect = function(depth) {
+        var str = '';
+        str += 'on slot ' + this.slot.sid;
+        return str;
+    }
 }
 Blocker.prototype = new Tower();
 // functions

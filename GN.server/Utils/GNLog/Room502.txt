@@ -1,0 +1,22 @@
+================================================================================
+                       - Log file for GhostNight server -                       
+================================================================================
+ - File name: Room502.txt
+ - Create time: 4/7/2016 10:35:11 PM
+ - Room Number: 502
+================================================================================
+ Timestamp | Event source | Event name | Data                                   
+--------------------------------------------------------------------------------
+     17174 |      Kappa-0 |     ATTACK | Blocker-0 90 to 910
+     17510 |      Kappa-0 |     ATTACK | Blocker-0 90 to 820
+     17847 |      Kappa-0 |     ATTACK | Blocker-0 90 to 730
+     18182 |      Kappa-0 |     ATTACK | Blocker-0 90 to 640
+     18516 |      Kappa-0 |     ATTACK | Blocker-0 90 to 550
+     18851 |      Kappa-0 |     ATTACK | Blocker-0 90 to 460
+     19187 |      Kappa-0 |     ATTACK | Blocker-0 90 to 370
+     19521 |      Kappa-0 |     ATTACK | Blocker-0 90 to 280
+     19855 |      Kappa-0 |     ATTACK | Blocker-0 90 to 190
+     20190 |      Kappa-0 |     ATTACK | Blocker-0 90 to 100
+     20532 |      Kappa-0 |     ATTACK | Blocker-0 90 to 10
+     20866 |      Kappa-0 |     ATTACK | Blocker-0 10 to 0
+     20866 |    Blocker-0 |        DIE | killed by Kappa-0

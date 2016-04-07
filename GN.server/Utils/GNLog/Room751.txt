@@ -1,0 +1,22 @@
+================================================================================
+                       - Log file for GhostNight server -                       
+================================================================================
+ - File name: Room751.txt
+ - Create time: 4/7/2016 10:15:26 PM
+ - Room Number: 751
+================================================================================
+ Timestamp | Event source | Event name | Data                                   
+--------------------------------------------------------------------------------
+     12628 |      Ameonna |     ATTACK | Blocker-0 90 to 910
+     12963 |      Ameonna |     ATTACK | Blocker-0 90 to 820
+     13298 |      Ameonna |     ATTACK | Blocker-0 90 to 730
+     13631 |      Ameonna |     ATTACK | Blocker-0 90 to 640
+     13966 |      Ameonna |     ATTACK | Blocker-0 90 to 550
+     14302 |      Ameonna |     ATTACK | Blocker-0 90 to 460
+     14636 |      Ameonna |     ATTACK | Blocker-0 90 to 370
+     14969 |      Ameonna |     ATTACK | Blocker-0 90 to 280
+     15303 |      Ameonna |     ATTACK | Blocker-0 90 to 190
+     15638 |      Ameonna |     ATTACK | Blocker-0 90 to 100
+     15971 |      Ameonna |     ATTACK | Blocker-0 90 to 10
+     16305 |      Ameonna |     ATTACK | Blocker-0 10 to 0
+     16306 |    Blocker-0 |        DIE | killed by Ameonna

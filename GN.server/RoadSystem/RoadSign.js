@@ -11,7 +11,10 @@ var RoadSign = function (id, x, y, joint, froms, GM) {
     GameObject.call(this, "_RS" + this.rid, Tags.roadsign, x, y, GM);
     // var
     this.joint = joint;
-    this.dests = this.joint.nbs;
+    this.dests = [];
+    this.joint.nbs.forEach((j) => {
+        this.dests.push(j);
+    })
     
     for (var i = 0; i < froms.length; i++) {
         var index = this.joint.nbs.indexOf(froms[i]);

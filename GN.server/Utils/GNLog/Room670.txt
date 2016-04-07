@@ -1,0 +1,22 @@
+================================================================================
+                       - Log file for GhostNight server -                       
+================================================================================
+ - File name: Room670.txt
+ - Create time: 4/7/2016 9:48:35 PM
+ - Room Number: 670
+================================================================================
+ Timestamp | Event source | Event name | Data                                   
+--------------------------------------------------------------------------------
+     13066 |      Ameonna |     ATTACK | Blocker-0 90 to 910
+     13401 |      Ameonna |     ATTACK | Blocker-0 90 to 820
+     13736 |      Ameonna |     ATTACK | Blocker-0 90 to 730
+     14070 |      Ameonna |     ATTACK | Blocker-0 90 to 640
+     14403 |      Ameonna |     ATTACK | Blocker-0 90 to 550
+     14738 |      Ameonna |     ATTACK | Blocker-0 90 to 460
+     15073 |      Ameonna |     ATTACK | Blocker-0 90 to 370
+     15406 |      Ameonna |     ATTACK | Blocker-0 90 to 280
+     15741 |      Ameonna |     ATTACK | Blocker-0 90 to 190
+     16074 |      Ameonna |     ATTACK | Blocker-0 90 to 100
+     16408 |      Ameonna |     ATTACK | Blocker-0 90 to 10
+     16742 |      Ameonna |     ATTACK | Blocker-0 10 to 0
+     16743 |    Blocker-0 |        DIE | killed by Ameonna

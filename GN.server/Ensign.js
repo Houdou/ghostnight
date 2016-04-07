@@ -3,14 +3,14 @@ var Tags = require('./Statics/Tags');
 var GameUnit = require('./GameUnit');
 
 var _Ensign = {
-    hp: 1000, atk: 0, range: -1, rate: 0, def: 10, spd: 0, price: 0, value: 30, layer: Layers.land
+    hp: 1000, atk: 0, range: -1, rate: 0, def: 10, spd: 0, value: 30, layer: Layers.land
 }
 
 // Class Ensign : GameUnit
 // variables
-var Ensign = function(name, id, tag, x, y, joint, buffType, buffAreaRadius, buffDuration, GM) {
+var Ensign = function(name, id, tag, x, y, joint, buffType, buffAreaRadius, buffDuration, price, GM) {
     GameUnit.call(this, name, id, Tags.ensign, x, y, joint, _Ensign.hp, _Ensign.atk, _Ensign.range,
-    _Ensign.rate, _Ensign.def, _Ensign.spd, _Ensign.layer, _Ensign.price, _Ensign.value, GM);
+    _Ensign.rate, _Ensign.def, _Ensign.spd, _Ensign.layer, price, _Ensign.value, GM);
     // var
     this.target = null;
     

@@ -18,6 +18,7 @@ var GameEventManager = require('./GN.server/GameEventManager');
 var Room = require('./Room');
 
 router.use(express.static(path.resolve(__dirname, 'client')));
+
 var sockets = [];
 var rooms = {};
 var roomof = {};
@@ -197,7 +198,17 @@ function startGame(roomNo){
 	// Create a game event manager to listen the event inside server
 	var GEM = new GameEventManager(room);
 	// Create the game server
-	room.GN = new GhostNight({MinDamage: 1, TimeLimit: 60, Room: roomNo, debug: true}, GEM);
+	var settings = {
+		MinDamage: 1, 
+		TimeLimit: 60, 
+		Room: roomNo,   
+		debug: true,
+		soul: 2000,
+		gold: 2000,
+		soulIncreasing: { value: 10, interval: 5}
+		
+	};
+	room.GN = new GhostNight(settings, GEM);
 	// Load map
 	
 	for (var i in room.players){
@@ -222,17 +233,16 @@ server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function() 
     console.log("Server listening at", addr.address + ":" + addr.port);
     
     // Test
-    // var GN = new GhostNight({MinDamage: 1, TimeLimit: 60, Room: "048"}, new GameEventManager(new Room('048')));
+    // var GN = new GhostNight({MinDamage: 1, TimeLimit: 60, Room: "048", debug: true}, new GameEventManager(new Room('048')));
     
     // GN.Scene.LoadMap('m01', function(){
+    	// var m = GN.CreateTower('Snake', 0);
     	
-    // 	var m = GN.CreateTower('Snake', 0);
+    	// GN.StartGame();
+    	// GN.CreateUnit("Kappa");
     	
-    // 	GN.StartGame();
-    // 	GN.CreateUnit("Kappa");
-    	
-    // 	setTimeout(function() {GN.CreateEnsign("Atk", 14);}, 8000);
-    // 	setTimeout(function() {GN.MoveHeroTo(22);}, 9000);
+    	// setTimeout(function() {GN.CreateEnsign("Atk", 14);}, 8000);
+    	// setTimeout(function() {GN.MoveHeroTo(22);}, 9000);
     	
     // });
 });

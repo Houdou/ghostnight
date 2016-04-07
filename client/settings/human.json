@@ -6,8 +6,8 @@
 	{"src": "img/char/tower/snake-s.png", "id": "button-Snake"},
 	{"src": "img/char/tower/asura-s.png", "id": "button-Asura"},
 	{"src": "img/char/tower/amaterasu-s.png", "id": "button-Amaterasu"},
-	{"src": "img/char/ensign/atkensign-s.png", "id": "button-Atkensign"},
-	{"src": "img/char/ensign/defensign-s.png", "id": "button-Defensign"},
-	{"src": "img/char/ensign/rangeensign-s.png", "id": "button-Rangeensign"},
+	{"src": "img/char/ensign/atkensign-s.png", "id": "button-Atk"},
+	{"src": "img/char/ensign/defensign-s.png", "id": "button-Def"},
+	{"src": "img/char/ensign/rangeensign-s.png", "id": "button-Range"},
 	{"src": "layout/human.json", "id": "layout-human"}
 ]

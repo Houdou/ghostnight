@@ -1,0 +1,129 @@
+================================================================================
+                       - Log file for GhostNight server -                       
+================================================================================
+ - File name: Room002.txt
+ - Create time: 4/8/2016 1:22:13 AM
+ - Room Number: 002
+================================================================================
+ Timestamp | Event source | Event name | Data                                   
+--------------------------------------------------------------------------------
+     27973 |      Kappa-0 |     ATTACK | Blocker-0 90 to 910
+     28308 |      Kappa-0 |     ATTACK | Blocker-0 90 to 820
+     28641 |      Kappa-0 |     ATTACK | Blocker-0 90 to 730
+     28972 |      Snake-0 |     ATTACK | Kappa-0 90 to 510
+     28976 |      Kappa-0 |     ATTACK | Blocker-0 90 to 640
+     29306 |      Snake-0 |     ATTACK | Kappa-0 90 to 420
+     29309 |      Kappa-0 |     ATTACK | Blocker-0 90 to 550
+     29640 |      Snake-0 |     ATTACK | Kappa-0 90 to 330
+     29643 |      Kappa-0 |     ATTACK | Blocker-0 90 to 460
+     29974 |      Snake-0 |     ATTACK | Kappa-0 90 to 240
+     29977 |      Kappa-0 |     ATTACK | Blocker-0 90 to 370
+     30032 |    Foxfire-2 |     ATTACK | Blocker-0 90 to 280
+     30309 |      Snake-0 |     ATTACK | Wanyudo-1 22.5 to 977.5
+     30309 |      Snake-0 |     ATTACK | Kappa-0 90 to 150
+     30312 |      Kappa-0 |     ATTACK | Blocker-0 90 to 190
+     30366 |    Foxfire-2 |     ATTACK | Blocker-0 90 to 100
+     30643 |      Snake-0 |     ATTACK | Kappa-0 90 to 60
+     30643 |      Snake-0 |     ATTACK | Wanyudo-1 22.5 to 955
+     30646 |      Kappa-0 |     ATTACK | Blocker-0 90 to 10
+     30699 |    Foxfire-2 |     ATTACK | Blocker-0 10 to 0
+     30700 |    Blocker-0 |        DIE | killed by Foxfire-2
+     30977 |      Snake-0 |     ATTACK | Kappa-0 60 to 0
+     30978 |      Kappa-0 |        DIE | killed by Snake-0
+     30979 |      Snake-0 |     ATTACK | Wanyudo-1 22.5 to 932.5
+     30979 |      Snake-0 |     ATTACK | Foxfire-2 22.5 to 977.5
+     31034 |    Foxfire-2 |     ATTACK | Snake-0 90 to 910
+     31313 |      Snake-0 |     ATTACK | Wanyudo-1 90 to 842.5
+     31314 |      Snake-0 |       HEAL | Kappa-0 0 to 0
+     31315 |      Kappa-0 |        DIE | killed by Snake-0
+     31315 |      Snake-0 |     ATTACK | Foxfire-2 22.5 to 955
+     31370 |    Foxfire-2 |     ATTACK | Snake-0 90 to 820
+     31648 |      Snake-0 |     ATTACK | Wanyudo-1 90 to 752.5
+     31649 |      Snake-0 |       HEAL | Kappa-0 0 to 0
+     31650 |      Kappa-0 |        DIE | killed by Snake-0
+     31650 |      Snake-0 |     ATTACK | Foxfire-2 22.5 to 932.5
+     31650 |      Snake-0 |     ATTACK | Dojoji-3 22.5 to 977.5
+     31704 |    Foxfire-2 |     ATTACK | Snake-0 90 to 730
+     31820 |     Dojoji-3 |     ATTACK | Snake-0 90 to 640
+     31820 |      Snake-0 |       NERF | def x0.5
+     31984 |      Snake-0 |     ATTACK | Wanyudo-1 90 to 662.5
+     31984 |      Snake-0 |       HEAL | Kappa-0 0 to 0
+     31987 |      Kappa-0 |        DIE | killed by Snake-0
+     31988 |      Snake-0 |     ATTACK | Foxfire-2 22.5 to 910
+     31989 |      Snake-0 |     ATTACK | Dojoji-3 22.5 to 955
+     32043 |    Foxfire-2 |     ATTACK | Snake-0 95 to 545
+     32154 |     Dojoji-3 |     ATTACK | Snake-0 95 to 450
+     32322 |      Snake-0 |     ATTACK | Wanyudo-1 90 to 572.5
+     32323 |      Snake-0 |       HEAL | Kappa-0 0 to 0
+     32325 |      Kappa-0 |        DIE | killed by Snake-0
+     32325 |      Snake-0 |     ATTACK | Foxfire-2 22.5 to 887.5
+     32325 |      Snake-0 |     ATTACK | Dojoji-3 22.5 to 932.5
+     32379 |    Foxfire-2 |     ATTACK | Snake-0 95 to 355
+     32480 |  Futakuchi-4 |     ATTACK | Snake-0 95 to 260
+     32481 |  Futakuchi-4 |     ATTACK | Snake-0 260 to 0
+     32481 |      Snake-0 |        DIE | killed by Futakuchi-4
+     32482 |  Futakuchi-4 |       BUFF | value x2
+     34317 |      Kappa-0 |       BUFF | def x3
+     34317 |    Wanyudo-1 |       BUFF | def x3
+     34317 |    Foxfire-2 |       BUFF | def x3
+     34317 |     Dojoji-3 |       BUFF | def x3
+     34317 |  Futakuchi-4 |       BUFF | def x3
+     35344 |  Amaterasu-2 |     ATTACK | Wanyudo-1 70 to 502.5
+     35679 |  Amaterasu-2 |     ATTACK | Wanyudo-1 70 to 432.5
+     36014 |  Amaterasu-2 |     ATTACK | Wanyudo-1 70 to 362.5
+     36350 |  Amaterasu-2 |     ATTACK | Wanyudo-1 70 to 292.5
+     36684 |  Amaterasu-2 |     ATTACK | Wanyudo-1 70 to 222.5
+     36820 |      Snake-0 |       BUFF | def x2
+     37017 |  Amaterasu-2 |     ATTACK | Wanyudo-1 70 to 152.5
+     37352 |  Amaterasu-2 |     ATTACK | Wanyudo-1 70 to 82.5
+     37685 |  Amaterasu-2 |     ATTACK | Wanyudo-1 70 to 212.5
+     38019 |  Amaterasu-2 |     ATTACK | Wanyudo-1 70 to 142.5
+     38354 |  Amaterasu-2 |     ATTACK | Wanyudo-1 70 to 72.5
+     38548 |    Foxfire-2 |     ATTACK | Amaterasu-2 90 to 910
+     38687 |  Amaterasu-2 |     ATTACK | Wanyudo-1 70 to 2.5
+     38882 |    Foxfire-2 |     ATTACK | Amaterasu-2 90 to 820
+     39021 |  Amaterasu-2 |     ATTACK | Wanyudo-1 2.5 to 0
+     39022 |    Wanyudo-1 |        DIE | killed by Amaterasu-2
+     39216 |    Foxfire-2 |     ATTACK | Amaterasu-2 90 to 730
+     39333 |     Dojoji-3 |     ATTACK | Amaterasu-2 90 to 640
+     39357 |  Amaterasu-2 |     ATTACK | Foxfire-2 70 to 930
+     39550 |    Foxfire-2 |     ATTACK | Amaterasu-2 90 to 550
+     39668 |     Dojoji-3 |     ATTACK | Amaterasu-2 90 to 460
+     39692 |  Amaterasu-2 |     ATTACK | Foxfire-2 70 to 860
+     39885 |    Foxfire-2 |     ATTACK | Amaterasu-2 90 to 370
+     39988 |  Futakuchi-4 |     ATTACK | Amaterasu-2 90 to 280
+     40002 |     Dojoji-3 |     ATTACK | Amaterasu-2 90 to 190
+     40002 |  Amaterasu-2 |       NERF | def x0.5
+     40026 |  Amaterasu-2 |     ATTACK | Foxfire-2 70 to 790
+     40218 |    Foxfire-2 |     ATTACK | Amaterasu-2 95 to 95
+     40323 |  Futakuchi-4 |     ATTACK | Amaterasu-2 95 to 0
+     40335 |     Dojoji-3 |       HEAL | Amaterasu-2 0 to 0
+     40336 |  Amaterasu-2 |        DIE | killed by Dojoji-3
+     41049 |      Asura-1 |     ATTACK | Foxfire-2 70 to 720
+     41050 |    Foxfire-2 |     ATTACK | Asura-1 90 to 910
+     41384 |      Asura-1 |     ATTACK | Foxfire-2 70 to 650
+     41384 |    Foxfire-2 |     ATTACK | Asura-1 90 to 820
+     41717 |      Asura-1 |     ATTACK | Foxfire-2 70 to 580
+     41718 |    Foxfire-2 |     ATTACK | Asura-1 90 to 730
+     41838 |     Dojoji-3 |     ATTACK | Asura-1 90 to 640
+     42051 |      Asura-1 |     ATTACK | Foxfire-2 70 to 510
+     42052 |    Foxfire-2 |     ATTACK | Asura-1 90 to 550
+     42172 |     Dojoji-3 |     ATTACK | Asura-1 90 to 460
+     42385 |      Asura-1 |     ATTACK | Foxfire-2 70 to 440
+     42386 |    Foxfire-2 |     ATTACK | Asura-1 90 to 370
+     42482 |  Futakuchi-4 |       NERF | value x0.5
+     42494 |  Futakuchi-4 |     ATTACK | Asura-1 90 to 280
+     42506 |     Dojoji-3 |     ATTACK | Asura-1 90 to 190
+     42720 |      Asura-1 |     ATTACK | Foxfire-2 70 to 370
+     42720 |    Foxfire-2 |     ATTACK | Asura-1 90 to 100
+     42828 |  Futakuchi-4 |     ATTACK | Asura-1 90 to 10
+     42841 |     Dojoji-3 |     ATTACK | Asura-1 10 to 0
+     42842 |      Asura-1 |        DIE | killed by Dojoji-3
+     44317 |      Kappa-0 |       NERF | def x0.3333333333333333
+     44318 |    Wanyudo-1 |       NERF | def x0.3333333333333333
+     44318 |    Foxfire-2 |       NERF | def x0.3333333333333333
+     44318 |     Dojoji-3 |       NERF | def x0.3333333333333333
+     44318 |  Futakuchi-4 |       NERF | def x0.3333333333333333
+     45002 |  Amaterasu-2 |       BUFF | def x2
+     49589 |      Kappa-5 |       BUFF | spd x2
+     59590 |      Kappa-5 |       NERF | spd x0.5
