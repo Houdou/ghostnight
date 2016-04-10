@@ -73,6 +73,7 @@ Scene.prototype.LoadMap = function(MapID, end) {
                 var newBlocker = new Blocker("Blocker-" + b.id, that.GM.assignBlockerID(), j.transform.x, j.transform.y, that.GM.joints[b.bindJoint], that.GM.slots[b.useSlot], that.GM);
                 // Build blocker on slot;
                 that.GM.slots[b.useSlot].BuildTower(newBlocker);
+                that.GM.blockers.push(newBlocker);
             });
         }
         
@@ -100,6 +101,25 @@ Scene.prototype.LoadMap = function(MapID, end) {
             if(that.GM.joints[0] != null) {
                 that.GM.entryJoint = that.GM.joints[0];
                 console.log("Use the first joint instead.");
+            } else {
+                console.log("The map is invalid.");
+            }
+        }
+        
+        if(map.goals != undefined) {
+            that.GM.life = 0;
+            map.goals.forEach(function(g) {
+               // Push the new goal
+               that.GM.goals.push({id: g.id, jid: g.bindJoint, life: g.life});
+               // Add life point
+               that.GM.life += g.life;
+            });
+            that.GM.maxlife = that.GM.life;
+        } else {
+            console.log("The goal of map is not defined.");
+            if(that.GM.joints[that.GM.joints.length - 1] != null) {
+                that.GM.goals.push(that.GM.joints[that.GM.joints.length - 1]);
+                console.log("Use the last joint instead.");
             } else {
                 console.log("The map is invalid.");
             }

@@ -23,6 +23,8 @@ var gn = function(stage, socket) {
 	this.towers = [];
 	this.blockers = [];
 	this.ensigns = [];
+	this.roadsigns = [];
+	this.goals = [];
 	this.gold = 0;
 	this.soul = 0;
 	
@@ -30,6 +32,7 @@ var gn = function(stage, socket) {
 	this.progressBar = null;
 	this.inputState = 'normal';
 	this.UI = [];
+	this.Text = [];
 	this.panel = [];
 	this.currentPanel = '';
 };
@@ -144,6 +147,23 @@ gn.prototype.BuildImageButton = function(name, srcImgID, x, y, width, height, of
 	
 	return c;
 }
+gn.prototype.BuildText = function(text, name, size, align, x, y, draw, scale) {
+	var str = new createjs.Text(text, size + " Brush Script MT", "#333333");
+	str.textAlign = align;
+	str.x = x;
+	str.y = y;
+	str.scaleX = scale || 1;
+	str.scaleY = scale || 1;
+	
+	this.Text[name] = str;
+	
+	if(draw) {
+		stage.addChild(str);
+		stage.update();
+	}
+	
+	return str;
+}
 gn.prototype.ParseLayout = function(element, draw) {
 	switch (element.type) {
 		case 'panel':
@@ -243,6 +263,8 @@ gn.prototype.ParseLayout = function(element, draw) {
 		case 'static':
 			return this.BuildImage(element.srcID, element.x, element.y,
 				element.width, element.height, element.buttonStrOffset, null, null, draw, element.scale);
+		case 'text':
+			return this.BuildText(element.text, element.name, element.size, element.align, element.x, element.y, draw);
 		default: break;
 	}
 }
@@ -262,10 +284,95 @@ gn.prototype.BuildProgressBar = function() {
 gn.prototype.BuildScene = function() {
 	
 }
+gn.prototype.BuildRoadSign = function(data) {
+	var imgstick = this.assets['assets-road-stick'];
+	var imgsign = this.assets['assets-road-sign'];
+	
+	var c = new createjs.Container();
+	var stick = new createjs.Bitmap(imgstick);
+	var sign = new createjs.Bitmap(imgsign);
+	
+	c.addChild(stick);
+	c.addChild(sign);
+	
+	stick.regX = 6;
+	stick.regY = 67;
+	sign.regX = 25;
+	sign.regY = 10;
+	sign.y = -53;
+	
+	sign.on('click', ()=>{
+		this.socket.emit('switch-roadsign', {rid: data.rid});
+	})
+	
+	c.x = data.x;
+	c.y = data.y;
+	
+	this.roadsigns[data.rid] = sign;
+	stage.addChild(c);
+	stage.update();
+}
+gn.prototype.BuildGoal = function(data) {
+	var goalimg = this.assets['assets-goal-red'];
+	
+	var goal = new createjs.Bitmap(goalimg);
+	
+	goal.regX = 96;
+	goal.regY = 96;
+	
+	goal.x = data.x;
+	goal.y = data.y;
+	goal.scaleX = 0.25;
+	goal.scaleY = 0.18;
+	
+	this.goals[data.gid] = goal;
+	stage.addChild(goal);
+	stage.update();
+}
+gn.prototype.BuildGoalLife = function() {
+	var img = this.assets['assets-goal-life-value'];
+	var c = new createjs.Container();
+	var value = new createjs.Bitmap(img);
+	var fill = new createjs.Shape();
+	
+	fill.graphics.clear().beginFill("rgba(0, 0, 0, 1)").drawRect(0, 0, 175, 13);
+	fill.cache(0, 0, 175, 13);
+	value.filters = [new createjs.AlphaMaskFilter(fill.cacheCanvas)];
+	value.cache(0, 0, 175, 13);
+	
+	c.x = 138;
+	c.y = 64;
+	
+	c.addChild(value);
+	
+	this.UI['goal-life'] = value;
+	
+	stage.addChild(c);
+	stage.update();
+}
 gn.prototype.BuildUnit = function(data) {
 	var img = this.assets['assets-' + data.type];
 	var unit = new createjs.Bitmap(img);
 	var c = new createjs.Container();
+	
+	var hpbar = new createjs.Bitmap(this.assets['assets-unit-life-bar']);
+	var value = new createjs.Bitmap(this.assets['assets-unit-life-value']);
+	var fill = new createjs.Shape();
+	
+	fill.graphics.clear().beginFill("rgba(0, 0, 0, 1)").drawRect(0, 0, 45, 14);
+	fill.cache(0, 0, 45, 14);
+	value.filters = [new createjs.AlphaMaskFilter(fill.cacheCanvas)];
+	value.cache(0, 0, 45, 14);
+	// hp fill offset
+	value.x = 3;
+	
+	hpbar.regX = 28;
+	hpbar.regY = 56;
+	value.regX = 25.5;
+	value.regY = 56;
+	
+	c.addChild(hpbar);
+	c.addChild(value);
 	
 	unit.regX = 24;
 	unit.regY = 36;
@@ -275,6 +382,8 @@ gn.prototype.BuildUnit = function(data) {
 	// Special for foxfire
 	if(data.type == "Foxfire") {
 		unit.y = -18;
+		hpbar.y = -24;
+		value.y = -24;
 		createjs.Tween.get(unit, {loop: true}, null, {override: true})
 			.to({y: -30}, 800, createjs.Ease.sineInOut)
 			.to({y: -18}, 800, createjs.Ease.sineInOut);
@@ -290,7 +399,8 @@ gn.prototype.BuildUnit = function(data) {
 	c.x = data.x;
 	c.y = data.y;
 	
-	this.units.push(c);
+	this.units[data.uid] = c;
+	
 	stage.addChild(c);
 	stage.update();
 }
@@ -316,6 +426,25 @@ gn.prototype.BuildHero = function(data) {
 	var img = this.assets['assets-' + data.type];
 	var unit = new createjs.Bitmap(img);
 	var c = new createjs.Container();
+	
+	var hpbar = new createjs.Bitmap(this.assets['assets-hero-life-bar']);
+	var value = new createjs.Bitmap(this.assets['assets-hero-life-value']);
+	var fill = new createjs.Shape();
+	
+	fill.graphics.clear().beginFill("rgba(0, 0, 0, 1)").drawRect(0, 0, 68, 21);
+	fill.cache(0, 0, 68, 21);
+	value.filters = [new createjs.AlphaMaskFilter(fill.cacheCanvas)];
+	value.cache(0, 0, 68, 21);
+	// hp fill offset
+	value.x = 3;
+	
+	hpbar.regX = 40;
+	hpbar.regY = 80;
+	value.regX = 36;
+	value.regY = 80;
+	
+	c.addChild(hpbar);
+	c.addChild(value);
 	
 	unit.regX = 32;
 	unit.regY = 48;
@@ -352,6 +481,25 @@ gn.prototype.BuildTower = function(data) {
 	var unit = new createjs.Bitmap(img);
 	var c = new createjs.Container();
 	
+	var hpbar = new createjs.Bitmap(this.assets['assets-tower-life-bar']);
+	var value = new createjs.Bitmap(this.assets['assets-tower-life-value']);
+	var fill = new createjs.Shape();
+	
+	fill.graphics.clear().beginFill("rgba(0, 0, 0, 1)").drawRect(0, 0, 68, 21);
+	fill.cache(0, 0, 68, 21);
+	value.filters = [new createjs.AlphaMaskFilter(fill.cacheCanvas)];
+	value.cache(0, 0, 68, 21);
+	// hp fill offset
+	value.x = 3;
+	
+	hpbar.regX = 40;
+	hpbar.regY = 90;
+	value.regX = 36;
+	value.regY = 90;
+	
+	c.addChild(hpbar);
+	c.addChild(value);
+	
 	unit.regX = 40;
 	unit.regY = 60;
 	
@@ -362,7 +510,7 @@ gn.prototype.BuildTower = function(data) {
 	c.x = this.mapData.slots[+data.sid].x;
 	c.y = this.mapData.slots[+data.sid].y;
 	
-	this.towers.push(c);
+	this.towers[data.tid] = c;
 	stage.addChild(c);
 	stage.update();
 }
@@ -388,12 +536,55 @@ gn.prototype.BuildEnsign = function(data) {
 	c.x = this.mapData.joints[+data.jid].x;
 	c.y = this.mapData.joints[+data.jid].y;
 	
-	this.towers.push(c);
+	this.ensigns[data.eid] = c;
 	stage.addChild(c);
 	stage.update();
 }
+gn.prototype.RemoveEnsign = function(data){
+	console.log('remove ensign', data);
+	// TODO
+	stage.removeChild(this.ensigns[data.eid]);
+	this.ensigns[data.eid] = null;
+	stage.update();
+}
 gn.prototype.BuildBlocker = function(data) {
+	var img = this.assets['assets-' + data.type];
+	var unit = new createjs.Bitmap(img);
+	var c = new createjs.Container();
 	
+	var hpbar = new createjs.Bitmap(this.assets['assets-blocker-life-bar']);
+	var value = new createjs.Bitmap(this.assets['assets-blocker-life-value']);
+	var fill = new createjs.Shape();
+	
+	fill.graphics.clear().beginFill("rgba(0, 0, 0, 1)").drawRect(0, 0, 68, 21);
+	fill.cache(0, 0, 68, 21);
+	value.filters = [new createjs.AlphaMaskFilter(fill.cacheCanvas)];
+	value.cache(0, 0, 68, 21);
+	// hp fill offset
+	value.x = 3;
+	
+	hpbar.regX = 40;
+	hpbar.regY = 60;
+	value.regX = 36;
+	value.regY = 60;
+	
+	c.addChild(hpbar);
+	c.addChild(value);
+	
+	
+	unit.regX = 32;
+	unit.regY = 54;
+	
+	unit.cache(0, 0, 64, 64);
+	
+	c.addChild(unit);
+	
+	c.x = data.x;
+	c.y = data.y;
+	
+	this.blockers[data.bid] = c;
+	stage.addChild(c);
+	stage.update();
 }
 
 // Move
@@ -411,18 +602,83 @@ gn.prototype.MoveHeroTo = function(data) {
 	}
 }
 
+gn.prototype.ChangeRoadSign = function(data) {
+	var roadsign = this.roadsigns[data.rid];
+	
+	var r = Math.atan2(data.dy, data.dx);
+	roadsign.rotation = r / Math.PI * 180;
+	stage.update();
+}
+
+gn.prototype.UpdateGoalLife = function(data) {
+	var value = this.UI['goal-life'];
+	
+	value.cache(0, 0, 175 * data.life / data.maxlife, 13);
+	stage.update();
+}
+gn.prototype.UpdateHPBar = function(type, data) {
+	var c = null;
+	var width = 0;
+	var height = 0;
+	switch (type) {
+		case 'unit':
+			c = this.units[data.uid];
+			width = 45; height = 14;
+			break;
+		case 'hero':
+			c = this.hero;
+			width = 68; height = 21;
+			break;
+		case 'tower':
+			c = this.towers[data.tid];
+			width = 68; height = 21;
+			break;
+		case 'blocker':
+			c = this.blockers[data.bid];
+			width = 68; height = 21;
+			break;
+		default:
+			break;
+	}
+	
+	if(c != null) {
+		// Value
+		var value = c.getChildAt(1);
+		value.cache(0, 0, data.hp / data.maxhp * width, height);
+		stage.update();
+	}
+}
+gn.prototype.UpdateText = function(name, data) {
+	var text = this.Text[name];
+	text.text = data.text;
+	
+	stage.update;
+}
+
 // Remove
 gn.prototype.RemoveUnit = function(data) {
-	// {uid}
-	
+	stage.removeChild(this.units[data.uid]);
+	stage.update();
 }
 
 gn.prototype.RemoveHero = function(data) {
-	// {}
+	stage.removeChild(this.hero);
+	stage.update();
 }
 
 gn.prototype.RemoveTower = function(data) {
-	
+	stage.removeChild(this.towers[data.tid]);
+	stage.update();
+}
+
+gn.prototype.RemoveBlocker = function(data) {
+	stage.removeChild(this.blockers[data.bid]);
+	stage.update();
+}
+
+gn.prototype.RemoveGoal = function(data) {
+	stage.removeChild(this.goals[data.gid]);
+	stage.update();
 }
 
 // Effects
@@ -498,6 +754,7 @@ gn.prototype.FindNearestSlot = function(x, y, maxDistance) {
 
 function initGame(socket){
 	var gnclient = new gn(stage, socket);
+	console.log(gnclient);
 	
 	var settingPreload = new createjs.LoadQueue(true, './settings/');
 	var preload = new createjs.LoadQueue(true, './assets/');
@@ -574,6 +831,7 @@ function initGame(socket){
 		// console.log(gnclient.playerIndex);
 		if (data.player == undefined) {return;}
 		if (data.player == gnclient.playerIndex){
+			gnclient.side = data.side;
 			console.log("change side to " + data.side);
 			// change my side
 		} else {
@@ -689,37 +947,52 @@ function initGame(socket){
 		loadSetting(data);
 	});
 	
+	
+	socket.on('game-started', function(){
+		console.log('game-started');
+	});
+	
+	socket.on('game-end', function(data){
+		
+		console.log('Game end. ' + data.win + " win.");
+	});
+	
+	socket.on('roadsign-built', function(data) {
+	    gnclient.BuildRoadSign(data);
+	});
+	
+	socket.on('roadsign-changed', function(data) {
+	    gnclient.ChangeRoadSign(data);
+	});
+	
+	socket.on('goal-life-bar-built', function() {
+	    gnclient.BuildGoalLife();
+	});
+	
+	socket.on('goal-built', function(data) {
+	    gnclient.BuildGoal(data);
+	});
+	
+	socket.on('goal-damage', function(data) {
+		gnclient.UpdateGoalLife(data);
+	});
+	
+	socket.on('goal-dead', function(data) {
+		gnclient.RemoveGoal(data);
+	});
+	
 	socket.on('button-cd', function(data){
 		gnclient.CoolDownEffect(data);
 	});
 	
-	socket.on('hero-reborn-cd', function(data) {
-		
-	});
-	
-	socket.on('hero-skill-cd', function(data) {
-		data.type = gnclient.heroName + '-Skill' + data.skillID;
-	    gnclient.CoolDownEffect(data);
-	});
-	
 	socket.on('map-data', function(data) {
 		gnclient.mapData = data;
-	})
-	
-	socket.on('game-started', function(){
-		
-		console.log('game-started');
-		
-	});
-	
-	socket.on('game-end', function(){
-		console.log('');
 	});
 	
 	socket.on('soul-update', function(data){
 		if (gnclient.side == 'ghost'){
-			console.log("soul-update", data.soul);
 			gnclient.soul = data.soul;
+			gnclient.UpdateText('money', {text: "" + data.soul});
 			if (!data.ok){
 				console.log('Insufficient money');
 			}
@@ -728,14 +1001,15 @@ function initGame(socket){
 	
 	socket.on('gold-update', function(data){
 		if (gnclient.side == 'human'){
-			console.log("gold-update", data.gold);
-			gnclient.soul = data.gold;
+			gnclient.gold = data.gold;
+			gnclient.UpdateText('money', {text: "" + data.gold});
 			if (!data.ok){
 				console.log('Insufficient money');
 			}
 		}
 	});
 	
+	// Unit
 	socket.on('unit-created', function(data){
 		gnclient.BuildUnit(data);
 	});
@@ -748,8 +1022,8 @@ function initGame(socket){
 		console.log('');
 	});
 	
-	socket.on('unit-hp-update', function(uid, hp){
-		console.log('');
+	socket.on('unit-hp-update', function(data){
+		gnclient.UpdateHPBar('unit', data);
 	});
 	
 	socket.on('unit-nerf', function(uid, attr){
@@ -757,14 +1031,14 @@ function initGame(socket){
 	});
 	
 	socket.on('unit-dead', function(data){
-		console.log('unit-dead', data);
 		gnclient.RemoveUnit(data);
 	});
 	
-	socket.on('unit-destroyed', function(uid){
-		console.log('');
+	socket.on('unit-remove', function(data){
+		gnclient.RemoveUnit(data);
 	});
 	
+	// Hero
 	socket.on('hero-moving', function(data){
 		gnclient.MoveHeroTo(data);
 	});
@@ -781,8 +1055,13 @@ function initGame(socket){
 		console.log('');
 	});
 	
-	socket.on('hero-hp-update', function(){
-		console.log('');
+	socket.on('hero-skill-cd', function(data) {
+		data.type = gnclient.heroName + '-Skill' + data.skillID;
+	    gnclient.CoolDownEffect(data);
+	});
+	
+	socket.on('hero-hp-update', function(data){
+		gnclient.UpdateHPBar('hero', data);
 	});
 	
 	socket.on('hero-nerf', function(){
@@ -790,8 +1069,8 @@ function initGame(socket){
 	});
 	
 	socket.on('hero-dead', function(data){
-		console.log('hero-dead', data);
 		gnclient.RemoveHero(data);
+		gnclient.TogglePanel('panel-Reborn');
 	});
 	
 	socket.on('hero-select', function(data){
@@ -799,12 +1078,16 @@ function initGame(socket){
 	})
 	
 	socket.on('hero-reborn', function(data){
-		console.log('hero-reborn', data);
 		gnclient.BuildHero(data);
 		gnclient.TogglePanel('panel-' + data.type);
 	});
 	
-	socket.on('tower-built', function(data){
+	socket.on('hero-reborn-cd', function(data) {
+		
+	});
+	
+	// Tower
+	socket.on('tower-built', function(data) {
 		gnclient.BuildTower(data);
 	});
 	
@@ -816,20 +1099,42 @@ function initGame(socket){
 		console.log('');
 	});
 	
-	socket.on('tower-hp-update', function(){
+	socket.on('tower-nerf', function(){
 		console.log('');
 	});
 	
-	socket.on('tower-nerf', function(){
+	socket.on('tower-hp-update', function(data) {
+		gnclient.UpdateHPBar('tower', data);
+	});
+	
+	socket.on('tower-dead', function(data){
+		gnclient.RemoveTower(data);
+	});
+	
+	// Blocker
+	socket.on('blocker-built', function(data) {
+		data.type = 'Blocker';
+		gnclient.BuildBlocker(data);
+	});
+	
+	socket.on('blocker-nerf', function(){
 		console.log('');
+	});
+	
+	socket.on('blocker-hp-update', function(data) {
+		gnclient.UpdateHPBar('blocker', data);
+	});
+	
+	socket.on('blocker-dead', function(data){
+		gnclient.RemoveBlocker(data);
 	});
 	
 	socket.on('ensign-built', function(data) {
 		gnclient.BuildEnsign(data)
 	});
 	
-	socket.on('ensign-removed', function(){
-		console.log('');
+	socket.on('ensign-removed', function(data){
+		gnclient.RemoveEnsign(data);
 	});
 	
 	// socket.on('', function(){

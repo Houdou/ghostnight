@@ -19,10 +19,23 @@
 	{"src": "img/char/ensign/atkensign-l.png", "id": "assets-Atk"},
 	{"src": "img/char/ensign/defensign-l.png", "id": "assets-Def"},
 	{"src": "img/char/ensign/rangeensign-l.png", "id": "assets-Range"},
-	{"src": "img/char/blocker/throns.png", "id": "assets-Throns"},
+	{"src": "img/char/blocker/throns-s.png", "id": "assets-Blocker"},
 	{"src": "img/icons/circle.png", "id": "assets-cirlce"},
 	{"src": "img/icons/checkmark-blue.png", "id": "assets-checkmark-blue"},
 	{"src": "img/icons/checkmark-red.png", "id": "assets-checkmark-red"},
 	{"src": "img/icons/goal-grey.png", "id": "assets-goal-grey"},
-	{"src": "img/icons/goal-red.png", "id": "assets-goal-red"}
+	{"src": "img/icons/goal-red.png", "id": "assets-goal-red"},
+	{"src": "img/road-sign.png", "id": "assets-road-sign"},
+	{"src": "img/road-stick.png", "id": "assets-road-stick"},
+	{"src": "img/bar/goal-life-bar.png", "id": "assets-goal-life-bar"},
+	{"src": "img/bar/goal-life-value.png", "id": "assets-goal-life-value"},
+	{"src": "img/bar/unit-life-bar.png", "id": "assets-unit-life-bar"},
+	{"src": "img/bar/unit-life-value.png", "id": "assets-unit-life-value"},
+	{"src": "img/bar/hero-life-bar.png", "id": "assets-hero-life-bar"},
+	{"src": "img/bar/hero-life-value.png", "id": "assets-hero-life-value"},
+	{"src": "img/bar/tower-life-bar.png", "id": "assets-tower-life-bar"},
+	{"src": "img/bar/tower-life-value.png", "id": "assets-tower-life-value"},
+	{"src": "img/bar/tower-life-bar.png", "id": "assets-blocker-life-bar"},
+	{"src": "img/bar/tower-life-value.png", "id": "assets-blocker-life-value"}
+	
 ]

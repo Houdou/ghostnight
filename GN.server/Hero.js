@@ -33,17 +33,9 @@ Hero.prototype.Move = function(path) {
         var j = this.path[0];
         var that = this;
         
-        // DEBUG
-        console.log(this.name + " will move to " + j.name);
-        // DEBUG
-        
         this.MoveTo(j.transform.x, j.transform.y, function() {
             if(that.isDead)
                 return false;
-            
-            // DEBUG
-            console.log(that.name + " arrive at " + j.name);
-            // DEBUG
             
             //Notice the joint
             var blocker = j.SteppedBy(that);
@@ -56,7 +48,8 @@ Hero.prototype.Move = function(path) {
             } else {
                 // Move to next joint on path
                 if(that.path.length > 0 && that.canMove) {
-                    that.path.shift();
+                    if(that.path.length > 1)
+                        that.path.shift();
                     that.Move(that.path);
                 }
             }

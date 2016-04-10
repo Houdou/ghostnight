@@ -52,12 +52,8 @@ Unit.prototype.Move = function () {
                     that.joint = j.Next();
                     that.Move();
                 } else {
-                    
-                    // DEBUG
                     if(j.dest == null)
-                        console.log(that.name + " reach the end.");
-                    // DEBUG
-                    
+                        that.End(j.jid);
                 }
                 
             }
@@ -70,6 +66,11 @@ Unit.prototype.Move = function () {
             }
         });
     }
+}
+Unit.prototype.End = function(jid) {
+    console.log(this.name + " reach the end.");
+    this.GM.UnitReachEnd(this.value / 10, jid);
+    this.GM.GEM.emit('unit-remove', {uid: this.uid});
 }
 // Override the RequireTarget method
 Unit.prototype.RequireTarget = function() {

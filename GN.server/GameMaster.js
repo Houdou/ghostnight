@@ -17,7 +17,11 @@ var GameMaster = function(settings, GEM){
     this.heroSelect = "Nekomata";
     
     this.cdof = [];
-    this.cds = require('./Statics/CD');
+    this.cds = [];
+    // Copy the value;
+    const _CDS = require('./Statics/CD');
+    for(var u in _CDS)
+    	this.cds[u] = _CDS[u];
     
     this.unitCount = 0;
     this.units = new Array();
@@ -30,6 +34,10 @@ var GameMaster = function(settings, GEM){
     
     this.towerCount = 0;
     this.towers = new Array();
+    
+    this.life = -1;
+    this.maxlife = -1;
+    this.goals = new Array();
     
     this.weather = Weather.night;
     this.time = -1;
@@ -72,9 +80,10 @@ GameMaster.prototype.StartTiming = function() {
             	that.AddSoul(that.soulIncreasing.value);
             }
             // console.log("tickNumber", that.tickNumber);
-            // console.log(that.time);
+            console.log(that.time);
             
             if(that.time >= that.settings.TimeLimit * 1000) {
+            	that.GEM.emit('game-end', {win: 'human'});
                 console.log("Time out");
                 clearInterval(that.timerInterval);
             }
@@ -86,6 +95,10 @@ GameMaster.prototype.StartTiming = function() {
 }
 
 // Econ system
+GameMaster.prototype.InitMoney = function() {
+	this.GEM.emit('soul-update', {ok: true, soul: this.soul});
+	this.GEM.emit('gold-update', {ok: true, gold: this.gold});
+}
 GameMaster.prototype.AddSoul = function (value) {
 	if (this.debug) console.log('AddSoul', value);
 	this.soul += value;
@@ -120,6 +133,31 @@ GameMaster.prototype.SubGold = function (value) {
 		this.gold -= value;
 		this.GEM.emit('gold-update', {ok: true, gold: this.gold});
 		return this.gold;
+	}
+}
+
+GameMaster.prototype.UnitReachEnd = function(value, jid) {
+	for(var i = 0; i < this.goals.length; i++) {
+		if(this.goals[i].jid == jid && this.goals[i].life > 0) {
+			if(value > this.goals[i].life)
+				value = this.goals[i].life;
+			
+			this.goals[i].life -= value;
+			this.life -= value;
+			this.GEM.emit("goal-damage", {gid: i, goalLife: this.goals[i].life, life: this.life, maxlife: this.maxlife});
+			
+			if(this.debug)
+				console.log("Goal " + i + " deduct life to " + this.goals[i].life);
+			
+			if(this.goals[i].life == 0) {
+				console.log("Goad " + i + " dead");
+				this.GEM.emit('goal-dead', {gid: i});
+			}
+			
+			if(this.life == 0) {
+				this.GEM.emit('ghost-win');
+			}
+		}
 	}
 }
 

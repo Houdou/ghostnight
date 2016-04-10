@@ -1,3 +1,4 @@
+var Tags = require('./Statics/Tags');
 var States = require('./Statics/States');
 var GameObject = require('./GameObject');
 
@@ -152,7 +153,8 @@ GameUnit.prototype.RequireTarget = function() {
 }
 GameUnit.prototype.DealDamage = function(from, dmg) {
     // DEBUG
-    console.log(from.name + " attack " + this.name + " and deal " + dmg + " damage");
+    if(this.GM.debug)
+        console.log(from.name + " attack " + this.name + " and deal " + dmg + " damage");
     // DEBUG
     
     if(this.hp < dmg) {
@@ -160,8 +162,11 @@ GameUnit.prototype.DealDamage = function(from, dmg) {
         this.hp = 0;
         
         // DEBUG
-        console.log(this.name + " now : " + this.hp + "/" + this.maxhp);
+        if(this.GM.debug)
+            console.log(this.name + " now : " + this.hp + "/" + this.maxhp);
         // DEBUG
+        
+        this.GM.GEM.emit(Tags[this.tag] + '-dead', {id: this.id, dmg: dmg});
         this.GM.LogDamage(from, this, dmg);
         
         this.isDead = true;
@@ -176,8 +181,11 @@ GameUnit.prototype.DealDamage = function(from, dmg) {
         this.hp -= dmg;
         
         // DEBUG
-        console.log(this.name + " now : " + this.hp + "/" + this.maxhp);
+        if(this.GM.debug)
+            console.log(this.name + " now : " + this.hp + "/" + this.maxhp);
         // DEBUG
+        
+        this.GM.GEM.emit(Tags[this.tag] + '-hp-update', {id: this.id, hp: this.hp, maxhp: this.maxhp, dmg: dmg});
         this.GM.LogDamage(from, this, dmg);
         
         // The target is still alive
@@ -188,9 +196,11 @@ GameUnit.prototype.Heal = function(from, healhp) {
     // Limit the max hp
     if(this.maxhp < this.hp + healhp) {
         this.hp = this.maxhp;
+        this.GM.GEM.emit(Tags[this.tag] + '-hp-update', {id: this.id, hp: this.hp, maxhp: this.maxhp, dmg: -healhp});
     } else {
         this.hp += healhp;
         console.log(this.name + " heals " + healhp);
+        this.GM.GEM.emit(Tags[this.tag] + '-hp-update', {id: this.id, hp: this.hp, maxhp: this.maxhp, dmg: -healhp});
     }
     
 }

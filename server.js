@@ -200,7 +200,7 @@ function startGame(roomNo){
 	// Create the game server
 	var settings = {
 		MinDamage: 1, 
-		TimeLimit: 60, 
+		TimeLimit: 120, 
 		Room: roomNo,   
 		debug: true,
 		soul: 2000,
@@ -220,7 +220,9 @@ function startGame(roomNo){
 	}
 	
 	// Start the game server
-	room.GN.Scene.LoadMap(room.map, function(){
+	room.GN.Scene.LoadMap(room.map, function(err, data){
+		if(err) console.log(err);
+		
 		room.GN.GM.mapLoaded = true;
 		room.broadcast("game-started", {});
 		// broadcastToRoom(room, "game-started", {});
@@ -233,16 +235,18 @@ server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function() 
     console.log("Server listening at", addr.address + ":" + addr.port);
     
     // Test
-    // var GN = new GhostNight({MinDamage: 1, TimeLimit: 60, Room: "048", debug: true}, new GameEventManager(new Room('048')));
+    // var GN = new GhostNight({MinDamage: 1, TimeLimit: 60, Room: "048", soul: 2000, debug: true}, new GameEventManager(new Room('048')));
     
     // GN.Scene.LoadMap('m01', function(){
-    	// var m = GN.CreateTower('Snake', 0);
+    // 	GN.GM.mapLoaded = true;
     	
-    	// GN.StartGame();
-    	// GN.CreateUnit("Kappa");
+    // 	// var m = GN.CreateTower('Snake', 0);
     	
-    	// setTimeout(function() {GN.CreateEnsign("Atk", 14);}, 8000);
-    	// setTimeout(function() {GN.MoveHeroTo(22);}, 9000);
+    // 	GN.StartGame();
+    // 	setTimeout(function() {GN.CreateUnit("Kappa");}, 3000);
+    	
+    // 	// setTimeout(function() {GN.CreateEnsign("Atk", 14);}, 8000);
+    // 	// setTimeout(function() {GN.MoveHeroTo(22);}, 9000);
     	
     // });
 });

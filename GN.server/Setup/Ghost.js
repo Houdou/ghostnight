@@ -3,11 +3,6 @@ var SetupGhost = function(socket, room) {
     
     socket.on('create-unit', function(data) {
         var unit = GN.CreateUnit(data.type);
-        if(unit != null) {
-            data.x = unit.transform.x;
-            data.y = unit.transform.y;
-            room.broadcast('unit-created', data);
-        } 
     });
     
     socket.on('move-hero', function(data) {
@@ -27,14 +22,11 @@ var SetupGhost = function(socket, room) {
     });
     
     socket.on('pay-reborn', function(data) {
-        console.log('pay-reborn');
-        
+        GN.RebornHero(true);
     });
     
     socket.on('switch-roadsign', function(data) {
-        GN.GM.roadSigns[data.rid].Turn();
-        console.log('switch-roadsign');
-        //broadcast('')
+        GN.TurnRoadSign(data.rid);
     });
     
     //socket.on('...')

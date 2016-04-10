@@ -35,13 +35,12 @@ Ensign.prototype.Effect = function() {
         }
     }
     
-    setTimeout(this.Disable, this.BuffDuration);
+    setTimeout(()=>{
+        this.hp = 0;
+        this.isDead = true;
+        this.GM.GEM.emit('ensign-removed', {eid: this.eid});
+    }, this.BuffDuration);
 }
-Ensign.prototype.Disable = function() {
-    this.hp = 0;
-    this.isDead = true;
-}
-
 // Override the Dead method
 Ensign.prototype.Dead = function(killedBy) {
     // TODO

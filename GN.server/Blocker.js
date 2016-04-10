@@ -9,6 +9,7 @@ var _Blocker = {
 // Class Blocker : Tower
 // variables
 var Blocker = function(name, id, x, y, bindJoint, slot, GM) {
+    this.bid = id;
     Tower.call(this, name, id, Tags.blocker, x, y, bindJoint, _Blocker.hp, _Blocker.atk, _Blocker.range,
         _Blocker.rate, _Blocker.def, _Blocker.spd, _Blocker.layer, _Blocker.price, _Blocker.value, GM);
     bindJoint.blocker = this;

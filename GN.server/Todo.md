@@ -97,14 +97,14 @@ Load assets									|	4/4		TPASS
 PreloadJS									|	4/4		TPASS
 Two-levels async preload					|	4/5		TPASS
 Build Unit									|	4/5		TPASS
-Build Static								|	-/-
-Build Hero									|	-/-
+Build Static								|	4/6		TPASS
+Build Hero									|	4/7		TPASS
 #### User input
 UI Layout									|	-/-
-Build Button								|	-/-
-Skill Button								|	-/-
-Client input state							|	-/-
-Input calculation							|	-/-
+Build Button								|	4/6
+Skill Button								|	4/7
+Client input state							|	4/7
+Input calculation							|	4/6
 #### UI Response
 Main menu									|	4/3
 Room & side selection						|	4/3		+4/5
@@ -119,7 +119,7 @@ Nekomata SKill 2							|	4/1
 Ameonna Skill 1								|	4/1     TPASS
 Ameonna Skill 2								|	4/1
 Todomeki SKill 1							|	4/1
-Todomeki SKill 2							|	4/1
+Todomeki SKill 2							|	4/1		TPASS
 #### Unit
 Kappa										|	4/1     TPASS
 Wanyudo										|	3/30    TPASS

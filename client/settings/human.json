@@ -9,5 +9,6 @@
 	{"src": "img/char/ensign/atkensign-s.png", "id": "button-Atk"},
 	{"src": "img/char/ensign/defensign-s.png", "id": "button-Def"},
 	{"src": "img/char/ensign/rangeensign-s.png", "id": "button-Range"},
+	{"src": "img/icons/coin.png", "id": "assets-money"},
 	{"src": "layout/human.json", "id": "layout-human"}
 ]

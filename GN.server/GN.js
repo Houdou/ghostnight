@@ -26,6 +26,10 @@ var GhostNight = function(settings, GEM) {
 GhostNight.prototype.StartGame = function() {
     if(this.GM.mapLoaded) {
         this.GM.StartTiming();
+        this.GM.InitMoney();
+        this.SetupBlocker();
+        this.SetupRoadSign();
+        this.SetupGoal();
         this.GM.ResetCoolDown(this.GNObjects.GetGameUnitList());
         this.SetHeroReborn();
         return true;
@@ -38,9 +42,6 @@ GhostNight.prototype.StartGame = function() {
 // Unit
 GhostNight.prototype.CreateUnit = function(type) {
     // Validation: check cooldown time in GameMaster
-    console.log(0 + this.GM.cdof[type] + this.GM.cds[type]);
-    console.log((new Date()).getTime());
-    
     if(this.GM.CheckCoolDown(type)) {
         if(this.GM.startTime != -1) {
             if (this.GM.SubSoul (this.GNObjects._UNIT[type].price) != -1) {
@@ -49,6 +50,7 @@ GhostNight.prototype.CreateUnit = function(type) {
                 var newUnit = new (this.GNObjects.GetUnitType(type))(
                     entryJoint.transform.x, entryJoint.transform.y, entryJoint);
                 this.GM.units.push(newUnit);
+                this.GM.GEM.emit('unit-created', {uid: newUnit.uid, type: type, x: newUnit.transform.x, y: newUnit.transform.y});
                 // Update created time;
                 this.GM.UpdateCoolDown(type);
                 // Start moving at beginning
@@ -66,24 +68,44 @@ GhostNight.prototype.CreateUnit = function(type) {
         return null;
     }
 }
+GhostNight.prototype.SetupGoal = function() {
+    this.GM.goals.forEach((g) => {
+        var j = this.GM.joints[g.jid];
+        if(j != undefined)
+            this.GM.GEM.emit('goal-built', {gid: g.id, x: j.transform.x, y: j.transform.y});
+    });
+    this.GM.GEM.emit('goal-life-bar-built');
+}
+
+GhostNight.prototype.SetupRoadSign = function() {
+    this.GM.roadSigns.forEach((rs)=>{
+		this.GM.GEM.emit('roadsign-built', {rid: rs.rid, x: rs.transform.x, y: rs.transform.y});
+		this.GM.GEM.emit('roadsign-changed', {rid: rs.rid,
+		    dx: rs.joint.dest.transform.x - rs.joint.transform.x, dy: rs.joint.dest.transform.y - rs.joint.transform.y});
+	});
+}
 GhostNight.prototype.TurnRoadSign = function(roadSignID) {
-    if(this.GM.roadSigns[roadSignID] != undefined)
-        this.GM.roadSigns[roadSignID].Turn();
+    if(this.GM.roadSigns[roadSignID] != undefined) {
+        var vec = this.GM.roadSigns[roadSignID].Turn();
+        this.GM.GEM.emit('roadsign-changed', {rid: roadSignID, dx: vec.dx, dy: vec.dy});
+    }
 }
 // Hero
 GhostNight.prototype.SetHeroReborn = function() {
-    setTimeout(()=>{this.RebornHero(false)}, this.GM.cds['Hero']);
+    setTimeout(()=>{this.RebornHero(false);}, this.GM.cds['Hero']);
     this.GM.GEM.emit('hero-select', {type: this.GM.heroSelect});
 }
 GhostNight.prototype.RebornHero = function(pay) {
     if(this.GM.hero == null) {
         if(!pay)
             this.GM.CancelCoolDown('Hero');
+            
+        console.log('CD Hero:' + this.GM.cdof['Hero']);
         var hero = this.CreateHero(this.GM.heroSelect);
         this.GM.GEM.emit('hero-reborn', {type: this.GM.heroSelect, x: hero.transform.x, y: hero.transform.y})
         // Reset CD time for skills
         hero.ResetSkill();
-        this.GM.cds['Hero'] *= 1.5;
+        this.GM.cds['Hero'] += 3000;
     }
 }
 GhostNight.prototype.CreateHero = function(type) {
@@ -96,7 +118,10 @@ GhostNight.prototype.CreateHero = function(type) {
             // Get the class from GNObjects
             var newHero = new (this.GNObjects.GetHeroType(type))(
                 entryJoint.transform.x, entryJoint.transform.y, entryJoint);
+                
+            console.log('create hero');
             this.GM.hero = newHero;
+            this.GM.UpdateCoolDown('Hero');
             return newHero;
         } else {
             console.log('Still cooling down or not enough money');
@@ -124,9 +149,11 @@ GhostNight.prototype.MoveHeroTo = function(jid) {
     }
 }
 GhostNight.prototype.UseHeroSkill = function(skillID, data) {
-    if(!this.GM.hero.isDead) {
+    if(this.GM.hero != null && !this.GM.hero.isDead) {
+        console.log("Use hero skill", skillID)
         return this.GM.hero.Skill(skillID, data);
     } else {
+        console.log("Hero is dead");
         return false;
     }
 }
@@ -150,6 +177,7 @@ GhostNight.prototype.CreateEnsign = function(type, jid) {
                 var newEnsign = new (this.GNObjects.GetEnsignType(type))(
                     joint.transform.x, joint.transform.y, joint);
                 this.GM.ensigns.push(newEnsign);
+                this.GM.GEM.emit('ensign-built', {eid: newEnsign.eid, type: type, jid: jid});
                 // Update created time;
                 this.GM.UpdateCoolDown(type);
                 // Start buff effect
@@ -167,6 +195,13 @@ GhostNight.prototype.CreateEnsign = function(type, jid) {
         console.log("Still cooling down for " + type);
         return null;
     }
+}
+// Blocker
+GhostNight.prototype.SetupBlocker = function() {
+	this.GM.blockers.forEach((b)=>{
+	    var j = b.joint.dest.dest;
+		this.GM.GEM.emit('blocker-built', {bid: b.bid, x: j.transform.x, y: j.transform.y});
+	});
 }
 // Tower
 GhostNight.prototype.CreateTower = function(type, slotID) {
@@ -187,8 +222,10 @@ GhostNight.prototype.CreateTower = function(type, slotID) {
                 // Update the slot state
                 slot.BuildTower(newTower);
                 this.GM.towers.push(newTower);
+                this.GM.GEM.emit('tower-built', {tid: newTower.tid, type: type, sid: slotID});
                 // Update created time;
                 this.GM.UpdateCoolDown(type);
+                newTower.FindTarget();
                 return newTower;
             } else {
                 console.log("Gold insufficient");

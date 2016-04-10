@@ -31,6 +31,15 @@ Tower.prototype.RequireTarget = function() {
     }
     return null;
 };
+Tower.prototype.FindTarget = function() {
+    this.unitsInRange = [];
+    if(this.GM.hero != null && this.transform.DistanceTo(this.GM.hero.transform) < this.range)
+        this.unitsInRange.push(this.GM.hero);
+    this.GM.units.forEach((u) => {
+        if(this.transform.DistanceTo(u.transform) < this.range)
+            this.unitsInRange.push(u);
+    });
+}
 // Override the Dead method
 Tower.prototype.Dead = function(killedBy) {
     // Econ system

@@ -30,15 +30,19 @@ RoadSign.prototype = new GameObject();
 // functions
 RoadSign.prototype.Turn = function() {
     //DEBUGING
-    console.log("RoadSign " + this.rid + " changed from " + this.dests[this.currentDestIndex].jid);
+    if(this.GM.debug)
+        console.log("RoadSign " + this.rid + " changed from " + this.dests[this.currentDestIndex].jid);
     //DEBUGING
 
     this.currentDestIndex = (this.currentDestIndex + 1) % this.dests.length;
     this.joint.dest = this.dests[this.currentDestIndex];
 
     //DEBUGING
-    console.log("to " + this.dests[this.currentDestIndex].jid);
+    if(this.GM.debug)
+        console.log("to " + this.dests[this.currentDestIndex].jid);
     //DEBUGING
+    
+    return {dx: this.joint.dest.transform.x - this.joint.transform.x, dy: this.joint.dest.transform.y - this.joint.transform.y};
 }
 
 module.exports = RoadSign;

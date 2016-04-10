@@ -186,6 +186,7 @@ var GNObjects = function(GM){
     // Skill 1 - Shield
     Ameonna.prototype.Shield = function() {
         if(this.canUseSkill(1)) {
+            this.Buff('def', 3, this.shieldDuration / 1000);
             this.GM.units.forEach((u) => {
                 if(u.transform.DistanceTo(this.transform) < this.shieldRadius) {
                     u.Buff('def', 3, this.shieldDuration / 1000);
@@ -243,13 +244,12 @@ var GNObjects = function(GM){
     // Skill 1 - Eyebomb
     Todomeki.prototype.EyeBomb = function() {
         if(this.canUseSkill(1)) {
-            var that = this;
-            this.GM.slots.forEach(function(s){
+            this.GM.slots.forEach((s) => {
                 if(s.tower != null && !s.tower.isDead) {
                     var target = s.tower;
                     
-                    var dmg = Math.max(this.EyeBombAtk - target.def, that.GM.settings.MinDamage);
-                    target.DealDamage(that, dmg);
+                    var dmg = Math.max(this.EyeBombAtk - target.def, this.GM.settings.MinDamage);
+                    target.DealDamage(this, dmg);
                 }
             });
             this.usedSkill(1);
@@ -342,12 +342,8 @@ var GNObjects = function(GM){
                         that.joint = j.Next();
                         that.Move();
                     } else {
-                        
-                        // DEBUG
                         if(j.dest == null)
-                            console.log(that.name + " reach the end.");
-                        // DEBUG
-                        
+                            that.End(j.jid);
                     }
                 }
             });
@@ -389,12 +385,8 @@ var GNObjects = function(GM){
                     that.joint = j.Next();
                     that.Move();
                 } else {
-                    
-                    // DEBUG
                     if(j.dest == null)
-                        console.log(that.name + " reach the end.");
-                    // DEBUG
-                    
+                        that.End(j.jid);
                 }
                 
                 // Find the nearest tower
