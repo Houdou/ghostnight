@@ -7,54 +7,54 @@ var Weather = require('./Statics/Weather');
 //Values
 const _HERO = {
     Nekomata: {
-        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 1000 / 300, price: 100, value: 30, layer: Layers.land },
+        hp: 1000, atk: 100, range: 100, rate: 1, def: 10, spd: 1000 / 300, price: 100, value: 30, layer: Layers.land },
     Ameonna: {
-        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 1000 / 300, price: 100, value: 30, layer: Layers.land },
+        hp: 1000, atk: 100, range: 100, rate: 1, def: 10, spd: 1000 / 300, price: 100, value: 30, layer: Layers.land },
     Todomeki: {
-        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 1000 / 300, price: 100, value: 30, layer: Layers.land }
+        hp: 1000, atk: 100, range: 100, rate: 1, def: 10, spd: 1000 / 300, price: 100, value: 30, layer: Layers.land }
 };
 
 const _UNIT = {
     Kappa: {
-        hp: 600, atk: 100, range: 100, rate: 3, def: 10, spd: 1000 / 500, price: 100, value: 30, layer: Layers.land },
+        hp: 700, atk: 100, range: 75, rate: 1.5, def: 10, spd: 1000 / 900, price: 60, value: 80, layer: Layers.land },
     Wanyudo: {
-        hp: 1000, atk: 300, range: 100, rate: 3, def: 10, spd: 1000 / 500, price: 100, value: 30, layer: Layers.land },
+        hp: 800, atk: 120, range: 125, rate: 0.75, def: 20, spd: 1000 / 600, price: 80, value: 100, layer: Layers.land },
     Foxfire: {
-        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 1000 / 500, price: 100, value: 30, layer: Layers.sky },
+        hp: 700, atk: 130, range: 75, rate: 1, def: 10, spd: 1000 / 700, price: 100, value: 120, layer: Layers.sky },
     Dojoji: {
-        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 1000 / 500, price: 100, value: 30, layer: Layers.land },
+        hp: 1400, atk: 80, range: 125, rate: 1.5, def: 35, spd: 1000 / 800, price: 120, value: 140, layer: Layers.land },
     Futakuchi: {
-        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 1000 / 500, price: 100, value: 30, layer: Layers.land },
+        hp: 1200, atk: 180, range: 75, rate: 0.5, def: 30, spd: 1000 / 900, price: 140, value: 160, layer: Layers.land },
     Raiju: {
-        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 1000 / 500, price: 100, value: 30, layer: Layers.land },
+        hp: 1100, atk: 200, range: 100, rate: 0.75, def: 20, spd: 1000 / 700, price: 160, value: 180, layer: Layers.land },
     Ubume: {
-        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 1000 / 500, price: 100, value: 30, layer: Layers.sky }
+        hp: 1100, atk: 150, range: 100, rate: 1, def: 20, spd: 1000 / 550, price: 180, value: 200, layer: Layers.sky }
 };
 
 const _ENSIGN = {
     Atk:{
-        buff: 'atk', radius: 100, duration: 20, price: 200},
+        buff: 'atk', radius: 100, duration: 10, price: 200},
     Def:{
-        buff: 'def', radius: 100, duration: 20, price: 200},
+        buff: 'def', radius: 100, duration: 10, price: 200},
     Range:{
-        buff: 'range', radius: 100, duration: 20, price: 200}
+        buff: 'range', radius: 100, duration: 10, price: 200}
 };
 
 const _TOWER = {
     Miko: {
-        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 1000 / 500, price: 100, value: 30, layer: Layers.land },
+        hp: 2000, atk: 100, range: 100, rate: 1, def: 50, spd: 1000 / 500, price: 200, value: 30, layer: Layers.land },
     Inari: {
-        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 1000 / 500, price: 100, value: 30, layer: Layers.land | Layers.sky },
+        hp: 2000, atk: 100, range: 100, rate: 1, def: 50, spd: 1000 / 500, price: 200, value: 30, layer: Layers.land | Layers.sky },
     Inugami: {
-        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 1000 / 500, price: 100, value: 30, layer: Layers.land | Layers.sky },
+        hp: 2000, atk: 100, range: 100, rate: 1, def: 50, spd: 1000 / 500, price: 200, value: 30, layer: Layers.land | Layers.sky },
     Ebisu: {
-        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 1000 / 500, price: 100, value: 30, layer: Layers.land },
+        hp: 2000, atk: 100, range: 100, rate: 1, def: 50, spd: 1000 / 500, price: 200, value: 30, layer: Layers.land },
     Snake: {
-        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 1000 / 500, price: 100, value: 30, layer: Layers.land },
+        hp: 2000, atk: 100, range: 100, rate: 1, def: 50, spd: 1000 / 500, price: 200, value: 30, layer: Layers.land },
     Asura: {
-        hp: 1000, atk: 100, range: 100, rate: 3, def: 10, spd: 1000 / 500, price: 100, value: 30, layer: Layers.land },
+        hp: 2000, atk: 100, range: 100, rate: 1, def: 50, spd: 1000 / 500, price: 200, value: 30, layer: Layers.land },
     Amaterasu: {
-        hp: 1000, atk: 100, range: 200, rate: 3, def: 10, spd: 1000 / 500, price: 100, value: 30, layer: Layers.land | Layers.sky }
+        hp: 2000, atk: 100, range: 200, rate: 1, def: 75, spd: 1000 / 500, price: 200, value: 30, layer: Layers.land | Layers.sky }
 };
 
 var Hero = require('./Hero');
@@ -168,6 +168,8 @@ var GNObjects = function(GM){
         if(this.canUseSkill(0)) {
             // Set the weather to rain
             this.GM.SetWeather(Weather.rain, this.rainDuration);
+            this.Heal(this, this.healAmount);
+            
             this.GM.units.forEach((u) => {
                 // No effect for the dead unit
                 if(u.isDead) { return; }

@@ -2,8 +2,8 @@ var Room = function (roomNo) {
 	this.roomNo = roomNo;
 	this.GN;
 	this.players = [];
-	//this.p1 = {socket: null, side: 0b0};
-	//this.p2 = {socket: null, side: 0b0};
+	//this.p1 = {socket: null, side: 'ghost'};
+	//this.p2 = {socket: null, side: 'human'};
 	this.isPlaying = false;
 	this.map = 'm01';
 	this.loadedNo = 0;

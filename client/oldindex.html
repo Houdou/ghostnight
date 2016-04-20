@@ -78,12 +78,12 @@
             	createjs.Ticker.setFPS(60);
                 createjs.Ticker.addEventListener("tick", stage);
                 
-                var tower = new createjs.Shape();
-                	tower.graphics.clear().beginFill("rgba(255,255,255,0.01)").drawCircle(0, 0, 400);
-                	tower.x = 400;
-                	tower.y = 200;
+                // var tower = new createjs.Shape();
+                // 	tower.graphics.clear().beginFill("rgba(255,255,255,0.01)").drawCircle(0, 0, 400);
+                // 	tower.x = 400;
+                // 	tower.y = 200;
                 
-                stage.addChild(tower);
+                // stage.addChild(tower);
                 
                 setTimeout(function(){
                     nekomata = new Nekomata(startJoint.transform.x - 10, startJoint.transform.y - 10, startJoint);
@@ -214,6 +214,8 @@
                 	}
                 	stage.update();
             	} else if (event.nativeEvent.button == 2) {
+            	    console.log(event.stageX, event.stageY);
+            	    
             	    var selectJoint = GN.Joint.FindNearest(new GN.Transform(stage.mouseX, stage.mouseY), 40);
             	    if(selectJoint != null)
             	    {

@@ -83,8 +83,9 @@ GameMaster.prototype.StartTiming = function() {
             console.log(that.time);
             
             if(that.time >= that.settings.TimeLimit * 1000) {
-            	that.GEM.emit('game-end', {win: 'human'});
-                console.log("Time out");
+            	that.GameEnd('timeout');
+            	//that.GEM.emit('game-end', {type: 'timeout', win: 'human'});
+                //console.log("Time out");
                 clearInterval(that.timerInterval);
             }
         }, 1000);
@@ -92,6 +93,21 @@ GameMaster.prototype.StartTiming = function() {
     } else {
         return false;
     }
+}
+GameMaster.prototype.GameEnd = function(type){
+	var win = '';
+	switch (type){
+		case 'timeout': 
+			win = 'human';
+			break;
+		case 'nolife':
+			win = 'ghost';
+			break;
+		default:
+			console.log('Wrong type input');
+	}
+	this.GEM.emit('game-end', {type: type, win: win});
+	clearInterval(this.timerInterval);
 }
 
 // Econ system
@@ -150,12 +166,12 @@ GameMaster.prototype.UnitReachEnd = function(value, jid) {
 				console.log("Goal " + i + " deduct life to " + this.goals[i].life);
 			
 			if(this.goals[i].life == 0) {
-				console.log("Goad " + i + " dead");
+				console.log("Goal " + i + " dead");
 				this.GEM.emit('goal-dead', {gid: i});
 			}
 			
 			if(this.life == 0) {
-				this.GEM.emit('ghost-win');
+				this.GameEnd('nolife')
 			}
 		}
 	}
@@ -267,6 +283,11 @@ GameMaster.prototype.assignTowerID = function () {
     return this.towerCount++;
 };
 // Log system
+GameMaster.prototype.LogCreate = function(side, type, id) {
+	this.time = (new Date()).getTime() - this.startTime;
+	this.logger.log(this.time, side, "CREATE", type + " at " + id);
+	
+}
 GameMaster.prototype.LogDamage = function(source, target, dmg) {
     this.time = (new Date()).getTime() - this.startTime;
     this.logger.Log(this.time, source.name , ((dmg > 0)?"ATTACK":"HEAL"), 

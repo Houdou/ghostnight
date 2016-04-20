@@ -29,8 +29,6 @@ var SetupGhost = function(socket, room) {
         GN.TurnRoadSign(data.rid);
     });
     
-    //socket.on('...')
-    
     return socket;
 }
 module.exports = SetupGhost;

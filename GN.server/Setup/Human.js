@@ -14,12 +14,10 @@ var SetupHuman = function(socket, room){
         var ensign = GN.CreateEnsign(data.type, data.jid);
     });
     
-    socket.on('', function(){
-        console.log('');
-        //broadcast('')
-    });
-    
-    //socket.on('...')
+    // socket.on('', function(){
+    //     console.log('');
+    //     //broadcast('')
+    // });
     
     return socket;
 }

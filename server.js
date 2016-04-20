@@ -92,10 +92,10 @@ function joinRoom(socket, roomNo) {
 		} else if(playerIndex == 1){
 			// Somebody already in
 			result.map = room.map;
-			if(room.players[0].side == 0b10) {
+			if(room.players[0].side == 'ghost') {
 				result.opposite = 'ghost';
 				result.side = 'human';
-			} else if(room.players[0].side == 0b01){
+			} else if(room.players[0].side == 'human'){
 				result.opposite = 'human';
 				result.side = 'ghost';
 			} else {
@@ -109,24 +109,25 @@ function joinRoom(socket, roomNo) {
 		room.broadcast('other-joined-room', result);
 		// Add the player
 		if(result.side == 'ghost')
-			room.players.push({socket: socket, side: 0b10});
+			room.players.push({socket: socket, side: 'ghost'});
 		else
-			room.players.push({socket: socket, side: 0b01});
+			room.players.push({socket: socket, side: 'human'});
 		
 		socket.emit('room-joined', result);
 		
 		// Register the room options
 		socket.on('choose-side', function(data){
-			console.log(data);
-			if(data.side == 'ghost'){
-				room.players[playerIndex].side = 0b10;
-				console.log('ghost');
-			}
-			if(data.side == 'human'){
-				room.players[playerIndex].side = 0b01;
-				console.log('human');
-			}
-			console.log(playerIndex);
+			// console.log(data);
+			room.players[playerIndex].side = data.side;
+			// if(data.side == 'ghost'){
+			// 	room.players[playerIndex].side = 'ghost';
+			// 	console.log('ghost');
+			// }
+			// if(data.side == 'human'){
+			// 	room.players[playerIndex].side = 'human';
+			// 	console.log('human');
+			// }
+			// console.log(playerIndex);
 			room.broadcast('side-chosen', {player: playerIndex, side: data.side});
 		});
 		
@@ -159,6 +160,17 @@ function joinRoom(socket, roomNo) {
 				startGame(roomof[socket.id]);
 			}
 		});
+		
+		socket.on('send-message', function(data) {
+	        //console.log('here');
+	        room.broadcast('message-send', {side: room.players[playerIndex].side, message: data.message});
+	  //      if (room.players[playerIndex].side == 'ghost') {//ghost
+			// 	room.broadcast('message-send', {side: 'Ghost', message: data.message})
+			// } else if(room.players[playerIndex].side == 'human') {//human
+			// 	room.broadcast('message-send', {side: 'Human', message: data.message})
+			// }
+	        
+	    });
 		
 	} else {
 		// Create a new room with specified room number
@@ -212,9 +224,9 @@ function startGame(roomNo){
 	// Load map
 	
 	for (var i in room.players){
-		if (room.players[i].side == 0b10) {//ghost
+		if (room.players[i].side == 'ghost') {//ghost
 			SetupGhost(room.players[i].socket, room);
-		} else if(room.players[i].side == 0b01) {//human
+		} else if(room.players[i].side == 'human') {//human
 			SetupHuman(room.players[i].socket, room);
 		}
 	}

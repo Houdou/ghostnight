@@ -11,6 +11,10 @@ var GameEventManager = function(room) {
         }
     }
     
+    this.on('message-send', function(data) {
+        room.broadcast('message-send', data);
+    });
+    
     this.on('map-data', function(data) {
         room.broadcast('map-data', data);
     });

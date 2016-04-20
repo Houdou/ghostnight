@@ -501,7 +501,7 @@ gn.prototype.BuildTower = function(data) {
 	c.addChild(value);
 	
 	unit.regX = 40;
-	unit.regY = 60;
+	unit.regY = 66;
 	
 	unit.cache(0, 0, 80, 80);
 	
@@ -538,13 +538,6 @@ gn.prototype.BuildEnsign = function(data) {
 	
 	this.ensigns[data.eid] = c;
 	stage.addChild(c);
-	stage.update();
-}
-gn.prototype.RemoveEnsign = function(data){
-	console.log('remove ensign', data);
-	// TODO
-	stage.removeChild(this.ensigns[data.eid]);
-	this.ensigns[data.eid] = null;
 	stage.update();
 }
 gn.prototype.BuildBlocker = function(data) {
@@ -668,6 +661,11 @@ gn.prototype.RemoveHero = function(data) {
 
 gn.prototype.RemoveTower = function(data) {
 	stage.removeChild(this.towers[data.tid]);
+	stage.update();
+}
+
+gn.prototype.RemoveEnsign = function(data){
+	stage.removeChild(this.ensigns[data.eid]);
 	stage.update();
 }
 
@@ -835,7 +833,7 @@ function initGame(socket){
 			console.log("change side to " + data.side);
 			// change my side
 		} else {
-			console.log("opponent change side to " + data.side);
+			console.log("opponent change side to " + data.opposite);
 			// change opponent's side
 		}
 	};
@@ -954,7 +952,7 @@ function initGame(socket){
 	
 	socket.on('game-end', function(data){
 		
-		console.log('Game end. ' + data.win + " win.");
+		console.log('Game end.', data);
 	});
 	
 	socket.on('roadsign-built', function(data) {
@@ -1137,7 +1135,12 @@ function initGame(socket){
 		gnclient.RemoveEnsign(data);
 	});
 	
-	// socket.on('', function(){
-	//     console.log('');
-	// });
+	socket.on('message-send', function(data){
+	    console.log(data.side + ": " + data.message);
+	});
+	
+	say = function(msg){
+		gnclient.socket.emit('send-message', {message: msg});
+	}
 }
+

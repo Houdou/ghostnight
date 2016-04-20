@@ -39,7 +39,7 @@ Ensign.prototype.Effect = function() {
         this.hp = 0;
         this.isDead = true;
         this.GM.GEM.emit('ensign-removed', {eid: this.eid});
-    }, this.BuffDuration);
+    }, this.BuffDuration * 1000);
 }
 // Override the Dead method
 Ensign.prototype.Dead = function(killedBy) {
