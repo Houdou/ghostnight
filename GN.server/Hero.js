@@ -16,7 +16,7 @@ Hero.prototype = new GameUnit();
 // functions
 Hero.prototype.MoveTo = function(x, y, end) {
     this.transform.MoveTo(x, y);
-    this.GM.GEM.emit('hero-moving', {uid: this.id, x: x, y: y, duration: 1000 / this.spd});
+    this.GM.GEM.emit('hero-moving', {x: x, y: y, duration: 1000 / this.spd});
     this.moveTimeout = setTimeout(end, 1000 / this.spd);
     
     // createjs.Tween.get(this.transform, {override: true})
@@ -27,6 +27,10 @@ Hero.prototype.MoveTo = function(x, y, end) {
 }
 Hero.prototype.Move = function(path) {
     clearTimeout(this.moveTimeout);
+    
+    if(this.joint.blocker != null)
+        path.unshift(this.joint);
+    
     this.path = path;
     
     if(this.path.length > 0) {

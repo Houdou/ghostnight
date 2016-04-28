@@ -7,54 +7,54 @@ var Weather = require('./Statics/Weather');
 //Values
 const _HERO = {
     Nekomata: {
-        hp: 1000, atk: 100, range: 100, rate: 1, def: 10, spd: 1000 / 300, price: 100, value: 30, layer: Layers.land },
+        hp: 1800, atk: 220, range: 75, rate: 1, def: 10, spd: 1000 / 600, price: 200, value: 200, layer: Layers.land },
     Ameonna: {
-        hp: 1000, atk: 100, range: 100, rate: 1, def: 10, spd: 1000 / 300, price: 100, value: 30, layer: Layers.land },
+        hp: 1500, atk: 170, range: 100, rate: 1, def: 30, spd: 1000 / 700, price: 200, value: 200, layer: Layers.land },
     Todomeki: {
-        hp: 1000, atk: 100, range: 100, rate: 1, def: 10, spd: 1000 / 300, price: 100, value: 30, layer: Layers.land }
+        hp: 1800, atk: 200, range: 150, rate: 1, def: 20, spd: 1000 / 600, price: 200, value: 200, layer: Layers.land }
 };
 
 const _UNIT = {
     Kappa: {
-        hp: 700, atk: 100, range: 75, rate: 1.5, def: 10, spd: 1000 / 900, price: 60, value: 80, layer: Layers.land },
+        hp: 700, atk: 100, range: 75, rate: 1.5, def: 10, spd: 1000 / 900, price: 80, value: 100, layer: Layers.land },
     Wanyudo: {
-        hp: 800, atk: 120, range: 125, rate: 0.75, def: 20, spd: 1000 / 600, price: 80, value: 100, layer: Layers.land },
+        hp: 700, atk: 250, range: 125, rate: 0.75, def: 20, spd: 1000 / 500, price: 100, value: 120, layer: Layers.land },
     Foxfire: {
-        hp: 700, atk: 130, range: 75, rate: 1, def: 10, spd: 1000 / 700, price: 100, value: 120, layer: Layers.sky },
+        hp: 800, atk: 130, range: 75, rate: 1, def: 10, spd: 1000 / 700, price: 120, value: 140, layer: Layers.sky },
     Dojoji: {
-        hp: 1400, atk: 80, range: 125, rate: 1.5, def: 35, spd: 1000 / 800, price: 120, value: 140, layer: Layers.land },
+        hp: 1400, atk: 80, range: 125, rate: 1.5, def: 35, spd: 1000 / 800, price: 140, value: 160, layer: Layers.land },
     Futakuchi: {
-        hp: 1200, atk: 180, range: 75, rate: 0.5, def: 30, spd: 1000 / 900, price: 140, value: 160, layer: Layers.land },
+        hp: 600, atk: 120, range: 75, rate: 0.5, def: 30, spd: 1000 / 1000, price: 160, value: 180, layer: Layers.land },
     Raiju: {
-        hp: 1100, atk: 200, range: 100, rate: 0.75, def: 20, spd: 1000 / 700, price: 160, value: 180, layer: Layers.land },
+        hp: 1100, atk: 200, range: 100, rate: 0.75, def: 20, spd: 1000 / 700, price: 180, value: 200, layer: Layers.land },
     Ubume: {
-        hp: 1100, atk: 150, range: 100, rate: 1, def: 20, spd: 1000 / 550, price: 180, value: 200, layer: Layers.sky }
+        hp: 1100, atk: 150, range: 100, rate: 1, def: 20, spd: 1000 / 550, price: 200, value: 220, layer: Layers.sky }
 };
 
 const _ENSIGN = {
     Atk:{
-        buff: 'atk', radius: 100, duration: 10, price: 200},
+        buff: 'atk', radius: 100, duration: 10, price: 400},
     Def:{
-        buff: 'def', radius: 100, duration: 10, price: 200},
+        buff: 'def', radius: 100, duration: 10, price: 400},
     Range:{
-        buff: 'range', radius: 100, duration: 10, price: 200}
+        buff: 'range', radius: 100, duration: 10, price: 400}
 };
 
 const _TOWER = {
     Miko: {
-        hp: 2000, atk: 100, range: 100, rate: 1, def: 50, spd: 1000 / 500, price: 200, value: 30, layer: Layers.land },
+        hp: 2200, atk: 120, range: 125, rate: 1, def: 20, spd: 1000 / 500, price: 200, value: 240, layer: Layers.land },
     Inari: {
-        hp: 2000, atk: 100, range: 100, rate: 1, def: 50, spd: 1000 / 500, price: 200, value: 30, layer: Layers.land | Layers.sky },
+        hp: 2300, atk: 130, range: 150, rate: 1, def: 10, spd: 1000 / 500, price: 240, value: 280, layer: Layers.land | Layers.sky },
     Inugami: {
-        hp: 2000, atk: 100, range: 100, rate: 1, def: 50, spd: 1000 / 500, price: 200, value: 30, layer: Layers.land | Layers.sky },
+        hp: 1800, atk: 150, range: 125, rate: 1, def: 20, spd: 1000 / 500, price: 260, value: 300, layer: Layers.land | Layers.sky },
     Ebisu: {
-        hp: 2000, atk: 100, range: 100, rate: 1, def: 50, spd: 1000 / 500, price: 200, value: 30, layer: Layers.land },
+        hp: 2000, atk: 110, range: 100, rate: 1, def: 40, spd: 1000 / 500, price: 260, value: 300, layer: Layers.land },
     Snake: {
-        hp: 2000, atk: 100, range: 100, rate: 1, def: 50, spd: 1000 / 500, price: 200, value: 30, layer: Layers.land },
+        hp: 2400, atk: 120, range: 150, rate: 1.25, def: 30, spd: 1000 / 500, price: 280, value: 320, layer: Layers.land },
     Asura: {
-        hp: 2000, atk: 100, range: 100, rate: 1, def: 50, spd: 1000 / 500, price: 200, value: 30, layer: Layers.land },
+        hp: 2100, atk: 200, range: 100, rate: 0.75, def: 20, spd: 1000 / 500, price: 320, value: 360, layer: Layers.land },
     Amaterasu: {
-        hp: 2000, atk: 100, range: 200, rate: 1, def: 75, spd: 1000 / 500, price: 200, value: 30, layer: Layers.land | Layers.sky }
+        hp: 2500, atk: 180, range: 200, rate: 0.75, def: 30, spd: 1000 / 500, price: 360, value: 400, layer: Layers.land | Layers.sky }
 };
 
 var Hero = require('./Hero');
@@ -88,16 +88,19 @@ var GNObjects = function(GM){
         if(this.canUseSkill(0)) {
             // Find jid in the game master
             var joint = this.GM.joints[jid];
-            // Find the nearest tower in selected position
-            var target = joint.FindNearestTower(this.scratchRadius);
             
-            if (target != null) {
-                // Skill damage to modified
-                var dmg = Math.max(this.scratchAtk - target.def, this.GM.settings.MinDamage);
-                target.DealDamage(this, dmg);
-                this.usedSkill(0);
+            if(joint != null) {
+                // Find the nearest tower in selected position
+                var target = joint.FindNearestTower(this.scratchRadius);
                 
-                return true;
+                if (target != null) {
+                    // Skill damage to modified
+                    var dmg = Math.max(this.scratchAtk - target.def, this.GM.settings.MinDamage);
+                    target.DealDamage(this, dmg);
+                    this.usedSkill(0);
+                    
+                    return true;
+                }
             } else {
                 // Failed to use skill: No target in range
                 return false;
@@ -112,14 +115,18 @@ var GNObjects = function(GM){
         if(this.canUseSkill(1)) {
             // Find jid in the game master
             var joint = this.GM.joints[jid];
-            // Interupt current movement
-            clearTimeout(this.moveTimeout);
-            // Teleport
-            this.transform.MoveTo(joint.transform);
-            this.joint = joint;
             
-            this.usedSkill(1);
-            return true;
+            if(joint != null) {
+                // Interupt current movement
+                clearTimeout(this.moveTimeout);
+                // Teleport
+                this.transform.MoveTo(joint.transform);
+                this.joint = joint;
+                this.GM.GEM.emit('hero-moving', {x: joint.transform.x, y: joint.transform.y, duration: 50});
+                
+                this.usedSkill(1);
+                return true;
+            }
         } else {
             // Skill not ready
             return false;
@@ -158,7 +165,7 @@ var GNObjects = function(GM){
         // var
         this.healAmount = 200;
         this.rainDuration = 10000;
-        this.shieldRadius = 100;
+        this.shieldRadius = 300;
         this.shieldDuration = 10000;
     }
     Ameonna.prototype = new Hero();
@@ -230,14 +237,17 @@ var GNObjects = function(GM){
         if(this.canUseSkill(0)) {
             // Find jid in the game master
             var joint = this.GM.joints[jid];
-            // Find the nearest tower in selected position
-            var target = joint.FindNearestTower(this.range * 1.5);
             
-            if (target != null) {
-                target.setState(States.paralyzed);
-                this.usedSkill(0);
-            } else {
-                // Failed to use skill: No target in range
+            if(joint != null) {
+                // Find the nearest tower in selected position
+                var target = joint.FindNearestTower(this.range * 1.5);
+                
+                if (target != null) {
+                    target.setState(States.paralyzed);
+                    this.usedSkill(0);
+                } else {
+                    // Failed to use skill: No target in range
+                }
             }
         } else {
             // Skill not ready
@@ -443,6 +453,8 @@ var GNObjects = function(GM){
             target.DealDamage(this, dmgToKill);
             // Mark as eaten
             this.eaten = true;
+            // Decrease the attack rate
+            this.rate = 0.05;
             // Increase value for reward
             this.Buff('value', 2, 10);
             return true;

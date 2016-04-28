@@ -158,8 +158,8 @@ GameMaster.prototype.UnitReachEnd = function(value, jid) {
 			if(value > this.goals[i].life)
 				value = this.goals[i].life;
 			
-			this.goals[i].life -= value;
-			this.life -= value;
+			this.goals[i].life -= 1;
+			this.life -= 1;
 			this.GEM.emit("goal-damage", {gid: i, goalLife: this.goals[i].life, life: this.life, maxlife: this.maxlife});
 			
 			if(this.debug)
@@ -207,26 +207,57 @@ GameMaster.prototype.SetWeather = function(newWeather, duration) {
 // Unit function
 GameMaster.prototype.findPathTo = function(j, at) {
     var path = new Array();
+    var list = new Array();
+    var end = false;
     
     this.joints.forEach(function(joint) {
         joint.visited = false;
+        joint.prev = null;
     })
     
-    if(at == j) return j;
-    var list = new Array();
+    if(at == j) return [j];
+    at.visited = true;
+    
     for(var i = 0; i < at.nbs.length; i++) {
-        if(at.nbs[i] != j)
-            list.push(at.nbs[i]);
+        if(at.nbs[i] != j) {
+        	at.nbs[i].prev = at;
+        	list.push(at.nbs[i]);
+        }
         else
             return [j];
     }
-    for(var i = 0; i< list.length; i++) {
-        var p = list[i].findPath(at, j);
-        list[i].visited = true;
-        if(p != null)
-            path = p;
+    
+    while(list.length > 0 && !end){
+    	var node = list[0];
+    	if(node.visited) { list.shift(); continue; }
+    	
+    	var newNodes = node.getDests(node.prev);
+    	for(var i = 0; i < newNodes.length; i++) {
+    		newNodes[i].prev = node;
+    		
+    		if(newNodes[i] != j) {
+    			list.push(newNodes[i]);
+    		} else {
+    			end = true;
+    			break;
+    		}
+    	}
+    	
+    	node.visited = true;
+    	list.shift();
     }
-    return path;
+    
+    if(end) {
+	    var node = j;
+	    while(node != null) {
+	    	path.unshift(node);
+	    	node = node.prev;
+	    }
+	    path.shift();
+	    return path;
+    } else {
+    	return [at];
+    }
 }
 GameMaster.prototype.findNearestJoint = function(at, maxDistance) {
     var d = maxDistance;

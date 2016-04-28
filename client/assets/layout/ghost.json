@@ -142,7 +142,7 @@
 				"type": "skill",
 				"event": "use-hero-skill",
 				"data": {"skillID": 1, "data": "null"},
-				"input": "sid",
+				"input": "jid",
 				"x": 155,
 				"y": 56,
 				"width": 64,
@@ -233,7 +233,7 @@
 		"active": true
 	},
 	{
-		"name": "Kappa",
+		"name": "Kappa\n80",
 		"srcID": "button-Kappa",
 		"type": "build",
 		"event": "create-unit",
@@ -243,10 +243,10 @@
 		"y": 640,
 		"width": 52,
 		"height": 48,
-		"buttonStrOffset": 30
+		"buttonStrOffset": 27
 	},
 	{
-		"name": "Wanyudo",
+		"name": "Wanyudo\n100",
 		"srcID": "button-Wanyudo",
 		"type": "build",
 		"event": "create-unit",
@@ -256,10 +256,10 @@
 		"y": 640,
 		"width": 52,
 		"height": 48,
-		"buttonStrOffset": 30
+		"buttonStrOffset": 27
 	},
 	{
-		"name": "Foxfire",
+		"name": "Foxfire\n120",
 		"srcID": "button-Foxfire",
 		"type": "build",
 		"event": "create-unit",
@@ -269,10 +269,10 @@
 		"y": 640,
 		"width": 52,
 		"height": 48,
-		"buttonStrOffset": 30
+		"buttonStrOffset": 27
 	},
 	{
-		"name": "Dojoji",
+		"name": "Dojoji\n140",
 		"srcID": "button-Dojoji",
 		"type": "build",
 		"event": "create-unit",
@@ -282,10 +282,10 @@
 		"y": 640,
 		"width": 52,
 		"height": 48,
-		"buttonStrOffset": 30
+		"buttonStrOffset": 27
 	},
 	{
-		"name": "Futakuchi",
+		"name": "Futakuchi\n160",
 		"srcID": "button-Futakuchi",
 		"type": "build",
 		"event": "create-unit",
@@ -295,10 +295,10 @@
 		"y": 640,
 		"width": 52,
 		"height": 48,
-		"buttonStrOffset": 30
+		"buttonStrOffset": 27
 	},
 	{
-		"name": "Raiju",
+		"name": "Raiju\n180",
 		"srcID": "button-Raiju",
 		"type": "build",
 		"event": "create-unit",
@@ -308,10 +308,10 @@
 		"y": 640,
 		"width": 52,
 		"height": 48,
-		"buttonStrOffset": 30
+		"buttonStrOffset": 27
 	},
 	{
-		"name": "Ubume",
+		"name": "Ubume\n200",
 		"srcID": "button-Ubume",
 		"type": "build",
 		"event": "create-unit",
@@ -321,6 +321,6 @@
 		"y": 640,
 		"width": 52,
 		"height": 48,
-		"buttonStrOffset": 30
+		"buttonStrOffset": 27
 	}
 ]

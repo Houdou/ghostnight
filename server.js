@@ -211,13 +211,13 @@ function startGame(roomNo){
 	var GEM = new GameEventManager(room);
 	// Create the game server
 	var settings = {
-		MinDamage: 1, 
-		TimeLimit: 120, 
+		MinDamage: 5, 
+		TimeLimit: 180, 
 		Room: roomNo,   
 		debug: true,
-		soul: 2000,
+		soul: 1000,
 		gold: 2000,
-		soulIncreasing: { value: 10, interval: 5}
+		soulIncreasing: { value: 10, interval: 10}
 		
 	};
 	room.GN = new GhostNight(settings, GEM);
@@ -249,16 +249,17 @@ server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function() 
     // Test
     // var GN = new GhostNight({MinDamage: 1, TimeLimit: 60, Room: "048", soul: 2000, debug: true}, new GameEventManager(new Room('048')));
     
-    // GN.Scene.LoadMap('m01', function(){
+    // GN.Scene.LoadMap('m03', function(){
     // 	GN.GM.mapLoaded = true;
-    	
     // 	// var m = GN.CreateTower('Snake', 0);
     	
     // 	GN.StartGame();
-    // 	setTimeout(function() {GN.CreateUnit("Kappa");}, 3000);
+    	
+    // 	setTimeout(function() {GN.RebornHero(false);}, 1000);
+    // 	// setTimeout(function() {GN.CreateUnit("Kappa");}, 3000);
     	
     // 	// setTimeout(function() {GN.CreateEnsign("Atk", 14);}, 8000);
-    // 	// setTimeout(function() {GN.MoveHeroTo(22);}, 9000);
+    // 	setTimeout(function() {GN.MoveHeroTo(139);}, 2000);
     	
     // });
 });

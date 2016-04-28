@@ -139,7 +139,9 @@ GhostNight.prototype.MoveHeroTo = function(jid) {
     // Move the hero
     if(joint != undefined && this.GM.hero != null && !this.GM.hero.isDead) {
         // Call game master to find the path to the position
-        console.log('Move hero path:');
+        if(this.GM.debug)
+            console.log('Move hero path:');
+        
         var path = this.GM.findPathTo(joint, this.GM.hero.joint)
         if(this.GM.debug)
             console.log(path);

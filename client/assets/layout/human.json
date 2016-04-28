@@ -29,7 +29,7 @@
 		"y": 90
 	},
 	{
-		"name": "Atk",
+		"name": "Atk\n400",
 		"srcID": "button-Atk",
 		"type": "build",
 		"event": "build-ensign",
@@ -42,7 +42,7 @@
 		"buttonStrOffset": 30
 	},
 	{
-		"name": "Def",
+		"name": "Def\n400",
 		"srcID": "button-Def",
 		"type": "build",
 		"event": "build-ensign",
@@ -55,7 +55,7 @@
 		"buttonStrOffset": 30
 	},
 	{
-		"name": "Range",
+		"name": "Range\n400",
 		"srcID": "button-Range",
 		"type": "build",
 		"event": "build-ensign",
@@ -68,7 +68,7 @@
 		"buttonStrOffset": 30
 	},
 	{
-		"name": "Miko",
+		"name": "Miko\n200",
 		"srcID": "button-Miko",
 		"type": "build",
 		"event": "build-tower",
@@ -78,10 +78,10 @@
 		"y": 640,
 		"width": 52,
 		"height": 48,
-		"buttonStrOffset": 30
+		"buttonStrOffset": 27
 	},
 	{
-		"name": "Inari",
+		"name": "Inari\n240",
 		"srcID": "button-Inari",
 		"type": "build",
 		"event": "build-tower",
@@ -91,10 +91,10 @@
 		"y": 640,
 		"width": 52,
 		"height": 48,
-		"buttonStrOffset": 30
+		"buttonStrOffset": 27
 	},
 	{
-		"name": "Inugami",
+		"name": "Inugami\n260",
 		"srcID": "button-Inugami",
 		"type": "build",
 		"event": "build-tower",
@@ -104,10 +104,10 @@
 		"y": 640,
 		"width": 52,
 		"height": 48,
-		"buttonStrOffset": 30
+		"buttonStrOffset": 27
 	},
 	{
-		"name": "Ebisu",
+		"name": "Ebisu\n260",
 		"srcID": "button-Ebisu",
 		"type": "build",
 		"event": "build-tower",
@@ -117,10 +117,10 @@
 		"y": 640,
 		"width": 52,
 		"height": 48,
-		"buttonStrOffset": 30
+		"buttonStrOffset": 27
 	},
 	{
-		"name": "Snake",
+		"name": "Snake\n280",
 		"srcID": "button-Snake",
 		"type": "build",
 		"event": "build-tower",
@@ -130,10 +130,10 @@
 		"y": 640,
 		"width": 52,
 		"height": 48,
-		"buttonStrOffset": 30
+		"buttonStrOffset": 27
 	},
 	{
-		"name": "Asura",
+		"name": "Asura\n320",
 		"srcID": "button-Asura",
 		"type": "build",
 		"event": "build-tower",
@@ -143,10 +143,10 @@
 		"y": 640,
 		"width": 52,
 		"height": 48,
-		"buttonStrOffset": 30
+		"buttonStrOffset": 27
 	},
 	{
-		"name": "Amaterasu",
+		"name": "Amaterasu\n360",
 		"srcID": "button-Amaterasu",
 		"type": "build",
 		"event": "build-tower",
@@ -156,6 +156,6 @@
 		"y": 640,
 		"width": 52,
 		"height": 48,
-		"buttonStrOffset": 30
+		"buttonStrOffset": 27
 	}
 ]

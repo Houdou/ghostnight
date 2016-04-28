@@ -9,6 +9,7 @@ var gn = function(stage, socket) {
 	this.opposite = null;
 	this.map = null;
 	this.socket = socket;
+	this.onKeys = [];
 	
 	// Assets
 	this.manifest = [];
@@ -233,8 +234,9 @@ gn.prototype.ParseLayout = function(element, draw) {
 							this.stage.on('stagemousedown', (event, data) => {
 								console.log('client state: normal');
 								this.inputState = 'normal';
-								DATA.jid = this.FindNearestJoint(event.stageX, event.stageY, data.maxDistance);
-								console.log(DATA.jid);
+								DATA.data = new Object();
+								DATA.data.jid = this.FindNearestJoint(event.stageX, event.stageY, data.maxDistance);
+								console.log(DATA);
 								this.socket.emit(element.event, DATA)
 							}, null, true, {maxDistance: 50})
 					}, element.data, draw, element.scale);
@@ -246,9 +248,10 @@ gn.prototype.ParseLayout = function(element, draw) {
 							this.stage.on('stagemousedown', (event, data) => {
 								console.log('client state: normal');
 								this.inputState = 'normal';
+								DATA.data = new Object();
 								console.log(event.stageX + ', ' + event.stageY);
-								DATA.sid = this.FindNearestSlot(event.stageX, event.stageY, data.maxDistance);
-								console.log(DATA.sid);
+								DATA.data.sid = this.FindNearestSlot(event.stageX, event.stageY, data.maxDistance);
+								console.log(DATA.data.sid);
 								this.socket.emit(element.event, DATA)
 							}, null, true, {maxDistance: 70})
 					}, element.data, draw, element.scale);
@@ -466,9 +469,11 @@ gn.prototype.BuildHero = function(data) {
 	
 	if(this.side == 'ghost') {
 		this.heroMovement = stage.on('stagemousedown', (event, data) => {
-			var jid = this.FindNearestJoint(event.stageX, event.stageY, 50);
-			if(jid != -1) {
-				this.socket.emit('move-hero', {jid: jid});
+			if(this.inputState == "normal"){
+				var jid = this.FindNearestJoint(event.stageX, event.stageY, 50);
+				if(jid != -1) {
+					this.socket.emit('move-hero', {jid: jid});
+				}
 			}
 		});
 	}
@@ -752,7 +757,6 @@ gn.prototype.FindNearestSlot = function(x, y, maxDistance) {
 
 function initGame(socket){
 	var gnclient = new gn(stage, socket);
-	console.log(gnclient);
 	
 	var settingPreload = new createjs.LoadQueue(true, './settings/');
 	var preload = new createjs.LoadQueue(true, './assets/');

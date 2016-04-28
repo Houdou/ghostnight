@@ -11,9 +11,14 @@ var Joint = function(id, x, y, GM) {
     this.nbs = [];
     this.dest = null;
     
+    // path finding
+    this.visited = true;
+    this.prev = null;
+    
     this.blocker = null;
     
     this.distances = [];
+    
     
     this.GM.slots.forEach(function(slot) {
         that.distances.push(slot.transform.DistanceTo(that.transform));
@@ -76,22 +81,22 @@ Joint.prototype.Next = function() {
 
 Joint.prototype.findPath = function(from, to) {
     var list = new Array();
+    
     for(var i = 0; i < this.nbs.length; i++) {
-        if (this.nbs[i].visited)
-            continue;
+        if (this.nbs[i].visited) { continue; }
         
         if (this.nbs[i] == to)
-        {
             return [this, to];
-        }
         else if (this.nbs[i] == from)
             continue;
         else
             list.push(this.nbs[i]);
     }
+    
     for(var i = 0; i < list.length; i++) {
-        var path = list[i].findPath(this, to);
         list[i].visited = true;
+        var path = list[i].findPath(this, to);
+        
         if(path != null) {
             path.unshift(this);
             return path;
@@ -99,6 +104,16 @@ Joint.prototype.findPath = function(from, to) {
     }
     return null;
 };
+Joint.prototype.getDests = function(from) {
+    var dests = new Array();
+    for(var i = 0; i < this.nbs.length; i++) {
+        if(this.nbs[i] == from)
+            continue;
+        else
+            dests.push(this.nbs[i]);
+    }
+    return dests;
+}
 
 Joint.prototype.FindNearestTower = function(range) {
     var tower = null;
