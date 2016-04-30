@@ -3,9 +3,8 @@ var GhostNight = function(settings, GEM) {
     this.GM = new (require("./GameMaster"))(settings, GEM);
     this.Scene = new (require('./Setup/Scene'))(this.GM);
     
-    // Player setup
-    // this.SetupGhost = require('./Setup/Ghost');
-    // this.SetupHuman = require('./Setup/Human');
+    // AI setup
+    this.AI = require('./AI');
     
     // Game object
     this.GNObjects = new (require('./GNObjects'))(this.GM);

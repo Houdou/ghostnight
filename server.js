@@ -12,6 +12,7 @@ var io = socketio.listen(server);
 var util = require('util');
 var SetupGhost = require('./GN.server/Setup/Ghost');
 var SetupHuman = require('./GN.server/Setup/Human');
+var SetupAI = require('./GN.server/Setup/AI');
 
 var GhostNight = require('./GN.server/GN');
 var GameEventManager = require('./GN.server/GameEventManager');
@@ -35,18 +36,18 @@ io.on('connection', function (socket) {
         // console.log(click);
 	});
 	
-	socket.on('single-mode', function(data) {
-		singlePlayer(socket, data.map);
-	});
+	// socket.on('single-mode', function(data) {
+	// 	singlePlayer(socket, data.map);
+	// });
 	
-	socket.on('create-room', function() {
+	socket.on('create-room', function(data) {
 		// Assign a random room number
 		var roomNo = 'lobby';
 		while(rooms[roomNo] != undefined) {
 			roomNo = ('000' + Math.floor(1000 * Math.random())).substr(-3, 3);
 		}
 		
-		createRoom(socket, roomNo);
+		createRoom(socket, roomNo, data.mode);
 	});
 	
 	socket.on('join-room', function(roomNo) {
@@ -59,33 +60,34 @@ io.on('connection', function (socket) {
 
 });
 
-function singlePlayer(socket, map){
-	var roomNo = "s01"; // for test
-	var singleRoom = new Room(roomNo); 
+// function singlePlayer(socket, map){
+// 	var roomNo = "s01"; // for test
+// 	var singleRoom = new Room(roomNo); 
 	
-	if(singleRoom.players.length >= 1) {
-		socket.emit('room-full', {});
-	}
+// 	if(singleRoom.players.length >= 1) {
+// 		socket.emit('room-full', {});
+// 	}
 	
-	// Leave the current room
-	leaveRoom(socket);
-	// Join new room on socket
-	socket.join(roomNo);
-	// Update the roomNo of socket
-	roomof[socket.id] = roomNo;
-	rooms[roomNo] = singleRoom;
+// 	// Leave the current room
+// 	leaveRoom(socket);
+// 	// Join new room on socket
+// 	socket.join(roomNo);
+// 	// Update the roomNo of socket
+// 	roomof[socket.id] = roomNo;
+// 	rooms[roomNo] = singleRoom;
 		
-	singleRoom.broadcast('load-scene', {map: map});
+// 	singleRoom.broadcast('load-scene', {map: map});
 	
-	socket.on('load-complete', function(){
-		startGame(roomof[socket.id], "single");
-	});
-}
+// 	socket.on('load-complete', function(){
+// 		startGame(roomof[socket.id], "single");
+// 	});
+// }
 
-function createRoom(socket, roomNo) {
+function createRoom(socket, roomNo, mode) {
 	var newRoom = new Room(roomNo);
 	rooms[roomNo] = newRoom;
 	
+	newRoom.mode = mode;
 	console.log("room created: " + roomNo);
 	
 	joinRoom(socket, roomNo);
@@ -110,7 +112,7 @@ function joinRoom(socket, roomNo) {
 		
 		// Default result of join
 		var playerIndex = room.players.length;
-		var result = {roomNo: roomNo, playerIndex: playerIndex, map: 'm01'};
+		var result = {roomNo: roomNo, playerIndex: playerIndex, map: 'm01', mode: room.mode};
 		
 		if (playerIndex == 0){
 			// First player in the room
@@ -166,21 +168,28 @@ function joinRoom(socket, roomNo) {
 		
 		// Register the start button
 		socket.on('start-game', function(){
-			// var room = rooms[roomof[socket.id]];
-			// Check if there are 2 players
-			if(room.players.length != 2) {
-				console.log("Players not enough in room ", roomNo);
-				return false; }
-			// Check if there are 2 sides of player
-			if (room.players[0].side == room.players[1].side) {
-				console.log("Players in same side in room ", roomNo);
-				return false; }
+			if(room.mode == 'SP') {
+				// Tell the client to load assets
+				room.broadcast('load-scene', {map: room.map});
+			}
 			
-			// Tell the client to load assets
-			room.broadcast('load-scene', {map: room.map});
-			// Register the loading feedback
+			if(room.mode == 'MP') {
+				// var room = rooms[roomof[socket.id]];
+				// Check if there are 2 players
+				if(room.players.length != 2) {
+					console.log("Players not enough in room ", roomNo);
+					return false; }
+				// Check if there are 2 sides of player
+				if (room.players[0].side == room.players[1].side) {
+					console.log("Players in same side in room ", roomNo);
+					return false; }
+				
+				// Tell the client to load assets
+				room.broadcast('load-scene', {map: room.map});
+			}
 		});
 		
+		// Register the loading feedback
 		socket.on('load-complete', function(){
 			// var room = rooms[roomof[socket.id]];
 			room.loadedNo++;
@@ -202,7 +211,7 @@ function joinRoom(socket, roomNo) {
 		
 	} else {
 		// Create a new room with specified room number
-		createRoom(socket, roomNo);
+		createRoom(socket, roomNo, 'MP');
 	}
 }
 
@@ -233,7 +242,7 @@ function leaveRoom(socket){
 	roomof[socket.id] = undefined;
 }
 
-function startGame(roomNo, mode){
+function startGame(roomNo){
 	var room = rooms[roomNo];
 	// Create a game event manager to listen the event inside server
 	var GEM = new GameEventManager(room);
@@ -250,15 +259,16 @@ function startGame(roomNo, mode){
 	};
 	room.GN = new GhostNight(settings, GEM);
 	// Load map
-	if (mode == "single"){
-		console.log("single mode");
-		SetupGhost((room.players[0].socket, room));
-		// How to set AI?
+	if (room.mode == "SP"){
+		// Setup the player side
+		SetupGhost(room.players[0].socket, room);
+		// Setup a simple AI to play the game
+		SetupAI(new room.GN.AI(), room);
 	} else {
 		for (var i in room.players){
-			if (room.players[i].side == 'ghost') {//ghost
+			if (room.players[i].side == 'ghost') {
 				SetupGhost(room.players[i].socket, room);
-			} else if(room.players[i].side == 'human') {//human
+			} else if(room.players[i].side == 'human') {
 				SetupHuman(room.players[i].socket, room);
 			}
 		}
@@ -269,9 +279,9 @@ function startGame(roomNo, mode){
 		if(err) console.log(err);
 		
 		room.GN.GM.mapLoaded = true;
-		room.broadcast("game-started", {});
 		// broadcastToRoom(room, "game-started", {});
 		room.GN.StartGame();
+		room.broadcast("game-started", {});
 	})
 }
 

@@ -19,6 +19,7 @@ var gn = function(stage, socket) {
 	this.mapData = null;
 	
 	// Game Elements
+	this.objects = new createjs.Container();
 	this.units = [];
 	this.hero = null;
 	this.heroName = null;
@@ -326,7 +327,10 @@ gn.prototype.BuildMenu = function() {
 	var cMenu = new createjs.Container();
 	// Single Player
 	// To-Do
-	var btnSP = this.BuildTextButton('button-main-sp', 1200, 138, 244, 55, 0, ()=>{console.log("sp")}, null, false);
+	var btnSP = this.BuildTextButton('button-main-sp', 1200, 138, 244, 55, 0,
+		this.ShowPanel, {panelID: 'SP', state: {x: 480}, time: 800, ease: createjs.Ease.quintOut,
+			callback: (event)=>{this.socket.emit('create-room', {mode: 'SP'});}},
+		false);
 	btnSP.alpha = 0;
 	cMenu.addChild(btnSP);
 	
@@ -351,6 +355,62 @@ gn.prototype.BuildMenu = function() {
 	this.panel['main'] = cMenu;
 	stage.addChild(cMenu);
 	
+	// SP Panel
+	var cSP = new createjs.Container();
+	cSP.x = 1280;
+	var panelbgSP = new createjs.Bitmap(this.assets['assets-bg-panel']);
+	panelbgSP.alpha = 0.97;
+	cSP.addChild(panelbgSP);
+	
+	// Back button
+	var btnBackSP = this.BuildTextButton('button-back', 660, 36, 89, 43, 0,
+		this.HidePanel, {panelID: 'SP', state: {x: 1280}, time: 800, ease: createjs.Ease.quintOut, callback: null},
+		false, 0.8);
+	cSP.addChild(btnBackSP);
+	
+	// Room Text
+	var strRoomSP = this.BuildText('---', 'roomNoSP', '48px', '#982205', 'left', 444, 148, true, 1);
+	cSP.addChild(strRoomSP);
+	
+	this.panel['SP'] = cSP;
+	stage.addChild(cSP);
+	
+	// Room panel
+	var cSPRM = new createjs.Container();
+	
+	// Map Buttons
+	var btnMapSP = this.BuildTextButton('button-map', 184, 383, 79, 54, 0,
+		(event)=>{console.log("map")}, null,
+		false);
+	cSPRM.addChild(btnMapSP);
+	var btnM01SP = this.BuildTextButton('button-m01', 409, 379, 22, 39, 0,
+		(event)=>{this.socket.emit('choose-map', {map:'m01'});}, null,
+		false);
+	cSPRM.addChild(btnM01SP);
+	var btnM02SP = this.BuildTextButton('button-m02', 484, 379, 31, 39, 0,
+		(event)=>{this.socket.emit('choose-map', {map:'m02'});}, null,
+		false);
+	cSPRM.addChild(btnM02SP);
+	var btnM03SP = this.BuildTextButton('button-m03', 559, 379, 28, 40, 0,
+		(event)=>{this.socket.emit('choose-map', {map:'m03'});}, null,
+		false);
+	cSPRM.addChild(btnM03SP);
+	// Map chosen mark
+	var mapCircleSP = this.BuildImage('assets-icon-circle', 407, 379, 83, 83, 0, null, null, false);
+	mapCircleSP.name = 'map';
+	mapCircleSP.alpha = 0;
+	cSPRM.addChild(mapCircleSP);
+	
+	// Start Game
+	var btnStartSP = this.BuildTextButton('button-start', 360, 580, 353, 73, 0,
+		(event)=>{this.socket.emit('start-game');}, null,
+		false);
+	cSPRM.addChild(btnStartSP);
+	
+	this.panel['SPRM'] = cSPRM;
+	cSPRM.alpha = 0;
+	cSP.addChild(cSPRM);
+	
 	// MP Panel
 	var cMP = new createjs.Container();
 	cMP.x = 1280;
@@ -365,12 +425,12 @@ gn.prototype.BuildMenu = function() {
 	cMP.addChild(btnBack);
 	
 	// Room Text
-	var strRoom = this.BuildText('---', 'roomNo', '48px', '#982205', 'left', 354, 148, true, 1);
+	var strRoom = this.BuildText('---', 'roomNoMP', '48px', '#982205', 'left', 354, 148, true, 1);
 	cMP.addChild(strRoom);
 	
 	// Create Room 
 	var btnCreateRoom = this.BuildTextButton('button-mp-create', 550, 140, 228, 43, 0,
-		(event)=>{this.socket.emit('create-room');}, null,
+		(event)=>{this.socket.emit('create-room', {mode: 'MP'});}, null,
 		false, 0.5);
 	cMP.addChild(btnCreateRoom);
 	
@@ -494,7 +554,7 @@ gn.prototype.BuildRoadSign = function(data) {
 	sign.y = -53;
 	
 	sign.on('click', ()=>{
-		this.socket.emit('witch-roadsign', {rid: data.rid});
+		this.socket.emit('switch-roadsign', {rid: data.rid});
 	})
 	
 	c.x = data.x;
@@ -592,8 +652,7 @@ gn.prototype.BuildUnit = function(data) {
 	c.y = data.y;
 	
 	this.units[data.uid] = c;
-	
-	stage.addChild(c);
+	this.objects.addChild(c);
 	stage.update();
 }
 gn.prototype.DrawHeroSelection = function(data) {
@@ -667,7 +726,7 @@ gn.prototype.BuildHero = function(data) {
 		});
 	}
 	
-	stage.addChild(c);
+	this.objects.addChild(c);
 	stage.update();
 }
 gn.prototype.BuildTower = function(data) {
@@ -705,7 +764,7 @@ gn.prototype.BuildTower = function(data) {
 	c.y = this.mapData.slots[+data.sid].y;
 	
 	this.towers[data.tid] = c;
-	stage.addChild(c);
+	this.objects.addChild(c);
 	stage.update();
 }
 gn.prototype.BuildEnsign = function(data) {
@@ -731,7 +790,7 @@ gn.prototype.BuildEnsign = function(data) {
 	c.y = this.mapData.joints[+data.jid].y;
 	
 	this.ensigns[data.eid] = c;
-	stage.addChild(c);
+	this.objects.addChild(c);
 	stage.update();
 }
 gn.prototype.BuildBlocker = function(data) {
@@ -770,7 +829,7 @@ gn.prototype.BuildBlocker = function(data) {
 	c.y = data.y;
 	
 	this.blockers[data.bid] = c;
-	stage.addChild(c);
+	this.objects.addChild(c);
 	stage.update();
 }
 
@@ -840,26 +899,33 @@ gn.prototype.UpdateText = function(name, data) {
 	stage.update();
 	return text;
 }
+gn.prototype.Resorting = function() {
+	this.objects.sortChildren((a, b, option)=>{
+		return a.y - b.y;
+	});
+	stage.update();
+}
 
 // Remove
 gn.prototype.RemoveUnit = function(data) {
-	stage.removeChild(this.units[data.uid]);
+	this.objects.removeChild(this.units[data.uid]);
 	stage.update();
 }
 gn.prototype.RemoveHero = function(data) {
-	stage.removeChild(this.hero);
+	this.objects.removeChild(this.hero);
+	this.hero = null;
 	stage.update();
 }
 gn.prototype.RemoveTower = function(data) {
-	stage.removeChild(this.towers[data.tid]);
+	this.objects.removeChild(this.towers[data.tid]);
 	stage.update();
 }
 gn.prototype.RemoveEnsign = function(data){
-	stage.removeChild(this.ensigns[data.eid]);
+	this.objects.removeChild(this.ensigns[data.eid]);
 	stage.update();
 }
 gn.prototype.RemoveBlocker = function(data) {
-	stage.removeChild(this.blockers[data.bid]);
+	this.objects.removeChild(this.blockers[data.bid]);
 	stage.update();
 }
 gn.prototype.RemoveGoal = function(data) {
@@ -947,17 +1013,10 @@ function initGame(socket){
 	
 	loadMenu();
 	
-	// gnclient.BuildButton("Create Room", 900, 200, 120, 50, function(event) {
-	// 	socket.emit('create-room');
-	// }, {});
+	window.addEventListener("keydown", (event)=>{
+		gnclient.Resorting();
+	})
 	
-	// gnclient.BuildButton("Join Room", 1100, 200, 120, 50, function(event) {
-	// 	var rn = prompt('Room Number');
-	// 	if (rn != null) {
-	// 		var roomNo = ('000'+ rn).substr(-3, 3)
-	// 		socket.emit('join-room', roomNo);
-	// 	}
-	// }, {});
 	
 	socket.on('room-joined', function(data){
 		// {roomNo, playerIndex, map, side, (opposite)}
@@ -967,7 +1026,7 @@ function initGame(socket){
 		// Display Room panel
 		createjs.Tween.get(gnclient.panel[gnclient.mode + 'RM'])
 			.to({alpha: 1}, 400);
-		gnclient.UpdateText('roomNo', {text: gnclient.roomNo});
+		gnclient.UpdateText('roomNo' + data.mode, {text: gnclient.roomNo});
 		stage.update();
 		
 		// Side choose
@@ -996,7 +1055,7 @@ function initGame(socket){
 			gnclient.opposite = data.side;
 		}
 		
-		if(gnclient.mode != '') {
+		if(gnclient.mode == 'MP') {
 			var checkmark = gnclient.panel[gnclient.mode + 'RM'].getChildByName('check' + data.playerIndex);
 			createjs.Tween.get(checkmark, {override: true})
 				.to({
@@ -1154,11 +1213,13 @@ function initGame(socket){
 	});
 	
 	
-	socket.on('game-started', function(){
+	socket.on('game-started', function() {
+		stage.addChild(gnclient.objects);
+		setInterval(()=>{gnclient.Resorting();}, 200);
 		console.log('game-started');
 	});
 	
-	socket.on('game-end', function(data){
+	socket.on('game-end', function(data) {
 		
 		console.log('Game end.', data);
 	});
