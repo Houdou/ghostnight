@@ -5,6 +5,7 @@ var gn = function(stage, socket) {
 	this.stage = stage;
 	this.roomNo = -1;
 	this.playerIndex = -1;
+	this.mode = '';
 	this.side = null;
 	this.opposite = null;
 	this.map = null;
@@ -30,6 +31,7 @@ var gn = function(stage, socket) {
 	this.soul = 0;
 	
 	// UI
+	this.currentMenu = "main";
 	this.progressBar = null;
 	this.inputState = 'normal';
 	this.UI = [];
@@ -90,10 +92,36 @@ gn.prototype.BuildImage = function(srcImgID, x, y, width, height, offset, onclic
 	c.scaleY = scale || 1;
 	
 	if(onclickFunction)
-		c.on('click', onclickFunction, null, false, eventData);
+		c.on('click', onclickFunction, this, false, eventData);
 
 	c.x = x;
 	c.y = y;
+	
+	this.UI[srcImgID] = c;
+	
+	if(draw) {
+		stage.addChild(c);
+		stage.update();
+	}
+	
+	return c;
+}
+gn.prototype.BuildTextButton = function(srcImgID, x, y, width, height, offset, onclickFunction, eventData, draw, scale) {
+	var c = new createjs.Bitmap(this.assets[srcImgID]);
+	c.regX = width/2;
+	c.regY = height/2;
+	c.scaleX = scale || 1;
+	c.scaleY = scale || 1;
+	
+	if(onclickFunction)
+		c.on('click', onclickFunction, this, false, eventData);
+
+	c.x = x;
+	c.y = y;
+	
+	var hit = new createjs.Shape();
+	hit.graphics.beginFill("#000").drawRect(0, 0, width, height);
+	c.hitArea = hit;
 	
 	this.UI[srcImgID] = c;
 	
@@ -148,8 +176,8 @@ gn.prototype.BuildImageButton = function(name, srcImgID, x, y, width, height, of
 	
 	return c;
 }
-gn.prototype.BuildText = function(text, name, size, align, x, y, draw, scale) {
-	var str = new createjs.Text(text, size + " Brush Script MT", "#333333");
+gn.prototype.BuildText = function(text, name, size, color, align, x, y, draw, scale) {
+	var str = new createjs.Text(text, size + " Brush Script MT", color);
 	str.textAlign = align;
 	str.x = x;
 	str.y = y;
@@ -165,6 +193,18 @@ gn.prototype.BuildText = function(text, name, size, align, x, y, draw, scale) {
 	
 	return str;
 }
+gn.prototype.BuildProgressBar = function() {
+	var progressBar = new createjs.Shape();
+	progressBar.graphics.beginFill("#EF5311").drawRect(0, 0, 1280, 4);
+	// progressBar.x = 960;
+	progressBar.y = 640;
+	progressBar.scaleX = 0;
+	this.progressBar = progressBar;
+	
+	stage.addChild(this.progressBar);
+	stage.update();
+}
+
 gn.prototype.ParseLayout = function(element, draw) {
 	switch (element.type) {
 		case 'panel':
@@ -267,26 +307,175 @@ gn.prototype.ParseLayout = function(element, draw) {
 			return this.BuildImage(element.srcID, element.x, element.y,
 				element.width, element.height, element.buttonStrOffset, null, null, draw, element.scale);
 		case 'text':
-			return this.BuildText(element.text, element.name, element.size, element.align, element.x, element.y, draw);
+			return this.BuildText(element.text, element.name, element.size, element.color, element.align, element.x, element.y, draw);
 		default: break;
 	}
 }
-gn.prototype.BuildProgressBar = function() {
-	var progressBar = new createjs.Shape();
-	progressBar.graphics.beginFill("#FFF").drawRect(0, 0, 240, 10);
-	progressBar.x = 960;
-	progressBar.y = 640;
-	progressBar.scaleX = 0;
-	this.progressBar = progressBar;
+
+// Menu
+gn.prototype.BuildMenu = function() {
+	// Remove progress bar
+	stage.removeChild(this.progressBar);
 	
-	stage.addChild(this.progressBar);
+	// Add background
+	var bg = new createjs.Bitmap(this.assets['assets-bg-main']);
+	bg.cache(0, 0, stage.canvas.width, stage.canvas.height);
+	stage.addChild(bg);
+	
+	// UI
+	var cMenu = new createjs.Container();
+	// Single Player
+	// To-Do
+	var btnSP = this.BuildTextButton('button-main-sp', 1200, 138, 244, 55, 0, ()=>{console.log("sp")}, null, false);
+	btnSP.alpha = 0;
+	cMenu.addChild(btnSP);
+	
+	// Multi Player
+	var btnMP = this.BuildTextButton('button-main-mp', 1200, 238, 244, 55, 0,
+		this.ShowPanel, {panelID: 'MP', state: {x: 480}, time: 800, ease: createjs.Ease.quintOut, callback: null},
+		false);
+	btnMP.alpha = 0;
+	cMenu.addChild(btnMP);
+	
+	// Collection
+	// To-Do
+	var btnC = this.BuildTextButton('button-main-c', 1200, 338, 244, 55, 0, ()=>{console.log("c")}, null, false);
+	btnC.alpha = 0;
+	cMenu.addChild(btnC);
+	
+	// Entering animation
+	createjs.Tween.get(btnSP).to({alpha: 1, x: 1000}, 800, createjs.Ease.cubicOut);
+	createjs.Tween.get(btnMP).wait(100).to({alpha: 1, x: 1000}, 800, createjs.Ease.cubicOut);
+	createjs.Tween.get(btnC).wait(200).to({alpha: 1, x: 1000}, 800, createjs.Ease.cubicOut);
+	
+	this.panel['main'] = cMenu;
+	stage.addChild(cMenu);
+	
+	// MP Panel
+	var cMP = new createjs.Container();
+	cMP.x = 1280;
+	var panelbg = new createjs.Bitmap(this.assets['assets-bg-panel']);
+	panelbg.alpha = 0.97;
+	cMP.addChild(panelbg);
+	
+	// Back button
+	var btnBack = this.BuildTextButton('button-back', 660, 36, 89, 43, 0,
+		this.HidePanel, {panelID: 'MP', state: {x: 1280}, time: 800, ease: createjs.Ease.quintOut, callback: null},
+		false, 0.8);
+	cMP.addChild(btnBack);
+	
+	// Room Text
+	var strRoom = this.BuildText('---', 'roomNo', '48px', '#982205', 'left', 354, 148, true, 1);
+	cMP.addChild(strRoom);
+	
+	// Create Room 
+	var btnCreateRoom = this.BuildTextButton('button-mp-create', 550, 140, 228, 43, 0,
+		(event)=>{this.socket.emit('create-room');}, null,
+		false, 0.5);
+	cMP.addChild(btnCreateRoom);
+	
+	// Join Room 
+	var btnJoinRoom = this.BuildTextButton('button-mp-join', 550, 200, 182, 42, 0,
+		(event)=>{
+			var rn = prompt('Room Number');
+			if (rn != null) {
+				var roomNo = ('000'+ rn).substr(-3, 3)
+				this.socket.emit('join-room', roomNo);
+			}
+		}, null,
+		false, 0.5);
+	cMP.addChild(btnJoinRoom);
+	
+	this.panel['MP'] = cMP;
+	stage.addChild(cMP);
+	
+	// Room panel
+	var cMPRM = new createjs.Container();
+	// Ghost Side
+	var btnGhostSide = this.BuildTextButton('button-ghost', 203, 307, 199, 46, 0,
+		(event)=>{this.socket.emit('choose-side', {side:'ghost'});}, null,
+		false);
+	cMPRM.addChild(btnGhostSide);
+	// Human Side
+	var btnHumanSide = this.BuildTextButton('button-human', 513, 307, 219, 46, 0,
+		(event)=>{this.socket.emit('choose-side', {side:'human'});}, null,
+		false);
+	cMPRM.addChild(btnHumanSide);
+	// Side chosen mark
+	var checkRed = this.BuildImage('assets-icon-checkmark-red', 358, 360, 82, 70, 0, null, null, false, 0.75);
+	var checkBlue = this.BuildImage('assets-icon-checkmark-blue', 358, 360, 82, 70, 0, null, null, false, 0.75);
+	checkRed.name = 'check0';
+	checkBlue.name = 'check1';
+	checkRed.alpha = 0;
+	checkBlue.alpha = 0;
+	cMPRM.addChild(checkRed);
+	cMPRM.addChild(checkBlue);
+	
+	// Map Buttons
+	var btnMap = this.BuildTextButton('button-map', 184, 473, 79, 54, 0,
+		(event)=>{console.log("map")}, null,
+		false);
+	cMPRM.addChild(btnMap);
+	var btnM01 = this.BuildTextButton('button-m01', 409, 469, 22, 39, 0,
+		(event)=>{this.socket.emit('choose-map', {map:'m01'});}, null,
+		false);
+	cMPRM.addChild(btnM01);
+	var btnM02 = this.BuildTextButton('button-m02', 484, 469, 31, 39, 0,
+		(event)=>{this.socket.emit('choose-map', {map:'m02'});}, null,
+		false);
+	cMPRM.addChild(btnM02);
+	var btnM03 = this.BuildTextButton('button-m03', 559, 469, 28, 40, 0,
+		(event)=>{this.socket.emit('choose-map', {map:'m03'});}, null,
+		false);
+	cMPRM.addChild(btnM03);
+	// Map chosen mark
+	var mapCircle = this.BuildImage('assets-icon-circle', 407, 469, 83, 83, 0, null, null, false);
+	mapCircle.name = 'map';
+	mapCircle.alpha = 0;
+	cMPRM.addChild(mapCircle);
+	
+	// Start Game
+	var btnStart = this.BuildTextButton('button-start', 360, 580, 353, 73, 0,
+		(event)=>{this.socket.emit('start-game');}, null,
+		false);
+	cMPRM.addChild(btnStart);
+	
+	this.panel['MPRM'] = cMPRM;
+	cMPRM.alpha = 0;
+	cMP.addChild(cMPRM);
+	
 	stage.update();
 }
+gn.prototype.ShowPanel = function(event, data) {
+	// Hide main
+	createjs.Tween.get(this.panel['main'], {override: true})
+		.to({alpha: 0}, 400);
+	
+	// Change menu
+	this.currentMenu = data.panelID;
+	this.mode = data.panelID;
+	var c = this.panel[data.panelID];
+	var tween = createjs.Tween.get(c, {override: true})
+		.to(data.state, data.time, data.ease);
+	if(data.callback != null)
+		tween.call(data.callback);
+}
+gn.prototype.HidePanel = function(event, data) {
+	// Show main
+	createjs.Tween.get(this.panel['main'], {override: true})
+		.to({alpha: 1}, 1000);
+	
+	// Hide menu
+	this.currentMenu = 'main';
+	this.mode = '';
+	var c = this.panel[data.panelID];
+	var tween = createjs.Tween.get(c, {override: true})
+		.to(data.state, data.time, data.ease);
+	if(data.callback != null)
+		tween.call(data.callback);
+};
 
 // Build
-gn.prototype.BuildScene = function() {
-	
-}
 gn.prototype.BuildRoadSign = function(data) {
 	var imgstick = this.assets['assets-road-stick'];
 	var imgsign = this.assets['assets-road-sign'];
@@ -305,7 +494,7 @@ gn.prototype.BuildRoadSign = function(data) {
 	sign.y = -53;
 	
 	sign.on('click', ()=>{
-		this.socket.emit('switch-roadsign', {rid: data.rid});
+		this.socket.emit('witch-roadsign', {rid: data.rid});
 	})
 	
 	c.x = data.x;
@@ -585,7 +774,7 @@ gn.prototype.BuildBlocker = function(data) {
 	stage.update();
 }
 
-// Move
+// Update
 gn.prototype.MoveUnitTo = function(data) {
 	var unit = this.units[data.uid];
 	if(unit != undefined) {
@@ -599,7 +788,6 @@ gn.prototype.MoveHeroTo = function(data) {
 			.to({x: data.x, y: data.y}, data.duration);
 	}
 }
-
 gn.prototype.ChangeRoadSign = function(data) {
 	var roadsign = this.roadsigns[data.rid];
 	
@@ -607,7 +795,6 @@ gn.prototype.ChangeRoadSign = function(data) {
 	roadsign.rotation = r / Math.PI * 180;
 	stage.update();
 }
-
 gn.prototype.UpdateGoalLife = function(data) {
 	var value = this.UI['goal-life'];
 	
@@ -650,7 +837,8 @@ gn.prototype.UpdateText = function(name, data) {
 	var text = this.Text[name];
 	text.text = data.text;
 	
-	stage.update;
+	stage.update();
+	return text;
 }
 
 // Remove
@@ -658,27 +846,22 @@ gn.prototype.RemoveUnit = function(data) {
 	stage.removeChild(this.units[data.uid]);
 	stage.update();
 }
-
 gn.prototype.RemoveHero = function(data) {
 	stage.removeChild(this.hero);
 	stage.update();
 }
-
 gn.prototype.RemoveTower = function(data) {
 	stage.removeChild(this.towers[data.tid]);
 	stage.update();
 }
-
 gn.prototype.RemoveEnsign = function(data){
 	stage.removeChild(this.ensigns[data.eid]);
 	stage.update();
 }
-
 gn.prototype.RemoveBlocker = function(data) {
 	stage.removeChild(this.blockers[data.bid]);
 	stage.update();
 }
-
 gn.prototype.RemoveGoal = function(data) {
 	stage.removeChild(this.goals[data.gid]);
 	stage.update();
@@ -758,100 +941,170 @@ gn.prototype.FindNearestSlot = function(x, y, maxDistance) {
 function initGame(socket){
 	var gnclient = new gn(stage, socket);
 	
+	var menuPreload = new createjs.LoadQueue(true, './assets/');
 	var settingPreload = new createjs.LoadQueue(true, './settings/');
 	var preload = new createjs.LoadQueue(true, './assets/');
 	
-	gnclient.BuildButton("Create Room", 900, 200, 120, 50, function(event) {
-		socket.emit('create-room');
-	}, {});
+	loadMenu();
 	
-	gnclient.BuildButton("Join Room", 1100, 200, 120, 50, function(event) {
-		var rn = prompt('Room Number');
-		if (rn != null) {
-			var roomNo = ('000'+ rn).substr(-3, 3)
-			socket.emit('join-room', roomNo);
-		}
-	}, {});
+	// gnclient.BuildButton("Create Room", 900, 200, 120, 50, function(event) {
+	// 	socket.emit('create-room');
+	// }, {});
+	
+	// gnclient.BuildButton("Join Room", 1100, 200, 120, 50, function(event) {
+	// 	var rn = prompt('Room Number');
+	// 	if (rn != null) {
+	// 		var roomNo = ('000'+ rn).substr(-3, 3)
+	// 		socket.emit('join-room', roomNo);
+	// 	}
+	// }, {});
 	
 	socket.on('room-joined', function(data){
 		// {roomNo, playerIndex, map, side, (opposite)}
 		gnclient.roomNo = data.roomNo;
 		gnclient.playerIndex = data.playerIndex;
-		gnclient.map = data.map;
+		
+		// Display Room panel
+		createjs.Tween.get(gnclient.panel[gnclient.mode + 'RM'])
+			.to({alpha: 1}, 400);
+		gnclient.UpdateText('roomNo', {text: gnclient.roomNo});
+		stage.update();
+		
+		// Side choose
 		gnclient.side = data.side;
-		gnclient.opposite = data.opposite;
+		sidesChange(data);
 		
-		gnclient.BuildButton("Room: " + data.roomNo, 900, 300, 320, 50, null, {});
-		
-		gnclient.BuildButton('Ghost Side', 900, 400, 120, 50, function(event) {
-			socket.emit('choose-side', {side:'ghost'});
-		}, {});
-		
-		gnclient.BuildButton('Human Side', 1100, 400, 120, 50, function(event) {
-			socket.emit('choose-side', {side:'human'});
-		}, {});
-		
-		gnclient.BuildButton('m01', 900, 500, 80, 50, function(event) {
-			socket.emit('choose-map', {map:'m01'});
-		}, {});
-		
-		gnclient.BuildButton('m02', 1020, 500, 80, 50, function(event) {
-			socket.emit('choose-map', {map:'m02'});
-		}, {});
-		
-		gnclient.BuildButton('m03', 1140, 500, 80, 50, function(event) {
-			socket.emit('choose-map', {map:'m03'});
-		}, {});
-		
-		gnclient.BuildButton('Start Game', 900, 600, 320, 50, function(event) {
-			socket.emit('start-game', {});
-			
-			// See loadScene() below
-			
-			// socket.emit('load-complete');
-			// stage.removeAllChildren();
-			// stage.clear();
-			// // stage.canvas = gamecanvas;
-			
-			// // enter loading page
-			// gnclient.BuildButton("Loading...", 0, 300, 1280, 50, function(event) {
-				
-			// }, {});
-			
-		}, {});
+		// Map choose
+		gnclient.map = data.map;
+		mapChange(data);
 		
 		// Somebody already in
-		if (data.playerIndex == 1) {
-			mapChange(data);
-			sidesChange({player:0, side: data.side});
+		gnclient.opposite = data.opposite;
+		if (data.opposite != null) {
+			sidesChange({playerIndex: 0, side: data.opposite});
 		}
 		
 		stage.update();
 	});
 	
 	var sidesChange = function(data){
-		// console.log(gnclient.playerIndex);
-		if (data.player == undefined) {return;}
-		if (data.player == gnclient.playerIndex){
+		if (data.playerIndex == undefined) { return; }
+		
+		if (data.playerIndex == gnclient.playerIndex){
 			gnclient.side = data.side;
-			console.log("change side to " + data.side);
-			// change my side
 		} else {
-			console.log("opponent change side to " + data.opposite);
-			// change opponent's side
+			gnclient.opposite = data.side;
+		}
+		
+		if(gnclient.mode != '') {
+			var checkmark = gnclient.panel[gnclient.mode + 'RM'].getChildByName('check' + data.playerIndex);
+			createjs.Tween.get(checkmark, {override: true})
+				.to({
+					alpha: 1,
+					x: 143 + parseInt(data.playerIndex) * 120 + (data.side == 'human'? 310 : 0)
+				}, 500, createjs.Ease.quartOut);
 		}
 	};
 	
 	var mapChange = function(data){
-		if (!data.map) {return;}
+		if(data.map == undefined) { return; }
+		
 		gnclient.map = data.map;
+		
+		if(gnclient.mode != '') {
+			var circleMark = gnclient.panel[gnclient.mode + 'RM'].getChildByName('map');
+			createjs.Tween.get(circleMark, {override: true})
+				.to({
+					alpha: 1,
+					x: 334 + parseInt(data.map.substr(-1, 1)) * 75
+				}, 500, createjs.Ease.quartOut);
+		}
 	}
 	
 	function handleSettingsLoad(event) {
 		if(event.item.type == 'manifest') {
-			// console.log(event);
+			// Append the loaded manifest to current one.
 			gnclient.manifest = gnclient.manifest.concat(event.result);
 		}
+	}
+	
+	function handleProgress(event) {
+		// Use progress bar to indicate the loading progress
+		gnclient.progressBar.scaleX = event.progress;
+		stage.update();
+	}
+	
+	function handleAssetsLoad(event) {
+		// Store the loaded assets into ghostnight client
+		switch (event.item.type) {
+			case createjs.AbstractLoader.IMAGE:
+				gnclient.assets[event.item.id] = event.target.getResult(event.item.id);
+				break;
+			case createjs.AbstractLoader.JSON:
+				if(event.item.id.substr(0, 6) == 'layout')
+					gnclient.layout = event.result;
+				break;
+			default:
+				break;
+		}
+	}
+	
+	function handleMenuComplete(event) {
+		gnclient.BuildMenu();
+	}
+	
+	function handleComplete(event) {
+		// Remove progress bar
+		stage.removeChild(gnclient.progressBar);
+		
+		// Add background
+		var bg = new createjs.Bitmap(gnclient.assets['assets-map']);
+		bg.cache(0, 0, stage.canvas.width, stage.canvas.height);
+		stage.addChild(bg);
+		
+		// UI
+		gnclient.layout.forEach(function(element) {
+			gnclient.ParseLayout(element, true);
+		});
+		
+		stage.update();
+		console.log("loading-complete");
+		socket.emit('load-complete');
+	}
+	
+	function loadMenu() {
+		console.log('loading menu...');
+		
+		var menuManifest = [
+			{"src": "img/bg/home.png", "id": "assets-bg-main"},
+			{"src": "img/bg/panel-shadow.png", "id": "assets-bg-panel"},
+			{"src": "img/icons/checkmark-red.png", "id": "assets-icon-checkmark-red"},
+			{"src": "img/icons/checkmark-blue.png", "id": "assets-icon-checkmark-blue"},
+			{"src": "img/icons/circle.png", "id": "assets-icon-circle"},
+			{"src": "img/text-buttons/main-menu-c.png", "id": "button-main-c"},
+			{"src": "img/text-buttons/main-menu-sp.png", "id": "button-main-sp"},
+			{"src": "img/text-buttons/main-menu-mp.png", "id": "button-main-mp"},
+			{"src": "img/text-buttons/mp-create-rm.png", "id": "button-mp-create"},
+			{"src": "img/text-buttons/mp-join-rm.png", "id": "button-mp-join"},
+			{"src": "img/text-buttons/btn-ghost.png", "id": "button-ghost"},
+			{"src": "img/text-buttons/btn-human.png", "id": "button-human"},
+			{"src": "img/text-buttons/btn-map.png", "id": "button-map"},
+			{"src": "img/text-buttons/btn-m01.png", "id": "button-m01"},
+			{"src": "img/text-buttons/btn-m02.png", "id": "button-m02"},
+			{"src": "img/text-buttons/btn-m03.png", "id": "button-m03"},
+			{"src": "img/text-buttons/back-btn.png", "id": "button-back"},
+			{"src": "img/text-buttons/start-btn.png", "id": "button-start"}
+		];
+		
+		menuPreload.on('progress', handleProgress);
+		menuPreload.on("fileload", handleAssetsLoad);
+		menuPreload.on("complete", handleMenuComplete);
+		
+		stage.removeAllChildren();
+		stage.clear();
+		
+		gnclient.BuildProgressBar();
+		menuPreload.loadManifest(menuManifest);
 	}
 	
 	var loadSetting = function(data) {
@@ -865,52 +1118,6 @@ function initGame(socket){
 		settingPreload.on("complete", loadScene);
 		
 		settingPreload.loadManifest(manifest);
-	}
-	
-	function handleProgress(event) {
-		// use progress bar to indicate the loading progress
-		gnclient.progressBar.scaleX = event.progress;
-		stage.update();
-		// console.log(event.progress);
-	}
-	
-	function handleAssetsLoad(event) {
-		// Store the loaded assets into ghostnight client
-		switch (event.item.type) {
-			case createjs.AbstractLoader.IMAGE:
-				gnclient.assets[event.item.id] = preload.getResult(event.item.id);
-				break;
-			case createjs.AbstractLoader.JSON:
-				if(event.item.id.substr(0, 6) == 'layout') {
-					// console.log(event);
-					gnclient.layout = event.result;
-				}
-			default:
-				// code
-		}
-	}
-	
-	function handleComplete(event) {
-		// var bt = document.getElementById("bt");
-		// bt.innerHTML = "file complete";
-		// document.body.appendChild(event.result);
-		// gnclient.progressBar.graphics.clear();
-		stage.removeChild(gnclient.progressBar);
-		
-		// Add background
-		var bg = new createjs.Bitmap(gnclient.assets['assets-map']);
-		bg.cache(0, 0, stage.canvas.width, stage.canvas.height);
-		stage.addChild(bg);
-		
-		// UI
-		// console.log(gnclient.layout);
-		gnclient.layout.forEach(function(element) {
-			gnclient.ParseLayout(element, true);
-		});
-		
-		stage.update();
-		console.log("loading-complete");
-		socket.emit('load-complete');
 	}
 	
 	var loadScene = function() {
@@ -931,21 +1138,18 @@ function initGame(socket){
 	}
 	
 	socket.on('other-joined-room', function(data){
-		console.log('other joined room');
+		sidesChange(data);
 	})
 	
 	socket.on('side-chosen', function(data) {
-		// console.log('side-chosen', data);
 		sidesChange(data);
 	});
 	
 	socket.on('map-chosen', function(data) {
-		// console.log('map-chosen', data); 
 		mapChange(data);
 	});
 	
 	socket.on('load-scene', function(data) {
-		// console.log('load-scene', data); 
 		loadSetting(data);
 	});
 	
@@ -1143,8 +1347,7 @@ function initGame(socket){
 	    console.log(data.side + ": " + data.message);
 	});
 	
-	say = function(msg){
+	var say = function(msg){
 		gnclient.socket.emit('send-message', {message: msg});
 	}
 }
-

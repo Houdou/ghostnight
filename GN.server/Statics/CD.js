@@ -13,7 +13,7 @@ var CD = {
 	Snake: 7000,
 	Asura: 8000,
 	Amaterasu: 9000,
-	Hero: 1000,
+	Hero: 16000,
 	Atk: 10000,
 	Def: 10000,
 	Range: 10000

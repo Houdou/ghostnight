@@ -23,6 +23,7 @@
 		"text": "0",
 		"name": "money",
 		"size": "28px",
+		"color": "#222222",
 		"type": "text",
 		"align": "right",
 		"x": 240,

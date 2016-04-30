@@ -15,7 +15,7 @@
         </style>
         <title>Ghost Night</title>
     </head>
-    <body style="background-color: black" onload="init()">
+    <body style="background-color: #2D2D2D" onload="init()">
         <canvas id="canvas" name="canvas" width="1280" height="720" style="background-color: #202020">Your browser doesn't support canvas.</canvas>
         <a href="http://goo.gl/forms/PQLmp2gjVN" style="font-size: 48px;color:#DDDDDD">Please fill this survey</a>
         <!--<canvas id="gamecanvas" name="gamecanvas" width="1280" height="720" style="background-color: #202020">Your browser doesn't support canvas.</canvas>-->
@@ -32,9 +32,10 @@
             	
             	stage.autoClear = true;
             	stage.enableDOMEvents(true);
+            	// stage.enableMouseOver(10);
             	
             	createjs.Touch.enable(stage);
-            	createjs.Ticker.setFPS(30);
+            	createjs.Ticker.setFPS(60);
                 createjs.Ticker.addEventListener("tick", stage);
                 
                 socket = io.connect();

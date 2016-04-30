@@ -35,6 +35,10 @@ io.on('connection', function (socket) {
         // console.log(click);
 	});
 	
+	socket.on('single-mode', function(data) {
+		singlePlayer(socket, data.map);
+	});
+	
 	socket.on('create-room', function() {
 		// Assign a random room number
 		var roomNo = 'lobby';
@@ -54,6 +58,29 @@ io.on('connection', function (socket) {
 	});
 
 });
+
+function singlePlayer(socket, map){
+	var roomNo = "s01"; // for test
+	var singleRoom = new Room(roomNo); 
+	
+	if(singleRoom.players.length >= 1) {
+		socket.emit('room-full', {});
+	}
+	
+	// Leave the current room
+	leaveRoom(socket);
+	// Join new room on socket
+	socket.join(roomNo);
+	// Update the roomNo of socket
+	roomof[socket.id] = roomNo;
+	rooms[roomNo] = singleRoom;
+		
+	singleRoom.broadcast('load-scene', {map: map});
+	
+	socket.on('load-complete', function(){
+		startGame(roomof[socket.id], "single");
+	});
+}
 
 function createRoom(socket, roomNo) {
 	var newRoom = new Room(roomNo);
@@ -103,10 +130,11 @@ function joinRoom(socket, roomNo) {
 				result.opposite = null;
 				result.side = 'ghost';
 			}
+			
+			// Notice the player in the room
+			room.broadcast('other-joined-room', result);
 		}
 		
-		// Notice the player in the room
-		room.broadcast('other-joined-room', result);
 		// Add the player
 		if(result.side == 'ghost')
 			room.players.push({socket: socket, side: 'ghost'});
@@ -128,7 +156,7 @@ function joinRoom(socket, roomNo) {
 			// 	console.log('human');
 			// }
 			// console.log(playerIndex);
-			room.broadcast('side-chosen', {player: playerIndex, side: data.side});
+			room.broadcast('side-chosen', {playerIndex: playerIndex, side: data.side});
 		});
 		
 		socket.on('choose-map', function(data){
@@ -205,7 +233,7 @@ function leaveRoom(socket){
 	roomof[socket.id] = undefined;
 }
 
-function startGame(roomNo){
+function startGame(roomNo, mode){
 	var room = rooms[roomNo];
 	// Create a game event manager to listen the event inside server
 	var GEM = new GameEventManager(room);
@@ -222,12 +250,17 @@ function startGame(roomNo){
 	};
 	room.GN = new GhostNight(settings, GEM);
 	// Load map
-	
-	for (var i in room.players){
-		if (room.players[i].side == 'ghost') {//ghost
-			SetupGhost(room.players[i].socket, room);
-		} else if(room.players[i].side == 'human') {//human
-			SetupHuman(room.players[i].socket, room);
+	if (mode == "single"){
+		console.log("single mode");
+		SetupGhost((room.players[0].socket, room));
+		// How to set AI?
+	} else {
+		for (var i in room.players){
+			if (room.players[i].side == 'ghost') {//ghost
+				SetupGhost(room.players[i].socket, room);
+			} else if(room.players[i].side == 'human') {//human
+				SetupHuman(room.players[i].socket, room);
+			}
 		}
 	}
 	
