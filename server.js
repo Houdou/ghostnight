@@ -246,7 +246,6 @@ function startGame(roomNo){
 	var room = rooms[roomNo];
 	// Create a game event manager to listen the event inside server
 	var GEM = new GameEventManager(room);
-	// Create the game server
 	var settings = {
 		MinDamage: 5, 
 		TimeLimit: 180, 
@@ -257,13 +256,16 @@ function startGame(roomNo){
 		soulIncreasing: { value: 10, interval: 10}
 		
 	};
+	// Create the game server
 	room.GN = new GhostNight(settings, GEM);
-	// Load map
+	
 	if (room.mode == "SP"){
-		// Setup the player side
-		SetupGhost(room.players[0].socket, room);
 		// Setup a simple AI to play the game
-		SetupAI(new room.GN.AI(), room);
+		var GNAI = new room.GN.AI(room);
+		room.players.push({socket: GNAI, side: 'human'});
+		
+		SetupGhost(room.players[0].socket, room);
+		SetupHuman(room.players[1].socket, room);
 	} else {
 		for (var i in room.players){
 			if (room.players[i].side == 'ghost') {
@@ -274,15 +276,15 @@ function startGame(roomNo){
 		}
 	}
 	
-	// Start the game server
+	// Load map
 	room.GN.Scene.LoadMap(room.map, function(err, data){
 		if(err) console.log(err);
 		
 		room.GN.GM.mapLoaded = true;
-		// broadcastToRoom(room, "game-started", {});
+		// Start the game server
 		room.GN.StartGame();
 		room.broadcast("game-started", {});
-	})
+	});
 }
 
 server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function() {
