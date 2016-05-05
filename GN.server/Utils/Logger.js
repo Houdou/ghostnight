@@ -10,6 +10,7 @@ var Logger = function(options, data) {
         this.createTime = new Date();
         this.createTime.setTime(this.createTime.getTime() + 8 * 60 * 60 * 1000);
         
+        // Header
         fs.writeFile(this.absolutePath,
             "================================================================================\n" +
             "                       - Log file for GhostNight server -                       \n" +
@@ -34,6 +35,17 @@ Logger.prototype.Log = function(timestamp, unit, event, data) {
         fs.appendFile(this.absolutePath, str, {encoding: 'utf8'}, null);
     }
 }
-
+Logger.prototype.Statistics = function(data) {
+    var str = "\n" + 
+            "================================================================================\n" +
+            "                                 - Statistics -                                 \n" +
+            "================================================================================\n" +
+            "--------------------------------------------------------------------------------";
+    for(var record in data) {
+        str += "\n" + record.type + ": " + record.damage;
+    }
+    
+    fs.appendFile(this.absolutePath, str, {encoding: 'utf8', mode: 0666, flag: "w"}, null);
+}
 
 module.exports = Logger;

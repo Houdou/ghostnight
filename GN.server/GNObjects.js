@@ -7,28 +7,28 @@ var Weather = require('./Statics/Weather');
 //Values
 const _HERO = {
     Nekomata: {
-        hp: 1800, atk: 220, range: 75, rate: 1, def: 10, spd: 1000 / 600, price: 200, value: 200, layer: Layers.land },
+        hp: 1800, atk: 220, range: 75, rate: 1, def: 10, spd: 80 / 50, price: 200, value: 200, layer: Layers.land },
     Ameonna: {
-        hp: 1500, atk: 170, range: 100, rate: 1, def: 30, spd: 1000 / 700, price: 200, value: 200, layer: Layers.land },
+        hp: 1500, atk: 170, range: 100, rate: 1, def: 30, spd: 70 / 50, price: 200, value: 200, layer: Layers.land },
     Todomeki: {
-        hp: 1800, atk: 200, range: 150, rate: 1, def: 20, spd: 1000 / 600, price: 200, value: 200, layer: Layers.land }
+        hp: 1800, atk: 200, range: 150, rate: 1, def: 20, spd: 80 / 50, price: 200, value: 200, layer: Layers.land }
 };
 
 const _UNIT = {
     Kappa: {
-        hp: 700, atk: 100, range: 75, rate: 1.5, def: 10, spd: 1000 / 900, price: 80, value: 100, layer: Layers.land },
+        hp: 700, atk: 100, range: 75, rate: 1.5, def: 10, spd: 60 / 50, price: 80, value: 100, layer: Layers.land },
     Wanyudo: {
-        hp: 700, atk: 250, range: 125, rate: 0.75, def: 20, spd: 1000 / 500, price: 100, value: 120, layer: Layers.land },
+        hp: 700, atk: 250, range: 125, rate: 0.75, def: 20, spd: 100 / 50, price: 100, value: 120, layer: Layers.land },
     Foxfire: {
-        hp: 800, atk: 130, range: 75, rate: 1, def: 10, spd: 1000 / 700, price: 120, value: 140, layer: Layers.sky },
+        hp: 800, atk: 130, range: 75, rate: 1, def: 10, spd: 70 / 50, price: 120, value: 140, layer: Layers.sky },
     Dojoji: {
-        hp: 1400, atk: 80, range: 125, rate: 1.5, def: 35, spd: 1000 / 800, price: 140, value: 160, layer: Layers.land },
+        hp: 1400, atk: 80, range: 125, rate: 1.5, def: 35, spd: 65 / 50, price: 140, value: 160, layer: Layers.land },
     Futakuchi: {
-        hp: 600, atk: 120, range: 75, rate: 0.5, def: 30, spd: 1000 / 1000, price: 160, value: 180, layer: Layers.land },
+        hp: 600, atk: 120, range: 75, rate: 0.5, def: 30, spd: 50 / 50, price: 160, value: 180, layer: Layers.land },
     Raiju: {
-        hp: 1100, atk: 200, range: 100, rate: 0.75, def: 20, spd: 1000 / 700, price: 180, value: 200, layer: Layers.land },
+        hp: 1100, atk: 200, range: 100, rate: 0.75, def: 20, spd: 65 / 50, price: 180, value: 200, layer: Layers.land },
     Ubume: {
-        hp: 1100, atk: 150, range: 100, rate: 1, def: 20, spd: 1000 / 550, price: 200, value: 220, layer: Layers.sky }
+        hp: 1100, atk: 150, range: 100, rate: 1, def: 20, spd: 90 / 50, price: 200, value: 220, layer: Layers.sky }
 };
 
 const _ENSIGN = {
@@ -40,20 +40,20 @@ const _ENSIGN = {
         buff: 'range', radius: 100, duration: 10, price: 400}
 };
 
-const _TOWER = {
-    Miko: {
-        hp: 2200, atk: 120, range: 125, rate: 1, def: 20, spd: 1000 / 500, price: 200, value: 240, layer: Layers.land },
-    Inari: {
+const _TOWER = { // rangeIndex: {100: 1, 125: 1.5, 150: 2, 175: 2.5, 200: 3}
+    Miko: { // 100
+        hp: 2000, atk: 100, range: 125, rate: 1.25, def: 20, spd: 1000 / 500, price: 200, value: 240, layer: Layers.land },
+    Inari: { // 110
         hp: 2300, atk: 130, range: 150, rate: 1, def: 10, spd: 1000 / 500, price: 240, value: 280, layer: Layers.land | Layers.sky },
-    Inugami: {
-        hp: 1800, atk: 150, range: 125, rate: 1, def: 20, spd: 1000 / 500, price: 260, value: 300, layer: Layers.land | Layers.sky },
-    Ebisu: {
-        hp: 2000, atk: 110, range: 100, rate: 1, def: 40, spd: 1000 / 500, price: 260, value: 300, layer: Layers.land },
-    Snake: {
+    Inugami: { // 140
+        hp: 1800, atk: 160, range: 125, rate: 1, def: 15, spd: 1000 / 500, price: 260, value: 300, layer: Layers.land | Layers.sky },
+    Ebisu: { // 80
+        hp: 2000, atk: 100, range: 100, rate: 1, def: 40, spd: 1000 / 500, price: 260, value: 300, layer: Layers.land },
+    Snake: { // 125
         hp: 2400, atk: 120, range: 150, rate: 1.25, def: 30, spd: 1000 / 500, price: 280, value: 320, layer: Layers.land },
-    Asura: {
+    Asura: { // 135
         hp: 2100, atk: 200, range: 100, rate: 0.75, def: 20, spd: 1000 / 500, price: 320, value: 360, layer: Layers.land },
-    Amaterasu: {
+    Amaterasu: { // 120
         hp: 2500, atk: 180, range: 200, rate: 0.75, def: 30, spd: 1000 / 500, price: 360, value: 400, layer: Layers.land | Layers.sky }
 };
 
@@ -80,6 +80,9 @@ var GNObjects = function(GM){
         // var
         this.scratchRadius = this.range * 1.5;
         this.scratchAtk = 500;
+        // override the time here↓
+        this.skillCDTime[0] = 180000;
+        this.skillCDTime[1] = 180000;
     }
     Nekomata.prototype = new Hero();
     // functions
@@ -117,13 +120,15 @@ var GNObjects = function(GM){
             var joint = this.GM.joints[jid];
             
             if(joint != null) {
-                // Interupt current movement
+                // Interupt current movement & attack
                 clearTimeout(this.moveTimeout);
+                clearInterval(this.attackInterval);
                 // Teleport
                 this.transform.MoveTo(joint.transform);
                 this.joint = joint;
                 this.GM.GEM.emit('hero-moving', {x: joint.transform.x, y: joint.transform.y, duration: 50});
                 
+                this.Move([this.joint]);
                 this.usedSkill(1);
                 return true;
             }
@@ -167,6 +172,10 @@ var GNObjects = function(GM){
         this.rainDuration = 10000;
         this.shieldRadius = 300;
         this.shieldDuration = 10000;
+        
+        // override the time here↓
+        this.skillCDTime[0] = 180000;
+        this.skillCDTime[1] = 180000;
     }
     Ameonna.prototype = new Hero();
     // functions
@@ -184,7 +193,7 @@ var GNObjects = function(GM){
                 u.Heal(this, this.healAmount);
                 // Speed up Kappa
                 if(u instanceof Kappa) {
-                    u.Buff('spd', 2, this.rainDuration / 1000);
+                    u.Buff('spd', 1.5, this.rainDuration / 1000);
                 }
             });
             this.usedSkill(0);
@@ -229,6 +238,10 @@ var GNObjects = function(GM){
         // var
         
         this.EyeBombAtk = 300;
+        
+        // override the time here↓
+        this.skillCDTime[0] = 180000;
+        this.skillCDTime[1] = 180000;
     }
     Todomeki.prototype = new Hero();
     // functions
@@ -420,8 +433,8 @@ var GNObjects = function(GM){
         Unit.call(this, "Dojoji-" + this.uid, this.uid, Tags.unit, x, y, joint, _UNIT.Dojoji.hp, _UNIT.Dojoji.atk, _UNIT.Dojoji.range,
             _UNIT.Dojoji.rate, _UNIT.Dojoji.def, _UNIT.Dojoji.spd, _UNIT.Dojoji.layer, _UNIT.Dojoji.price, _UNIT.Dojoji.value, that.GM);
         // var
-        this.nerfPossibility = 0.4;
-        this.nerfRate = 0.5;
+        this.nerfPossibility = 0.2;
+        this.nerfRate = 0.1;
         this.nerfDuration = 5;
     }
     Dojoji.prototype = new Unit();
@@ -453,6 +466,8 @@ var GNObjects = function(GM){
             target.DealDamage(this, dmgToKill);
             // Mark as eaten
             this.eaten = true;
+            // Reset attack
+            clearInterval(this.attackInterval);
             // Decrease the attack rate
             this.rate = 0.05;
             // Increase value for reward
@@ -595,7 +610,7 @@ var GNObjects = function(GM){
         
         this.pullPosibility = 0.6;
         this.pullLastTime = -1;
-        this.pullInterval = 5000;
+        this.pullInterval = 20000;
         
         this.skillInterval = -1;
         
@@ -616,31 +631,33 @@ var GNObjects = function(GM){
     Ebisu.prototype.enableSkill = function() {
         var that = this;
         this.skillInterval = setInterval(function(){
-            that.Skill((new Date().getTime()));
-        }, 1000);
+            that.Skill();
+        }, this.pullInterval);
     }
-    Ebisu.prototype.Skill = function(time) {
+    Ebisu.prototype.Skill = function() {
         if(this.isDead) {
             clearInterval(this.skillInterval);
             return;
         }
         
-        if(time - this.pullLastTime > this.pullInterval) {
-            // Find the unit that is closest to the end (based on x)
-            var target = this.GM.findLastUnit(this.joint.transform.x);
+        // Find the unit that is closest to the end (param: minimal x value)
+        var target = this.GM.findLastUnit(this.joint.transform.x);
+        
+        if(target != null) {
+            // Move to bindJoint
+            clearTimeout(target.moveTimeout);
+            target.transform.MoveTo(this.joint.transform);
+            target.joint = this.joint;
+            target.Move();
+            this.GM.GEM.emit('unit-moving',
+                {uid: target.uid, x: this.joint.transform.x, y: this.joint.transform.y, duration: 80});
+            // TODO emit("ebisu-skill")
+            // DEBUG
+            console.log("target will move to " + this.joint.name);
+            // DEBUG
             
-            if(target != null) {
-                // Move to bindJoint
-                target.transform.MoveTo(this.joint.transform);
-                target.joint = this.joint;
-                
-                // DEBUG
-                console.log("target will move to " + this.joint.name);
-                // DEBUG
-                
-                // Update time
-                this.pullLastTime = time;
-            }
+            // Update time
+            this.pullLastTime = new Date().time;
         }
     }
     this.Ebisu = Ebisu;
@@ -776,12 +793,17 @@ GNObjects.prototype.GetTowerType = function(type) {
             return null;
     }
 };
-GNObjects.prototype.GetGameUnitList = function() {
-    var list = ['Hero',
+GNObjects.prototype.GetCDList = function() {
+    return ['Hero',
         'Kappa','Wanyudo','Foxfire','Dojoji','Futakuchi','Raiju','Ubume',
         'Atk','Def','Range',
         'Miko','Inari','Inugami','Ebisu','Snake','Asura','Amaterasu'];
-    return list;
+}
+GNObjects.prototype.GetGameUnitList = function() {
+    return ['Nekomata','Ameonna','Todomeki',
+        'Kappa','Wanyudo','Foxfire','Dojoji','Futakuchi','Raiju','Ubume',
+        'Blocker','Atk','Def','Range',
+        'Miko','Inari','Inugami','Ebisu','Snake','Asura','Amaterasu'];
 }
 
 module.exports = GNObjects;

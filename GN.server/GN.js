@@ -26,15 +26,24 @@ GhostNight.prototype.StartGame = function() {
     if(this.GM.mapLoaded) {
         this.GM.StartTiming();
         this.GM.InitMoney();
+        this.GM.InitStatistics(this.GNObjects.GetGameUnitList());
+        
         this.SetupBlocker();
         this.SetupRoadSign();
         this.SetupGoal();
-        this.GM.ResetCoolDown(this.GNObjects.GetGameUnitList());
+        
+        this.GM.ResetCoolDown(this.GNObjects.GetCDList());
         this.SetHeroReborn();
         return true;
     } else {
         return false;
     }
+}
+GhostNight.prototype.EndGame = function() {
+    var settings = this.GM.settings;
+    var GEM = this.GM.GEM;
+    delete this.GM;
+    this.GM = new (require("./GameMaster"))(settings, GEM);
 }
 
 // Ghost side
@@ -49,6 +58,9 @@ GhostNight.prototype.CreateUnit = function(type) {
                 var newUnit = new (this.GNObjects.GetUnitType(type))(
                     entryJoint.transform.x, entryJoint.transform.y, entryJoint);
                 this.GM.units.push(newUnit);
+                // Log
+                this.GM.LogCreate('Ghost', type, 0);
+                // Notice the client
                 this.GM.GEM.emit('unit-created', {uid: newUnit.uid, type: type, x: newUnit.transform.x, y: newUnit.transform.y});
                 // Update created time;
                 this.GM.UpdateCoolDown(type);
@@ -93,9 +105,10 @@ GhostNight.prototype.TurnRoadSign = function(roadSignID) {
 GhostNight.prototype.SetHeroReborn = function() {
     setTimeout(()=>{this.RebornHero(false);}, this.GM.cds['Hero']);
     this.GM.GEM.emit('hero-select', {type: this.GM.heroSelect});
+    this.GM.GEM.emit('hero-reborn-cd', {time: this.GM.cds['Hero']});
 }
 GhostNight.prototype.RebornHero = function(pay) {
-    if(this.GM.hero == null) {
+    if(this.GM.hero == null && !this.GM.gameover) {
         if(!pay)
             this.GM.CancelCoolDown('Hero');
             
@@ -118,7 +131,9 @@ GhostNight.prototype.CreateHero = function(type) {
             var newHero = new (this.GNObjects.GetHeroType(type))(
                 entryJoint.transform.x, entryJoint.transform.y, entryJoint);
                 
-            console.log('create hero');
+            // Log
+            this.GM.LogCreate('Ghost', type, 0);
+            
             this.GM.hero = newHero;
             this.GM.UpdateCoolDown('Hero');
             return newHero;
@@ -178,6 +193,8 @@ GhostNight.prototype.CreateEnsign = function(type, jid) {
                 var newEnsign = new (this.GNObjects.GetEnsignType(type))(
                     joint.transform.x, joint.transform.y, joint);
                 this.GM.ensigns.push(newEnsign);
+                // Log
+                this.GM.LogCreate('Human', type, jid);
                 this.GM.GEM.emit('ensign-built', {eid: newEnsign.eid, type: type, jid: jid});
                 // Update created time;
                 this.GM.UpdateCoolDown(type);
@@ -200,8 +217,7 @@ GhostNight.prototype.CreateEnsign = function(type, jid) {
 // Blocker
 GhostNight.prototype.SetupBlocker = function() {
 	this.GM.blockers.forEach((b)=>{
-	    var j = b.joint.dest.dest;
-		this.GM.GEM.emit('blocker-built', {bid: b.bid, x: j.transform.x, y: j.transform.y});
+		this.GM.GEM.emit('blocker-built', {bid: b.bid, x: b.transform.x, y: b.transform.y});
 	});
 }
 // Tower
@@ -223,6 +239,8 @@ GhostNight.prototype.CreateTower = function(type, slotID) {
                 // Update the slot state
                 slot.BuildTower(newTower);
                 this.GM.towers.push(newTower);
+                // Log
+                this.GM.LogCreate('Human', type, slotID);
                 this.GM.GEM.emit('tower-built', {tid: newTower.tid, type: type, sid: slotID});
                 // Update created time;
                 this.GM.UpdateCoolDown(type);

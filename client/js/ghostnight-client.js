@@ -3,7 +3,8 @@
 var gn = function(stage, socket) {
 	// Infos
 	this.stage = stage;
-	this.roomNo = -1;
+	this.roomNoSP = -1;
+	this.roomNoMP = -1;
 	this.playerIndex = -1;
 	this.mode = '';
 	this.side = null;
@@ -20,6 +21,7 @@ var gn = function(stage, socket) {
 	
 	// Game Elements
 	this.objects = new createjs.Container();
+	this.effects = new createjs.Container();
 	this.units = [];
 	this.hero = null;
 	this.heroName = null;
@@ -41,13 +43,13 @@ var gn = function(stage, socket) {
 	this.currentPanel = '';
 };
 // UI
-gn.prototype.BuildPanel = function(srcID, x, y, width, height) {
+gn.prototype.BuildPanel = function(panelID, x, y, width, height) {
 	var c = new createjs.Container();
 	
 	c.x = x;
 	c.y = y;
-	this.panel[srcID] = c;
-	c.name = srcID;
+	this.panel[panelID] = c;
+	c.name = panelID;
 	
 	this.stage.addChild(c);
 	return c;
@@ -99,6 +101,7 @@ gn.prototype.BuildImage = function(srcImgID, x, y, width, height, offset, onclic
 	c.y = y;
 	
 	this.UI[srcImgID] = c;
+	c.name = srcImgID;
 	
 	if(draw) {
 		stage.addChild(c);
@@ -277,7 +280,6 @@ gn.prototype.ParseLayout = function(element, draw) {
 								this.inputState = 'normal';
 								DATA.data = new Object();
 								DATA.data.jid = this.FindNearestJoint(event.stageX, event.stageY, data.maxDistance);
-								console.log(DATA);
 								this.socket.emit(element.event, DATA)
 							}, null, true, {maxDistance: 50})
 					}, element.data, draw, element.scale);
@@ -290,9 +292,7 @@ gn.prototype.ParseLayout = function(element, draw) {
 								console.log('client state: normal');
 								this.inputState = 'normal';
 								DATA.data = new Object();
-								console.log(event.stageX + ', ' + event.stageY);
 								DATA.data.sid = this.FindNearestSlot(event.stageX, event.stageY, data.maxDistance);
-								console.log(DATA.data.sid);
 								this.socket.emit(element.event, DATA)
 							}, null, true, {maxDistance: 70})
 					}, element.data, draw, element.scale);
@@ -320,7 +320,7 @@ gn.prototype.BuildMenu = function() {
 	
 	// Add background
 	var bg = new createjs.Bitmap(this.assets['assets-bg-main']);
-	bg.cache(0, 0, stage.canvas.width, stage.canvas.height);
+	bg.alpha = 0;
 	stage.addChild(bg);
 	
 	// UI
@@ -329,7 +329,7 @@ gn.prototype.BuildMenu = function() {
 	// To-Do
 	var btnSP = this.BuildTextButton('button-main-sp', 1200, 138, 244, 55, 0,
 		this.ShowPanel, {panelID: 'SP', state: {x: 480}, time: 800, ease: createjs.Ease.quintOut,
-			callback: (event)=>{this.socket.emit('create-room', {mode: 'SP'});}},
+			callback: (event)=>{if(this.roomNoSP == -1) this.socket.emit('create-room', {mode: 'SP'});}},
 		false);
 	btnSP.alpha = 0;
 	cMenu.addChild(btnSP);
@@ -348,9 +348,12 @@ gn.prototype.BuildMenu = function() {
 	cMenu.addChild(btnC);
 	
 	// Entering animation
-	createjs.Tween.get(btnSP).to({alpha: 1, x: 1000}, 800, createjs.Ease.cubicOut);
-	createjs.Tween.get(btnMP).wait(100).to({alpha: 1, x: 1000}, 800, createjs.Ease.cubicOut);
-	createjs.Tween.get(btnC).wait(200).to({alpha: 1, x: 1000}, 800, createjs.Ease.cubicOut);
+	createjs.Tween.get(bg).to({alpha: 0.7}, 400).call(()=>{
+		createjs.Tween.get(bg).to({alpha: 1}, 300);
+		createjs.Tween.get(btnSP).to({alpha: 1, x: 1000}, 700, createjs.Ease.cubicOut);
+		createjs.Tween.get(btnMP).wait(100).to({alpha: 1, x: 1000}, 700, createjs.Ease.cubicOut);
+		createjs.Tween.get(btnC).wait(200).to({alpha: 1, x: 1000}, 700, createjs.Ease.cubicOut);
+	});
 	
 	this.panel['main'] = cMenu;
 	stage.addChild(cMenu);
@@ -854,6 +857,20 @@ gn.prototype.ChangeRoadSign = function(data) {
 	roadsign.rotation = r / Math.PI * 180;
 	stage.update();
 }
+gn.prototype.HeroRebornCD = function(data) {
+	var panel = this.panel['panel-Reborn'];
+	var rebornBar = panel.getChildByName('assets-hero-reborn-cd-value');
+	rebornBar.scaleY = 1;
+	rebornBar.x = 96 -186/2;
+	
+	createjs.Tween.get(rebornBar)
+		.to({scaleX: 1, x: 96}, data.time)
+		.call(()=>{
+			rebornBar.alpha = 0;
+			stage.update();
+			rebornBar.scaleX = 0;
+		});
+}
 gn.prototype.UpdateGoalLife = function(data) {
 	var value = this.UI['goal-life'];
 	
@@ -934,7 +951,26 @@ gn.prototype.RemoveGoal = function(data) {
 }
 
 // Effects
-gn.prototype.DamageEffect = function() {
+gn.prototype.AttackEffect = function(data) {
+	var effect = new createjs.Bitmap(this.assets['assets-effects-atk-' + data.source]);
+	effect.regX = 8;
+	effect.regY = 8;
+	
+	effect.x = data.from.x;
+	effect.y = data.from.y;
+	
+	if(data.target.substr(0, 7) == "Foxfire")
+		data.to.y -= 18;
+	
+	this.effects.addChild(effect);
+	stage.update();
+	
+	createjs.Tween.get(effect)
+		.to({x: data.to.x, y: data.to.y}, 350)
+		.to({alpha: 0}, 200)
+		.call(() => {this.effects.removeChild(effect);});
+}
+gn.prototype.DamageEffect = function(data) {
 	
 }
 gn.prototype.CoolDownEffect = function(data) {
@@ -971,6 +1007,47 @@ gn.prototype.CoolDownEffect = function(data) {
 		}
 	}
 }
+gn.prototype.GameEnd = function(data) {
+	// Black out
+	var cover = new createjs.Bitmap(this.assets['assets-cover']);
+	cover.alpha = 0;
+	stage.addChild(cover);
+	
+	// Text
+	var text = new createjs.Bitmap(this.assets['assets-' + (data.win == this.side?'win':'lose')]);
+	text.alpha = 0;
+	text.regX = (data.win == this.side)? 253 / 2 : 238 / 2;
+	text.regY = 68 / 2;
+	text.x = 640;
+	text.y = 264;
+	stage.addChild(text);
+	
+	// Button back to main menu
+	var btnBack = this.BuildImage('button-back-gameend', 640, 540, 167, 78, 0, ()=>{
+		stage.removeAllChildren();
+		
+		this['roomNo' + this.mode] = -1;
+		
+		this.BuildProgressBar();
+		this.BuildMenu();
+	}, null, false);
+	btnBack.alpha = 0;
+	stage.addChild(btnBack);
+	
+	// Animation
+	createjs.Tween.get(cover)
+		.to({alpha: 0.8}, 800)
+		.call(()=>{
+			createjs.Tween.get(cover)
+				.to({alpha: 1}, 200);
+				
+			createjs.Tween.get(text)
+				.to({alpha: 1}, 600);
+				
+			createjs.Tween.get(btnBack)
+				.to({alpha: 1}, 1000);
+		});
+}
 
 // Utilities
 gn.prototype.FindNearestJoint = function(x, y, maxDistance) {
@@ -1003,9 +1080,10 @@ gn.prototype.FindNearestSlot = function(x, y, maxDistance) {
 	
 	return sid;
 }
-
+var gnc;
 function initGame(socket){
 	var gnclient = new gn(stage, socket);
+	gnc = gnclient;
 	
 	var menuPreload = new createjs.LoadQueue(true, './assets/');
 	var settingPreload = new createjs.LoadQueue(true, './settings/');
@@ -1020,13 +1098,13 @@ function initGame(socket){
 	
 	socket.on('room-joined', function(data){
 		// {roomNo, playerIndex, map, side, (opposite)}
-		gnclient.roomNo = data.roomNo;
+		gnclient['roomNo' + data.mode] = data.roomNo;
 		gnclient.playerIndex = data.playerIndex;
 		
 		// Display Room panel
 		createjs.Tween.get(gnclient.panel[gnclient.mode + 'RM'])
 			.to({alpha: 1}, 400);
-		gnclient.UpdateText('roomNo' + data.mode, {text: gnclient.roomNo});
+		gnclient.UpdateText('roomNo' + data.mode, {text: gnclient['roomNo' + data.mode]});
 		stage.update();
 		
 		// Side choose
@@ -1127,7 +1205,7 @@ function initGame(socket){
 		});
 		
 		stage.update();
-		console.log("loading-complete");
+		console.log("loading complete");
 		socket.emit('load-complete');
 	}
 	
@@ -1151,7 +1229,8 @@ function initGame(socket){
 			{"src": "img/text-buttons/btn-m01.png", "id": "button-m01"},
 			{"src": "img/text-buttons/btn-m02.png", "id": "button-m02"},
 			{"src": "img/text-buttons/btn-m03.png", "id": "button-m03"},
-			{"src": "img/text-buttons/back-btn.png", "id": "button-back"},
+			{"src": "img/text-buttons/btn-back.png", "id": "button-back"},
+			{"src": "img/text-buttons/btn-back-gameend.png", "id": "button-back-gameend"},
 			{"src": "img/text-buttons/start-btn.png", "id": "button-start"}
 		];
 		
@@ -1216,12 +1295,18 @@ function initGame(socket){
 	socket.on('game-started', function() {
 		stage.addChild(gnclient.objects);
 		setInterval(()=>{gnclient.Resorting();}, 200);
+		stage.addChild(gnclient.effects);
 		console.log('game-started');
 	});
 	
 	socket.on('game-end', function(data) {
-		
+		if(data.win == gnclient.side) {
+			console.log('Win');
+		} else {
+			console.log("Lose");
+		}
 		console.log('Game end.', data);
+		gnclient.GameEnd(data);
 	});
 	
 	socket.on('roadsign-built', function(data) {
@@ -1285,8 +1370,9 @@ function initGame(socket){
 		gnclient.MoveUnitTo(data);
 	});
 	
-	socket.on('unit-attack', function(){
-		console.log('');
+	socket.on('unit-attack', function(data){
+		data.source = data.source.substr(0, data.source.indexOf('-'));
+		gnclient.AttackEffect(data);
 	});
 	
 	socket.on('unit-hp-update', function(data){
@@ -1318,8 +1404,8 @@ function initGame(socket){
 		console.log('');
 	});
 	
-	socket.on('hero-attack', function(){
-		console.log('');
+	socket.on('hero-attack', function(data){
+		gnclient.AttackEffect(data);
 	});
 	
 	socket.on('hero-skill-cd', function(data) {
@@ -1350,7 +1436,7 @@ function initGame(socket){
 	});
 	
 	socket.on('hero-reborn-cd', function(data) {
-		
+		gnclient.HeroRebornCD(data);
 	});
 	
 	// Tower
@@ -1362,8 +1448,9 @@ function initGame(socket){
 		console.log('');
 	});
 	
-	socket.on('tower-attack', function(){
-		console.log('');
+	socket.on('tower-attack', function(data){
+		data.source = data.source.substr(0, data.source.indexOf('-'));
+		gnclient.AttackEffect(data);
 	});
 	
 	socket.on('tower-nerf', function(){
@@ -1408,7 +1495,7 @@ function initGame(socket){
 	    console.log(data.side + ": " + data.message);
 	});
 	
-	var say = function(msg){
+	gnclient.say = function(msg){
 		gnclient.socket.emit('send-message', {message: msg});
 	}
 }

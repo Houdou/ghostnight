@@ -41,6 +41,7 @@ var GameMaster = function(settings, GEM){
     
     this.weather = Weather.night;
     this.time = -1;
+    this.gameover = true;
     this.tickNumber = -1;
     this.startTime = -1;
     this.timerInterval = -1;
@@ -56,6 +57,7 @@ var GameMaster = function(settings, GEM){
     this.ghostKill = 0;
     this.huamnTotalDMG = 0;
     this.humanKill = 0;
+    this.statistics = {};
     
     this.debug = settings.debug || false;
     
@@ -67,6 +69,7 @@ GameMaster.prototype.StartTiming = function() {
     if(this.startTime == -1) {
         this.time = 0;
         this.startTime = (new Date()).getTime();
+        this.gameover = false;
         
         this.tickNumber = 0;
         
@@ -95,6 +98,8 @@ GameMaster.prototype.StartTiming = function() {
     }
 }
 GameMaster.prototype.GameEnd = function(type){
+	this.gameover = true;
+	
 	var win = '';
 	switch (type){
 		case 'timeout': 
@@ -108,6 +113,26 @@ GameMaster.prototype.GameEnd = function(type){
 	}
 	this.GEM.emit('game-end', {type: type, win: win});
 	clearInterval(this.timerInterval);
+	
+	function StopGameUnit(u) {
+		if(u == null || u.isDead) { return; }
+		// Moving
+		u.canMove = false;
+		clearTimeout(u.moveTimeout);
+		// Attack
+		clearInterval(u.attackInterval);
+	}
+	
+	// Stop Unit
+	this.units.forEach(StopGameUnit);
+	// Stop Tower
+	this.towers.forEach(StopGameUnit);
+	// Stop Hero
+	StopGameUnit(this.hero);
+	// Stop ensigns
+	this.ensigns.forEach((e)=>{clearTimeout(e.removeTimeout)});
+	
+	console.log(this.statistics);
 }
 
 // Econ system
@@ -278,7 +303,7 @@ GameMaster.prototype.findLastUnit = function(minDistance) {
     var u = null;
     
     this.units.forEach(function(unit) {
-        if(unit.isDead) { return }
+        if(unit.isDead || unit.reachEnd) { return }
         
         var nd = unit.transform.x;
         if (nd > d) {
@@ -314,10 +339,17 @@ GameMaster.prototype.assignTowerID = function () {
     return this.towerCount++;
 };
 // Log system
+GameMaster.prototype.InitStatistics = function(list) {
+	for(var i in list) {
+		this.statistics[list[i]] = {build: 0, dmg: 0};
+	}
+}
 GameMaster.prototype.LogCreate = function(side, type, id) {
 	this.time = (new Date()).getTime() - this.startTime;
-	this.logger.log(this.time, side, "CREATE", type + " at " + id);
+	this.logger.Log(this.time, side, "CREATE", type + " at " + id);
 	
+	// Statistics
+	this.statistics[type].build += 1;
 }
 GameMaster.prototype.LogDamage = function(source, target, dmg) {
     this.time = (new Date()).getTime() - this.startTime;
@@ -325,6 +357,11 @@ GameMaster.prototype.LogDamage = function(source, target, dmg) {
         target.name + " " + dmg + " to " + target.hp);
     
     // Statistic
+    if(source.tag == Tags.unit || source.tag == Tags.tower)
+    	this.statistics[source.name.substr(0, source.name.indexOf('-'))].dmg += dmg
+   	else if(source.tag == Tags.hero)
+   		this.statistics[source.name].dmg += dmg
+    
     if(source.tag == Tags.unit || source.tag == Tags.hero) {
         this.ghostTotalDMG += dmg;
     } else {

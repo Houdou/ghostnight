@@ -10,7 +10,7 @@ var Hero = function(name, id, tag, x, y, destJoint, hp, atk, range, rate, def, s
     this.moveTimeout = -1;
     
     this.skillLastTime = [-1, -1];
-    this.skillCDTime = [5000, 5000];
+    this.skillCDTime = [180000, 180000];
 }
 Hero.prototype = new GameUnit();
 // functions

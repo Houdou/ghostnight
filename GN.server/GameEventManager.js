@@ -21,6 +21,7 @@ var GameEventManager = function(room) {
     
     this.on('game-end', function(data){
         room.broadcast('game-end', data);
+        room.SetupSocket(false);
     });
     
     this.on('button-cd', function(data){
@@ -64,10 +65,9 @@ var GameEventManager = function(room) {
     //     console.log('');
     // });
     
-    this.on('unit-attack', function(){
-        room.broadcast('unit-attack');
-        console.log('');
-        
+    this.on('unit-attack', function(data){
+        room.broadcast('unit-attack', data);
+        console.log(data);
     });
     
     this.on('unit-hp-update', function(data){
@@ -108,10 +108,9 @@ var GameEventManager = function(room) {
         room.broadcast('hero-skill-cd', data);	
     });
     
-    this.on('hero-attack', function(){
-        room.broadcast('hero-attack');
-        console.log('');
-        
+    this.on('hero-attack', function(data){
+        room.broadcast('hero-attack', data);
+        console.log(data);
     });
     
     this.on('hero-hp-update', function(data){
@@ -137,6 +136,10 @@ var GameEventManager = function(room) {
         room.broadcast('hero-reborn', data);
     });
     
+    this.on('hero-reborn-cd', function(data){
+        room.broadcast('hero-reborn-cd', data);
+    });
+    
     this.on('ensign-built', function(data) {
         room.broadcast('ensign-built', data);
     });
@@ -154,10 +157,9 @@ var GameEventManager = function(room) {
         room.broadcast('tower-removed', data);
     });
     
-    this.on('tower-attack', function(){
-        room.broadcast('tower-attack');
-        console.log('');
-        
+    this.on('tower-attack', function(data){
+        room.broadcast('tower-attack', data);
+        console.log(data);
     });
     
     this.on('tower-nerf', function(){

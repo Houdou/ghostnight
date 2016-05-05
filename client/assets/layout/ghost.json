@@ -182,7 +182,7 @@
 				"data": {"type": "Nekomata"},
 				"input": "none",
 				"x": 30,
-				"y": 32,
+				"y": 28,
 				"width": 84,
 				"height": 82,
 				"buttonStrOffset": 40,
@@ -196,7 +196,7 @@
 				"data": {"type": "Ameonna"},
 				"input": "none",
 				"x": 110,
-				"y": 32,
+				"y": 28,
 				"width": 84,
 				"height": 82,
 				"buttonStrOffset": 40,
@@ -210,7 +210,7 @@
 				"data": {"type": "Todomeki"},
 				"input": "none",
 				"x": 190,
-				"y": 32,
+				"y": 28,
 				"width": 84,
 				"height": 82,
 				"buttonStrOffset": 40,
@@ -225,6 +225,26 @@
 				"width": 83,
 				"height": 83,
 				"scale": 0.4
+			},
+			{
+				"name": "",
+				"srcID": "assets-hero-reborn-cd-bg",
+				"type": "static",
+				"x": 96,
+				"y": 72,
+				"width": 186,
+				"height": 12,
+				"scale": 1
+			},
+			{
+				"name": "",
+				"srcID": "assets-hero-reborn-cd-value",
+				"type": "static",
+				"x": 96,
+				"y": 72,
+				"width": 186,
+				"height": 12,
+				"scale": 0.001
 			}
 		],
 		"x": 220,

@@ -68,7 +68,7 @@ Scene.prototype.LoadMap = function(MapID, end) {
             // Travesal of all blockers data
             map.blockers.forEach(function(b) {
                 // Get the location from the bound joint
-                var j = that.GM.joints[b.bindJoint];
+                var j = that.GM.joints[b.bindJoint].dest.dest;
                 // Create new blocker
                 var newBlocker = new Blocker("Blocker-" + b.id, that.GM.assignBlockerID(), j.transform.x, j.transform.y, that.GM.joints[b.bindJoint], that.GM.slots[b.useSlot], that.GM);
                 // Build blocker on slot;

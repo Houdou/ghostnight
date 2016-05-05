@@ -11,6 +11,8 @@
 	{"src": "img/icons/head-todomeki.png", "id": "button-Todomeki"},
 	{"src": "img/bar/hero-life-bar.png", "id": "assets-hero-life-bar"},
 	{"src": "img/bar/hero-life-value.png", "id": "assets-hero-life-value"},
+	{"src": "img/bar/cd-bar-bg.png", "id": "assets-hero-reborn-cd-bg"},
+	{"src": "img/bar/cd-bar-value.png", "id": "assets-hero-reborn-cd-value"},
 	{"src": "img/icons/skills/nekomata-sk1.png", "id": "button-Nekomata-Skill1"},
 	{"src": "img/icons/skills/nekomata-sk2.png", "id": "button-Nekomata-Skill2"},
 	{"src": "img/icons/skills/ameonna-sk1.png", "id": "button-Ameonna-Skill1"},

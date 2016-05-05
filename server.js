@@ -1,7 +1,6 @@
 var http = require('http');
 var path = require('path');
 
-var async = require('async');
 var socketio = require('socket.io');
 var express = require('express');
 
@@ -10,9 +9,6 @@ var server = http.createServer(router);
 var io = socketio.listen(server);
 
 var util = require('util');
-var SetupGhost = require('./GN.server/Setup/Ghost');
-var SetupHuman = require('./GN.server/Setup/Human');
-var SetupAI = require('./GN.server/Setup/AI');
 
 var GhostNight = require('./GN.server/GN');
 var GameEventManager = require('./GN.server/GameEventManager');
@@ -23,7 +19,6 @@ router.use(express.static(path.resolve(__dirname, 'client')));
 var sockets = [];
 var rooms = {};
 var roomof = {};
-// rooms.push(new Room('lobby'));
 rooms['lobby'] = new Room('lobby');
 
 io.on('connection', function (socket) {
@@ -35,10 +30,6 @@ io.on('connection', function (socket) {
 	    // click: {x, y, button};
         // console.log(click);
 	});
-	
-	// socket.on('single-mode', function(data) {
-	// 	singlePlayer(socket, data.map);
-	// });
 	
 	socket.on('create-room', function(data) {
 		// Assign a random room number
@@ -59,29 +50,6 @@ io.on('connection', function (socket) {
 	});
 
 });
-
-// function singlePlayer(socket, map){
-// 	var roomNo = "s01"; // for test
-// 	var singleRoom = new Room(roomNo); 
-	
-// 	if(singleRoom.players.length >= 1) {
-// 		socket.emit('room-full', {});
-// 	}
-	
-// 	// Leave the current room
-// 	leaveRoom(socket);
-// 	// Join new room on socket
-// 	socket.join(roomNo);
-// 	// Update the roomNo of socket
-// 	roomof[socket.id] = roomNo;
-// 	rooms[roomNo] = singleRoom;
-		
-// 	singleRoom.broadcast('load-scene', {map: map});
-	
-// 	socket.on('load-complete', function(){
-// 		startGame(roomof[socket.id], "single");
-// 	});
-// }
 
 function createRoom(socket, roomNo, mode) {
 	var newRoom = new Room(roomNo);
@@ -147,17 +115,7 @@ function joinRoom(socket, roomNo) {
 		
 		// Register the room options
 		socket.on('choose-side', function(data){
-			// console.log(data);
 			room.players[playerIndex].side = data.side;
-			// if(data.side == 'ghost'){
-			// 	room.players[playerIndex].side = 'ghost';
-			// 	console.log('ghost');
-			// }
-			// if(data.side == 'human'){
-			// 	room.players[playerIndex].side = 'human';
-			// 	console.log('human');
-			// }
-			// console.log(playerIndex);
 			room.broadcast('side-chosen', {playerIndex: playerIndex, side: data.side});
 		});
 		
@@ -174,7 +132,6 @@ function joinRoom(socket, roomNo) {
 			}
 			
 			if(room.mode == 'MP') {
-				// var room = rooms[roomof[socket.id]];
 				// Check if there are 2 players
 				if(room.players.length != 2) {
 					console.log("Players not enough in room ", roomNo);
@@ -199,14 +156,7 @@ function joinRoom(socket, roomNo) {
 		});
 		
 		socket.on('send-message', function(data) {
-	        //console.log('here');
 	        room.broadcast('message-send', {side: room.players[playerIndex].side, message: data.message});
-	  //      if (room.players[playerIndex].side == 'ghost') {//ghost
-			// 	room.broadcast('message-send', {side: 'Ghost', message: data.message})
-			// } else if(room.players[playerIndex].side == 'human') {//human
-			// 	room.broadcast('message-send', {side: 'Human', message: data.message})
-			// }
-	        
 	    });
 		
 	} else {
@@ -247,9 +197,9 @@ function startGame(roomNo){
 	// Create a game event manager to listen the event inside server
 	var GEM = new GameEventManager(room);
 	var settings = {
-		MinDamage: 5, 
-		TimeLimit: 180, 
-		Room: roomNo,   
+		MinDamage: 5,
+		TimeLimit: 10,
+		Room: roomNo, 
 		debug: true,
 		soul: 1000,
 		gold: 2000,
@@ -259,22 +209,13 @@ function startGame(roomNo){
 	// Create the game server
 	room.GN = new GhostNight(settings, GEM);
 	
-	if (room.mode == "SP"){
+	if(room.mode == "SP"){
 		// Setup a simple AI to play the game
 		var GNAI = new room.GN.AI(room);
 		room.players.push({socket: GNAI, side: 'human'});
-		
-		SetupGhost(room.players[0].socket, room);
-		SetupHuman(room.players[1].socket, room);
-	} else {
-		for (var i in room.players){
-			if (room.players[i].side == 'ghost') {
-				SetupGhost(room.players[i].socket, room);
-			} else if(room.players[i].side == 'human') {
-				SetupHuman(room.players[i].socket, room);
-			}
-		}
 	}
+	
+	room.SetupSocket(true);
 	
 	// Load map
 	room.GN.Scene.LoadMap(room.map, function(err, data){

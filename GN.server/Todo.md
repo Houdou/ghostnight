@@ -1,5 +1,16 @@
 # TODO
 
+## Final stage
+AI
+Music
+Refine Code
+UML Diagram
+Report
+Collection
+Tutorial
+Input hint
+Slot Hammer
+
 ## Design
 ### Class Design
 Core game system							|	2/2		+2/24

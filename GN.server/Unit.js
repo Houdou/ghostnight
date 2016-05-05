@@ -8,6 +8,8 @@ var Unit = function (name, id, tag, x, y, joint, hp, atk, range, rate, def, spd,
     this.target = null;
     this.canMove = true;
     this.moveTimeout = -1;
+    
+    this.reachEnd = false;
 }
 Unit.prototype = new GameUnit();
 // functions
@@ -69,6 +71,7 @@ Unit.prototype.Move = function () {
 }
 Unit.prototype.End = function(jid) {
     console.log(this.name + " reach the end.");
+    this.reachEnd = true;
     this.GM.UnitReachEnd(this.value / 10, jid);
     this.GM.GEM.emit('unit-remove', {uid: this.uid});
 }

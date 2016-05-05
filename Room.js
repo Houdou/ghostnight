@@ -1,3 +1,6 @@
+var SetupGhost = require('./GN.server/Setup/Ghost');
+var SetupHuman = require('./GN.server/Setup/Human');
+
 var Room = function (roomNo) {
 	this.roomNo = roomNo;
 	this.GN = null;
@@ -14,6 +17,20 @@ Room.prototype.broadcast = function(event, data){
 	
 	this.players.forEach(function(p){
 		p.socket.emit(event, data);
+	});
+}
+Room.prototype.SetupSocket = function(on) {
+	this.players.forEach((p)=>{
+	    switch(p.side) {
+	    	case 'ghost':
+	    		SetupGhost(p.socket, this, on);
+	    		break;
+    		case 'human':
+    			SetupHuman(p.socket, this, on);
+    			break;
+			default:
+    			break;
+	    }
 	});
 }
 module.exports = Room;

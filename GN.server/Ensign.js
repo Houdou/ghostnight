@@ -19,6 +19,8 @@ var Ensign = function(name, id, tag, x, y, joint, buffType, buffAreaRadius, buff
     this.BuffAttenuation = -0.5;
     this.BuffMagnitude = 2;
     this.BuffDuration = buffDuration;
+    
+    this.removeTimeout = -1;
 }
 Ensign.prototype = new GameUnit();
 // functions
@@ -35,7 +37,7 @@ Ensign.prototype.Effect = function() {
         }
     }
     
-    setTimeout(()=>{
+    this.removeTimeout = setTimeout(()=>{
         this.hp = 0;
         this.isDead = true;
         this.GM.GEM.emit('ensign-removed', {eid: this.eid});

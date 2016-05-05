@@ -26,6 +26,7 @@ var GameUnit = function(name, id, tag, x, y, joint, hp, atk, range, rate, def, s
     this.stateUpdateInterval = -1;
     
     this.isDead = false;
+    this.canMove = false;
 }
 GameUnit.prototype = new GameObject();
 // functions
@@ -166,6 +167,7 @@ GameUnit.prototype.DealDamage = function(from, dmg) {
             console.log(this.name + " now : " + this.hp + "/" + this.maxhp);
         // DEBUG
         
+        this.GM.GEM.emit(Tags[from.tag] + '-attack', {source: from.name, target: this.name, from: from.transform, to: this.transform});
         this.GM.GEM.emit(Tags[this.tag] + '-dead', {id: this.id, dmg: dmg});
         this.GM.LogDamage(from, this, dmg);
         
@@ -185,6 +187,7 @@ GameUnit.prototype.DealDamage = function(from, dmg) {
             console.log(this.name + " now : " + this.hp + "/" + this.maxhp);
         // DEBUG
         
+        this.GM.GEM.emit(Tags[from.tag] + '-attack', {source: from.name, target: this.name, from: from.transform, to: this.transform});
         this.GM.GEM.emit(Tags[this.tag] + '-hp-update', {id: this.id, hp: this.hp, maxhp: this.maxhp, dmg: dmg});
         this.GM.LogDamage(from, this, dmg);
         

@@ -13,7 +13,7 @@ var AI = function(room) {
         that.emit('build-ensign', {type: type, jid: jid});
     }
     
-    setTimeout(()=>{BuildTower('Miko', 0);}, 8000);
+    setTimeout(()=>{BuildTower('Snake', 0);}, 12000);
 	setTimeout(()=>{BuildEnsign('Atk', 12);}, 12000);
 	
 	this.on('game-started', function() {
