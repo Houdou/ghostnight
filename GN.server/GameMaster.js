@@ -15,6 +15,7 @@ var GameMaster = function(settings, GEM){
     this.heroCount = 0;
     this.hero = null;
     this.heroSelect = "Nekomata";
+    this.heroRebornTimeout = -1;
     
     this.cdof = [];
     this.cds = [];

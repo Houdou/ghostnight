@@ -103,7 +103,7 @@ GhostNight.prototype.TurnRoadSign = function(roadSignID) {
 }
 // Hero
 GhostNight.prototype.SetHeroReborn = function() {
-    setTimeout(()=>{this.RebornHero(false);}, this.GM.cds['Hero']);
+    this.GM.heroRebornTimeout = setTimeout(()=>{this.RebornHero(false);}, this.GM.cds['Hero']);
     this.GM.GEM.emit('hero-select', {type: this.GM.heroSelect});
     this.GM.GEM.emit('hero-reborn-cd', {time: this.GM.cds['Hero']});
 }
@@ -111,8 +111,8 @@ GhostNight.prototype.RebornHero = function(pay) {
     if(this.GM.hero == null && !this.GM.gameover) {
         if(!pay)
             this.GM.CancelCoolDown('Hero');
-            
-        console.log('CD Hero:' + this.GM.cdof['Hero']);
+        
+        clearTimeout(this.GM.heroRebornTimeout);    
         var hero = this.CreateHero(this.GM.heroSelect);
         this.GM.GEM.emit('hero-reborn', {type: this.GM.heroSelect, x: hero.transform.x, y: hero.transform.y})
         // Reset CD time for skills

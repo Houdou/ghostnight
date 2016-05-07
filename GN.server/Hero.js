@@ -10,6 +10,7 @@ var Hero = function(name, id, tag, x, y, destJoint, hp, atk, range, rate, def, s
     this.moveTimeout = -1;
     
     this.skillLastTime = [-1, -1];
+    // Default skill time, to be overriden.
     this.skillCDTime = [180000, 180000];
 }
 Hero.prototype = new GameUnit();
@@ -89,7 +90,8 @@ Hero.prototype.Skill = function(skillID, data) {
 // Skill cood down control
 Hero.prototype.ResetSkill = function() {
     for(var skillID in this.skillCDTime) {
-        this.usedSkill(skillID);
+        this.skillLastTime[skillID] = (new Date()).getTime();
+        this.GM.GEM.emit('hero-skill-cd', {skillID: +skillID + 1, duration: this.skillCDTime[skillID]});
     }
 }
 Hero.prototype.canUseSkill = function(skillID) {
@@ -97,6 +99,7 @@ Hero.prototype.canUseSkill = function(skillID) {
 }
 Hero.prototype.usedSkill = function(skillID) {
     this.skillLastTime[skillID] = (new Date()).getTime();
+    this.GM.GEM.emit('hero-skill', {skillID: +skillID + 1, duration: this.skillCDTime[skillID]});
     this.GM.GEM.emit('hero-skill-cd', {skillID: +skillID + 1, duration: this.skillCDTime[skillID]});
 }
 module.exports = Hero;

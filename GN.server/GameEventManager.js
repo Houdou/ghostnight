@@ -11,11 +11,11 @@ var GameEventManager = function(room) {
         }
     }
     
-    this.on('message-send', function(data) {
+    this.on('message-send', function(data){
         room.broadcast('message-send', data);
     });
     
-    this.on('map-data', function(data) {
+    this.on('map-data', function(data){
         room.broadcast('map-data', data);
     });
     
@@ -28,7 +28,7 @@ var GameEventManager = function(room) {
     	room.broadcast('button-cd', data);
     });
     
-    this.on('goal-built', function(data) {
+    this.on('goal-built', function(data){
         room.broadcast('goal-built', data);
     });
     
@@ -40,7 +40,7 @@ var GameEventManager = function(room) {
     	room.broadcast('goal-damage', data);
     });
     
-    this.on('goal-dead', function(data) {
+    this.on('goal-dead', function(data){
         room.broadcast('goal-dead', data);
     });
     
@@ -52,7 +52,7 @@ var GameEventManager = function(room) {
     	room.broadcast('gold-update', data);
     });
     
-    this.on('unit-created', function(data) {
+    this.on('unit-created', function(data){
     	room.broadcast('unit-created', data);
     });
     
@@ -60,14 +60,8 @@ var GameEventManager = function(room) {
         room.broadcast('unit-moving', data);
     });
     
-    // this.on('unit-arrived', function(){
-    //     room.broadcast('unit-arrived');
-    //     console.log('');
-    // });
-    
     this.on('unit-attack', function(data){
         room.broadcast('unit-attack', data);
-        console.log(data);
     });
     
     this.on('unit-hp-update', function(data){
@@ -75,10 +69,16 @@ var GameEventManager = function(room) {
         room.broadcast('unit-hp-update', data);
     });
     
-    this.on('unit-nerf', function(uid, att){
-        room.broadcast('unit-nerf');
-        console.log('');
-        
+    this.on('unit-buff', function(data) {
+        data.uid = data.id;
+        room.broadcast('unit-buff', data);
+        console.log('unit-buff', data);
+    })
+    
+    this.on('unit-nerf', function(data){
+        data.uid = data.id;
+        room.broadcast('unit-nerf', data);
+        console.log('unit-nerf', data);
     });
     
     this.on('unit-dead', function(data){
@@ -86,7 +86,7 @@ var GameEventManager = function(room) {
         room.broadcast('unit-dead', data);
     });
     
-    this.on('unit-remove', function(data) {
+    this.on('unit-remove', function(data){
         room.broadcast('unit-remove', data);
     });
     
@@ -94,14 +94,8 @@ var GameEventManager = function(room) {
         room.broadcast('hero-moving', data);
     });
     
-    // this.on('hero-arrived', function(){
-    //     room.broadcast('hero-arrived');
-    //     console.log('');
-        
-    // });
-    
     this.on('hero-skill', function(data){
-        room.broadcast('hero-skill');
+        room.broadcast('hero-skill', data);
     });
     
     this.on('hero-skill-cd', function(data){
@@ -110,17 +104,20 @@ var GameEventManager = function(room) {
     
     this.on('hero-attack', function(data){
         room.broadcast('hero-attack', data);
-        console.log(data);
     });
     
     this.on('hero-hp-update', function(data){
         room.broadcast('hero-hp-update', data);
     });
     
-    this.on('hero-nerf', function(){
-        room.broadcast('hero-nerf');
-        console.log('');
-        
+    this.on('hero-buff', function(data){
+        room.broadcast('hero-buff', data);
+        console.log('hero-buff', data);
+    });
+    
+    this.on('hero-nerf', function(data){
+        room.broadcast('hero-nerf', data);
+        console.log('hero-nerf', data);
     });
     
     this.on('hero-dead', function(data){
@@ -159,13 +156,18 @@ var GameEventManager = function(room) {
     
     this.on('tower-attack', function(data){
         room.broadcast('tower-attack', data);
-        console.log(data);
     });
     
-    this.on('tower-nerf', function(){
-        room.broadcast('tower-nerf');
-        console.log('');
-        
+    this.on('tower-buff', function(data){
+        data.tid = data.id;
+        room.broadcast('tower-buff', data);
+        console.log('tower-buff', data);
+    });
+    
+    this.on('tower-nerf', function(data){
+        data.tid = data.id;
+        room.broadcast('tower-nerf', data);
+        console.log('tower-nerf', data);
     });
     
     this.on('tower-hp-update', function(data){
@@ -182,10 +184,16 @@ var GameEventManager = function(room) {
         room.broadcast('blocker-built', data);
     });
     
-    this.on('blocker-nerf', function(){
-        room.broadcast('blocker-nerf');
-        console.log('');
-        
+    this.on('blocker-buff', function(data){
+        data.bid = data.id;
+        room.broadcast('blocker-buff', data);
+        console.log('blocker-buff', data);
+    });
+    
+    this.on('blocker-nerf', function(data){
+        data.bid = data.id;
+        room.broadcast('blocker-nerf', data);
+        console.log('blocker-nerf', data);
     });
     
     this.on('blocker-hp-update', function(data){
@@ -205,12 +213,6 @@ var GameEventManager = function(room) {
     this.on('roadsign-changed', function(data) {
         room.broadcast('roadsign-changed', data);
     });
-    
-    // this.on('', function(){
-    //     room.broadcast('');
-    //     console.log('');
-        
-    // });
 }
 util.inherits(GameEventManager, EventEmitter);
 

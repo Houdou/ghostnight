@@ -198,7 +198,7 @@ function startGame(roomNo){
 	var GEM = new GameEventManager(room);
 	var settings = {
 		MinDamage: 5,
-		TimeLimit: 10,
+		TimeLimit: 180,
 		Room: roomNo, 
 		debug: true,
 		soul: 1000,

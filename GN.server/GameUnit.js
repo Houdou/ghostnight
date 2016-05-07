@@ -37,49 +37,23 @@ GameUnit.prototype.Nerf = function(property, multiplier, duration){
     }
     // Convert (ms) into (s)
     duration *= 1000;
-    var that = this;
     
-    // New Method
     if(this[property] != undefined) {
+        // Multiply the value
         this[property] *= multiplier;
-        this.GM.LogBuff(that, property, multiplier);
+        // Notice client
+        this.GM.GEM.emit(Tags[this.tag] + '-buff',
+            {id: this.id, tag: Tags[this.tag], type: (multiplier >= 1 ? 'buff' : 'nerf'), property: property, duration: duration});
+        // Log
+        this.GM.LogBuff(this, property, multiplier);
         // Restore the value
-        setTimeout(function(){
-            that[property] /= multiplier;
-            that.GM.LogBuff(that, property, 1 / multiplier);
+        setTimeout(() => {
+            this[property] /= multiplier;
+            this.GM.LogBuff(this, property, 1 / multiplier);
         }, duration);
-    } else { console.log("Wrong property type"); }
-    
-    // Back up
-    // switch (property) {
-    //     case 'atk':
-    //         this.atk *= multiplier;
-    //         setTimeout(function(){that.atk /= multiplier;}, duration);
-    //         break;
-    //     case 'def': 
-    //         this.def *= multiplier;
-    //         setTimeout(function(){that.def /= multiplier;}, duration);
-    //         break;
-    //     case 'range':
-    //         this.range *= multiplier;
-    //         setTimeout(function(){that.range /= multiplier;}, duration);
-    //         break;
-    //     case 'spd':
-    //         this.spd *= multiplier;
-    //         setTimeout(function(){that.spd /= multiplier;}, duration);
-    //         break;
-    //     case 'rate':
-    //         this.rate *= multiplier;
-    //         setTimeout(function(){that.rate /= multiplier;}, duration);
-    //         break;
-    //     case 'value':
-    //         this.value *= multiplier;
-    //         setTimeout(function(){that.value /= multiplier;}, duration);
-    //         break;
-    //     default: 
-    //         console.log("Wrong property type");
-    //         break;
-    // }
+    } else {
+        console.log("Wrong property type");
+    }
 }
 GameUnit.prototype.Buff = GameUnit.prototype.Nerf;
 GameUnit.prototype.setState = function(from, addState, duration) {
@@ -188,7 +162,7 @@ GameUnit.prototype.DealDamage = function(from, dmg) {
         // DEBUG
         
         this.GM.GEM.emit(Tags[from.tag] + '-attack', {source: from.name, target: this.name, from: from.transform, to: this.transform});
-        this.GM.GEM.emit(Tags[this.tag] + '-hp-update', {id: this.id, hp: this.hp, maxhp: this.maxhp, dmg: dmg});
+        this.GM.GEM.emit(Tags[this.tag] + '-hp-update', {id: this.id, tag: Tags[this.tag], hp: this.hp, maxhp: this.maxhp, dmg: dmg, type: 'damage'});
         this.GM.LogDamage(from, this, dmg);
         
         // The target is still alive
@@ -199,11 +173,11 @@ GameUnit.prototype.Heal = function(from, healhp) {
     // Limit the max hp
     if(this.maxhp < this.hp + healhp) {
         this.hp = this.maxhp;
-        this.GM.GEM.emit(Tags[this.tag] + '-hp-update', {id: this.id, hp: this.hp, maxhp: this.maxhp, dmg: -healhp});
+        this.GM.GEM.emit(Tags[this.tag] + '-hp-update', {id: this.id, tag: Tags[this.tag], hp: this.hp, maxhp: this.maxhp, dmg: -healhp, type: 'heal'});
     } else {
         this.hp += healhp;
         console.log(this.name + " heals " + healhp);
-        this.GM.GEM.emit(Tags[this.tag] + '-hp-update', {id: this.id, hp: this.hp, maxhp: this.maxhp, dmg: -healhp});
+        this.GM.GEM.emit(Tags[this.tag] + '-hp-update', {id: this.id, tag: Tags[this.tag], hp: this.hp, maxhp: this.maxhp, dmg: -healhp, type: 'heal'});
     }
     
 }

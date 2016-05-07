@@ -19,6 +19,9 @@
 	{"src": "img/icons/skills/ameonna-sk2.png", "id": "button-Ameonna-Skill2"},
 	{"src": "img/icons/skills/todomeki-sk1.png", "id": "button-Todomeki-Skill1"},
 	{"src": "img/icons/skills/todomeki-sk2.png", "id": "button-Todomeki-Skill2"},
+	{"src": "img/text-buttons/name-Nekomata.png", "id": "assets-name-Nekomata"},
+	{"src": "img/text-buttons/name-Ameonna.png", "id": "assets-name-Ameonna"},
+	{"src": "img/text-buttons/name-Todomeki.png", "id": "assets-name-Todomeki"},
 	{"src": "img/icons/soul.png", "id": "assets-money"},
 	{"src": "layout/ghost.json", "id": "layout-ghost"}
 ]

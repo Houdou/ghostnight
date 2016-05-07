@@ -25,7 +25,7 @@ var Blocker = function(name, id, x, y, bindJoint, slot, GM) {
 }
 Blocker.prototype = new Tower();
 // functions
-// Override the RequireTarget method
+// Override the Sight method
 Blocker.prototype.Sight = function(unit) {
     // Blocker will not check environment
     return null;

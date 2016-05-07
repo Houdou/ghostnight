@@ -25,6 +25,12 @@
 	{"src": "img/icons/checkmark-red.png", "id": "assets-checkmark-red"},
 	{"src": "img/icons/goal-grey.png", "id": "assets-goal-grey"},
 	{"src": "img/icons/goal-red.png", "id": "assets-goal-red"},
+	{"src": "img/icons/buff/atk-buff.png", "id": "assets-atk-buff"},
+	{"src": "img/icons/buff/atk-nerf.png", "id": "assets-atk-nerf"},
+	{"src": "img/icons/buff/def-buff.png", "id": "assets-def-buff"},
+	{"src": "img/icons/buff/def-nerf.png", "id": "assets-def-nerf"},
+	{"src": "img/icons/buff/rng-buff.png", "id": "assets-range-buff"},
+	{"src": "img/icons/buff/rng-nerf.png", "id": "assets-range-nerf"},
 	{"src": "img/bg/cover.png", "id":"assets-cover"},
 	{"src": "img/road-sign.png", "id": "assets-road-sign"},
 	{"src": "img/road-stick.png", "id": "assets-road-stick"},
@@ -55,6 +61,9 @@
 	{"src": "img/effects/unit-effect/effect-atk-Futakuchi.png", "id": "assets-effects-atk-Futakuchi"},
 	{"src": "img/effects/unit-effect/effect-atk-Raiju.png", "id": "assets-effects-atk-Raiju"},
 	{"src": "img/effects/unit-effect/effect-atk-Ubume.png", "id": "assets-effects-atk-Ubume"},
+	{"src": "img/effects/ve-hp.png", "id": "assets-effects-hp"},
+	{"src": "img/effects/ve-love.png", "id": "assets-effects-love"},
+	{"src": "img/effects/hero-effect/effect-shield.png", "id": "assets-effects-shield"},
 	{"src": "img/text-buttons/win.png", "id": "assets-win"},
 	{"src": "img/text-buttons/lose.png", "id": "assets-lose"}
 ]

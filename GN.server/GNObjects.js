@@ -81,8 +81,8 @@ var GNObjects = function(GM){
         this.scratchRadius = this.range * 1.5;
         this.scratchAtk = 500;
         // override the time here↓
-        this.skillCDTime[0] = 180000;
-        this.skillCDTime[1] = 180000;
+        this.skillCDTime[0] = 5000;
+        this.skillCDTime[1] = 5000;
     }
     Nekomata.prototype = new Hero();
     // functions
@@ -174,8 +174,8 @@ var GNObjects = function(GM){
         this.shieldDuration = 10000;
         
         // override the time here↓
-        this.skillCDTime[0] = 180000;
-        this.skillCDTime[1] = 180000;
+        this.skillCDTime[0] = 5000;
+        this.skillCDTime[1] = 5000;
     }
     Ameonna.prototype = new Hero();
     // functions
@@ -240,8 +240,8 @@ var GNObjects = function(GM){
         this.EyeBombAtk = 300;
         
         // override the time here↓
-        this.skillCDTime[0] = 180000;
-        this.skillCDTime[1] = 180000;
+        this.skillCDTime[0] = 5000;
+        this.skillCDTime[1] = 5000;
     }
     Todomeki.prototype = new Hero();
     // functions
@@ -594,8 +594,10 @@ var GNObjects = function(GM){
     }
     Inugami.prototype = new Tower();
     Inugami.prototype.didAttackedTarget = function(target, dmg) {
-        if((new Date()).getTime() - this.lastNerfTime > this.nerfInterval) {
+        var time = (new Date()).getTime();
+        if(time - this.lastNerfTime > this.nerfInterval) {
             target.Nerf('atk', 0.5, 4);
+            this.lastNerfTime = time;
         }
     }
     this.Inugami = Inugami;
@@ -652,9 +654,6 @@ var GNObjects = function(GM){
             this.GM.GEM.emit('unit-moving',
                 {uid: target.uid, x: this.joint.transform.x, y: this.joint.transform.y, duration: 80});
             // TODO emit("ebisu-skill")
-            // DEBUG
-            console.log("target will move to " + this.joint.name);
-            // DEBUG
             
             // Update time
             this.pullLastTime = new Date().time;
@@ -681,8 +680,11 @@ var GNObjects = function(GM){
             var t = this.unitsInRange[i];
             // Prevent duplicated target
             if(AOETargets.indexOf(t) == -1 && t != target) {
-                // Array.push will return the length of array
-                if(AOETargets.push(t) >= this.AOETargetsNumber) { break; }
+                // Check the range
+                if(t.transform.DistanceTo(this.transform) <= this.range  && !t.isDead) {
+                    // Array.push will return the length of array
+                    if(AOETargets.push(t) >= this.AOETargetsNumber) { break; }
+                }
             }
         }
         

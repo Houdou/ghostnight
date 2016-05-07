@@ -68,6 +68,16 @@
 				"width": 64,
 				"height": 64,
 				"buttonStrOffset": 30
+			},
+			{
+				"name": "",
+				"srcID": "assets-name-Nekomata",
+				"type": "static",
+				"x": 195,
+				"y": 12,
+				"width": 116,
+				"height": 20,
+				"scale": 1
 			}
 		],
 		"x": 210,
@@ -115,6 +125,16 @@
 				"width": 64,
 				"height": 64,
 				"buttonStrOffset": 30
+			},
+			{
+				"name": "",
+				"srcID": "assets-name-Ameonna",
+				"type": "static",
+				"x": 195,
+				"y": 12,
+				"width": 105,
+				"height": 19,
+				"scale": 1
 			}
 		],
 		"x": 210,
@@ -162,6 +182,16 @@
 				"width": 64,
 				"height": 64,
 				"buttonStrOffset": 30
+			},
+			{
+				"name": "",
+				"srcID": "assets-name-Todomeki",
+				"type": "static",
+				"x": 195,
+				"y": 12,
+				"width": 123,
+				"height": 22,
+				"scale": 1
 			}
 		],
 		"x": 210,
