@@ -365,6 +365,7 @@ gn.prototype.BuildMenu = function() {
 	});
 	
 	this.panel['main'] = cMenu;
+	this.currentPanel = 'main';
 	stage.addChild(cMenu);
 	
 	// SP Panel {
@@ -559,7 +560,8 @@ gn.prototype.LoadCollection = function() {
 		{"src": "cp-list-ghost.png", "id": "assets-collection-list-ghost"},
 		{"src": "cp-to-human.png", "id": "assets-collection-to-human"},
 		{"src": "cp-list-human.png", "id": "assets-collection-list-human"},
-		{"src": "cp-to-ghost.png", "id": "assets-collection-to-ghost"}
+		{"src": "cp-to-ghost.png", "id": "assets-collection-to-ghost"},
+		{"src": "cp-Todomeki.png", "id": "assets-collection-details-Todomeki"}
 	];
 	
 	collectionPreload.on('progress', (event) => {
@@ -583,6 +585,9 @@ gn.prototype.LoadCollection = function() {
 			
 			this.BuildProgressBar();
 			collectionPreload.loadManifest(collectionManifest);
+			
+			console.log('loading collection...');
+			
 			stage.alpha = 1;
 		});
 }
@@ -590,11 +595,37 @@ gn.prototype.ShowCollectionList = function() {
 	var cCP = new createjs.Container();
 	cCP.alpha = 0;
 	
-	var layout = [
-		{
-			name: "Todomeki",
-		}
-	];
+	var ghostNameList = ['Nekomata','Ameonna','Todomeki',
+        'Kappa','Wanyudo','Foxfire','Dojoji','Futakuchi','Raiju','Ubume'];
+    var humanNameList = ['Miko','Inari','Inugami','Ebisu','Snake','Asura','Amaterasu',
+    	'Ensigns','Thorns'];
+    	
+	var collectionLayout = {
+		ghost:
+			{
+				nameList:
+					['Nekomata','Ameonna','Todomeki',
+        				'Kappa','Wanyudo','Foxfire','Dojoji','Futakuchi','Raiju','Ubume'],
+				positions: {
+						main: {x: 364, y: 180, dx: 80, dy: 0},
+						list: {x: 60, y: 64, dx: 0, dy: 64}
+					}
+			},
+		human:
+			{
+				nameList:
+					['Miko','Inari','Inugami','Ebisu','Snake','Asura','Amaterasu',
+				    	'Ensigns','Thorns'],
+				positions: {
+						main: {x: 546, y: 444, dx: 80, dy: 0},
+						list: {x: 60, y: 128, dx: 0, dy: 64}
+					}
+			},
+	};
+	
+	this.collectionPanel = 'main';
+    	
+    var listItems = [];
 	
 	var bg = new createjs.Bitmap(this.assets['assets-collection-bg']);
 	cCP.addChild(bg);
@@ -602,6 +633,116 @@ gn.prototype.ShowCollectionList = function() {
 	var btnBackCP = this.BuildTextButton('button-back', 1200, 36, 89, 43, 0,
 		this.BuildMenu, null, false, 0.8);
 	cCP.addChild(btnBackCP);
+	
+	// List Panel Human {
+	var cLPH = new createjs.Container();
+	// Background
+	cLPH.addChild(new createjs.Bitmap(this.assets['assets-collection-list-human']));
+	
+	var toGhost = new createjs.Bitmap(this.assets['assets-collection-to-ghost']);
+	toGhost.on('click', () => {
+		this.collectionItem = 'Nekomata';
+		this.collectionPanel = 'ghost';
+		
+		createjs.Tween.get(cLPG)
+			.to({y: 0}, 600, createjs.Ease.quartOut);
+		createjs.Tween.get(cLPH)
+			.to({y: 720}, 600, createjs.Ease.quartOut);
+	})
+	toGhost.y = 0;
+	cLPH.addChild(toGhost);
+	
+	var posY = 128;
+	humanNameList.forEach((u) => {
+		// Circle image
+		var btn = new createjs.Bitmap(this.assets['assets-collection-list-circle-blue']);
+		btn.name = 'item-' + u;
+		btn.on('click', () => {
+			this.ShowDetails(u);
+				
+			this.collectionItem = u;
+			this.collectionPanel = 'human';
+			cLPH.y = 0;
+			
+			createjs.Tween.get(cover)
+				.to({x: -300}, 500, createjs.Ease.quartOut);
+			createjs.Tween.get(nameList)
+				.to({alpha: 0}, 600);
+			createjs.Tween.get(cLPM)
+				.to({alpha: 0}, 600);
+		});
+		btn.regX = 12; 
+		btn.regY = 12;
+		btn.x = 60;
+		btn.y = posY;
+		posY += 64;
+		// hitArea
+		var hit = new createjs.Shape();
+		hit.graphics.beginFill('#000').drawRect(0, -20, 180, 50); // To-Do : use layout data
+		btn.hitArea = hit;
+		
+		listItems.push(btn);
+		cLPH.addChild(btn);
+	});
+	
+	cLPH.y = 720;
+	
+	cCP.addChild(cLPH);
+	// }
+	
+	// List Panel Ghost {
+	var cLPG = new createjs.Container();
+	cLPG.addChild(new createjs.Bitmap(this.assets['assets-collection-list-ghost']));
+	
+	var toHuman = new createjs.Bitmap(this.assets['assets-collection-to-human']);
+	toHuman.on('click', () => {
+		this.collectionItem = 'Miko';
+		this.collectionPanel = 'human';
+		
+		createjs.Tween.get(cLPG)
+			.to({y: -720}, 600, createjs.Ease.quartOut);
+		createjs.Tween.get(cLPH)
+			.to({y: 0}, 600, createjs.Ease.quartOut);
+	})
+	toHuman.y = 720 - 42;
+	cLPG.addChild(toHuman);
+	
+	var posY = 64;
+	ghostNameList.forEach((u) => {
+		// Circle image
+		var btn = new createjs.Bitmap(this.assets['assets-collection-list-circle-red']);
+		btn.name = 'item-' + u;
+		btn.on('click', () => {
+			this.ShowDetails(u);
+			
+			this.collectionItem = u;
+			this.collectionPanel = 'ghost';
+			cLPG.y = 0;
+			
+			createjs.Tween.get(cover)
+				.to({x: -300}, 500, createjs.Ease.quartOut);
+			createjs.Tween.get(nameList)
+				.to({alpha: 0}, 600);
+			createjs.Tween.get(cLPM)
+				.to({alpha: 0}, 600);
+		});
+		btn.regX = 12; 
+		btn.regY = 12;
+		btn.x = 60;
+		btn.y = posY;
+		posY += 64;
+		// hitArea
+		var hit = new createjs.Shape();
+		hit.graphics.beginFill('#000').drawRect(0, -20, 180, 50); // To-Do : use layout data
+		btn.hitArea = hit;
+		
+		listItems.push(btn);
+		cLPG.addChild(btn);
+	});
+	
+	cLPG.y = -720;
+	cCP.addChild(cLPG);
+	// }
 	
 	var cover = new createjs.Bitmap(this.assets['assets-collection-list-cover']);
 	cover.name = 'cover';
@@ -612,15 +753,8 @@ gn.prototype.ShowCollectionList = function() {
 	nameList.alpha = 0;
 	cCP.addChild(nameList);
 	
-	// list circle {
+	// List Panel Main {
 	var cLPM = new createjs.Container(); // List Panel Main
-	
-	var ghostNameList = ['Nekomata','Ameonna','Todomeki',
-        'Kappa','Wanyudo','Foxfire','Dojoji','Futakuchi','Raiju','Ubume'];
-    var humanNameList = ['Miko','Inari','Inugami','Ebisu','Snake','Asura','Amaterasu',
-    	'Ensigns','Thorns'];
-    	
-    var listItems = [];
 	
 	var posX = 364, dx = 80;
 	ghostNameList.forEach((u) => {
@@ -628,7 +762,19 @@ gn.prototype.ShowCollectionList = function() {
 		var btn = new createjs.Bitmap(this.assets['assets-collection-list-circle-red']);
 		btn.name = 'item-' + u;
 		btn.on('click', () => {
-			console.log('Move to details: ' + u);
+			this.collectionPanel = 'ghost';
+			cLPG.y = 0;
+			
+			createjs.Tween.get(cover)
+				.to({x: -300}, 500, createjs.Ease.quartOut);
+			createjs.Tween.get(nameList)
+				.to({alpha: 0}, 600);
+			createjs.Tween.get(cLPM)
+				.to({alpha: 0}, 600)
+				.call(() => {
+					this.ShowDetails(u);
+					this.collectionItem = u;
+				});
 		});
 		btn.regX = 12; 
 		btn.regY = 12;
@@ -649,7 +795,19 @@ gn.prototype.ShowCollectionList = function() {
 		var btn = new createjs.Bitmap(this.assets['assets-collection-list-circle-blue']);
 		btn.name = 'item-' + u;
 		btn.on('click', () => {
-			console.log('Move to details: ' + u);
+			this.collectionPanel = 'human';
+			cLPH.y = 0;
+			
+			createjs.Tween.get(cover)
+				.to({x: -300}, 500, createjs.Ease.quartOut);
+			createjs.Tween.get(nameList)
+				.to({alpha: 0}, 600);
+			createjs.Tween.get(cLPM)
+				.to({alpha: 0}, 600)
+				.call(() => {
+					this.ShowDetails(u);
+					this.collectionItem = u;
+				});
 		});
 		btn.regX = 12; 
 		btn.regY = 12;
@@ -664,14 +822,16 @@ gn.prototype.ShowCollectionList = function() {
 		listItems.push(btn);
 		cLPM.addChild(btn);
 	});
-	// }
 	cLPM.alpha = 0;
 	cCP.addChild(cLPM);
+	// }
 	
+	this.panel['CP'] = cCP;
+	this.currentPanel = 'CP';
 	stage.addChild(cCP);
 	stage.update();
 	
-	// Animation
+	// Enter Animation
 	createjs.Tween.get(cCP)
 		.to({alpha: 0.7}, 500)
 		.call(() => {
@@ -684,8 +844,32 @@ gn.prototype.ShowCollectionList = function() {
 			createjs.Tween.get(cLPM)
 				.to({alpha: 1}, 600);
 		});
-		
 }
+gn.prototype.ShowDetails = function(type) {
+	// if(type == this.collectionItem) { return; }
+	
+	if(this.collectionAssetsLoaded && this.currentPanel == 'CP') {
+		var panel = this.panel['CP'];
+		var current = panel.getChildByName('cp-' + this.collectionItem);
+		if(current != null) {
+			createjs.Tween.get(current)
+				.to({alpha: 0}, 300)
+				.call(() => {
+					panel.removeChild(current);
+				});
+		}
+		
+		var detail = new createjs.Bitmap(this.assets['assets-collection-details-' + type]);
+		detail.name = 'cp-' + type;
+		detail.x = 300;
+		detail.alpha = 0;
+		panel.addChild(detail);
+		
+		createjs.Tween.get(detail, {override: true})
+			.to({alpha: 1}, 400);
+	}
+}
+
 // Build
 gn.prototype.BuildRoadSign = function(data) {
 	var imgstick = this.assets['assets-road-stick'];
