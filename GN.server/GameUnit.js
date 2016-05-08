@@ -60,34 +60,33 @@ GameUnit.prototype.setState = function(from, addState, duration) {
     // Check if the unit is already in that state
     if((this.state & addState) != 0) { return false; }
     
-    var that = this;
-    
-    if(this.state == States.normal) {
-        // Set interval to handle the states
-        this.stateUpdateInterval = setInterval(function(){
-            if(that.state == States.normal || that.isDead) {
-                clearInterval(that.stateUpdateInterval);
-            } else {
-                // On fire
-                if((that.state & States.fire) != 0) {
-                    var dmg = Math.max(that.hp * 0.05, that.GM.settings.MinDamage);
-                    console.log(that.name + " is on fire, and deal " + dmg);
-                    that.DealDamage(from, dmg);
-                }
-                // Paralyzed
-                if((that.state & States.paralyzed) != 0) {
-                    // Nothing right now
-                }
+    // Set interval to handle the states
+    this.stateUpdateInterval = setInterval(() => {
+        if(this.state == States.normal || this.isDead) {
+            clearInterval(this.stateUpdateInterval);
+        } else {
+            // On fire
+            if((this.state & States.fire) != 0) {
+                var dmg = Math.max(this.hp * 0.05 + 50, this.GM.settings.MinDamage);
+                this.DealDamage(from, dmg);
             }
-        }, 500);
-    }
+            // Paralyzed
+            if((this.state & States.paralyzed) != 0) {
+                // Nothing to do now
+            }
+        }
+    }, 500);
+    
     // Mark the state
     this.state |= addState;
     
+    // Notice the client
+    this.GM.GEM.emit(Tags[this.tag] + '-state', {id: this.id, tag: Tags[this.tag], state: States[addState]});
+    
     // Set recovery delay
-    setTimeout(function(){
-        that.state &= ~addState;
-    }, duration);
+    setTimeout(() => {
+        this.state &= ~addState;
+    }, duration + 200);
     
     return true;
 }
@@ -95,28 +94,25 @@ GameUnit.prototype.Attack = function() {
     // Prevent bursting attack
     if(this.rate <= 0) { return };
     
-    var that = this;
-    
     this.isAttacking = true;
     
     // Attack time interval
-    this.attackInterval = setInterval(function(){
+    this.attackInterval = setInterval(() => {
         // Cannot attack under paralyzed state
-        if((that.state & States.paralyzed) != 0) { return; }
+        if((this.state & States.paralyzed) != 0) { return; }
         // Different classes will have different implementation of RequrieTarget
-        var target = that.RequireTarget();
+        var target = this.RequireTarget();
         
-        if (target != null && !that.isDead) {
+        if (target != null && !this.isDead) {
             // Minimal damage can be set in GameMaster
-            var dmg = Math.max(that.atk - target.def, that.GM.settings.MinDamage);
-            // 'that' is refering to the attacker, not target (ry
-            target.DealDamage(that, dmg);
+            var dmg = Math.max(this.atk - target.def, this.GM.settings.MinDamage);
+            target.DealDamage(this, dmg);
             // Callback interface for unit feature
-            if(that.didAttackedTarget) { that.didAttackedTarget(target, dmg); }
+            if(this.didAttackedTarget) { this.didAttackedTarget(target, dmg); }
         } else {
             // Stop attacking
-            clearInterval(that.attackInterval);
-            that.isAttacking = false;
+            clearInterval(this.attackInterval);
+            this.isAttacking = false;
         }
         
     }, 1000 / this.rate);

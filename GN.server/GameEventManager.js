@@ -72,14 +72,12 @@ var GameEventManager = function(room) {
     this.on('unit-buff', function(data) {
         data.uid = data.id;
         room.broadcast('unit-buff', data);
-        console.log('unit-buff', data);
     })
     
-    this.on('unit-nerf', function(data){
+    this.on('unit-state', function(data) {
         data.uid = data.id;
-        room.broadcast('unit-nerf', data);
-        console.log('unit-nerf', data);
-    });
+        room.broadcast('unit-state', data);
+    })
     
     this.on('unit-dead', function(data){
     	data.uid = data.id;
@@ -112,12 +110,6 @@ var GameEventManager = function(room) {
     
     this.on('hero-buff', function(data){
         room.broadcast('hero-buff', data);
-        console.log('hero-buff', data);
-    });
-    
-    this.on('hero-nerf', function(data){
-        room.broadcast('hero-nerf', data);
-        console.log('hero-nerf', data);
     });
     
     this.on('hero-dead', function(data){
@@ -161,13 +153,11 @@ var GameEventManager = function(room) {
     this.on('tower-buff', function(data){
         data.tid = data.id;
         room.broadcast('tower-buff', data);
-        console.log('tower-buff', data);
     });
     
-    this.on('tower-nerf', function(data){
+    this.on('tower-state', function(data) {
         data.tid = data.id;
-        room.broadcast('tower-nerf', data);
-        console.log('tower-nerf', data);
+        room.broadcast('tower-state', data);
     });
     
     this.on('tower-hp-update', function(data){
@@ -187,13 +177,11 @@ var GameEventManager = function(room) {
     this.on('blocker-buff', function(data){
         data.bid = data.id;
         room.broadcast('blocker-buff', data);
-        console.log('blocker-buff', data);
     });
     
-    this.on('blocker-nerf', function(data){
+    this.on('blocker-state', function(data) {
         data.bid = data.id;
-        room.broadcast('blocker-nerf', data);
-        console.log('blocker-nerf', data);
+        room.broadcast('blocker-state', data);
     });
     
     this.on('blocker-hp-update', function(data){

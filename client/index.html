@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+    	<script type="text/javascript" src="js/es6-shim.min.js"></script>
         <script type="text/javascript" src="js/jquery.min.js"></script>
         <script type="text/javascript" src="js/createjs-2015.11.26.min.js"></script>
         <script type="text/javascript" src="/socket.io/socket.io.js"></script>
@@ -43,6 +44,13 @@
                 stage.on('stagemousedown', function(evt, data){
                     socket.emit('click', {x: evt.stageX, y: evt.stageY, button: evt.nativeEvent.button});
                 })
+            	
+            	var compatibility = new createjs.Text("Your browser do not support ES6,\nPlease use the lastest version of Chrome.", "24px Arial", "#666666");
+            	compatibility.x = canvas.width / 2;
+            	compatibility.y = canvas.height / 2;
+            	compatibility.textAlign = 'center';
+            	stage.addChild(compatibility);
+            	stage.update();
             	
             	initGame(socket);
             }

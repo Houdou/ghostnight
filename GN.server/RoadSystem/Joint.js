@@ -115,12 +115,15 @@ Joint.prototype.getDests = function(from) {
     return dests;
 }
 
-Joint.prototype.FindNearestTower = function(range) {
+Joint.prototype.FindNearestTower = function(range, includeBlocker) {
+    includeBlocker = includeBlocker || false;
     var tower = null;
     var d = 9999;
     for(var i = 0; i < this.distances.length; i++) {
         if(this.GM.slots[i].tower != null) {
             if(!this.GM.slots[i].tower.isDead && this.distances[i] <= range && this.distances[i] < d) {
+                // Include blocker or not
+                if(!includeBlocker && this.GM.slots[i].tower.isBlocker) { continue; }
                 tower = this.GM.slots[i].tower;
                 d = this.distances[i];
             }

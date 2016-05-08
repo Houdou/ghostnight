@@ -17,6 +17,9 @@ var gn = function(stage, socket) {
 	this.manifest = [];
 	this.layout = [];
 	this.assets = {};
+	this.collectionAssetsLoaded = false;
+	this.collectionItem = '';
+	this.collectionPanel = '';
 	this.mapData = null;
 	
 	// Game Elements
@@ -281,7 +284,7 @@ gn.prototype.ParseLayout = function(element, draw) {
 								DATA.data = new Object();
 								DATA.data.jid = this.FindNearestJoint(event.stageX, event.stageY, data.maxDistance);
 								this.socket.emit(element.event, DATA)
-							}, null, true, {maxDistance: 50})
+							}, null, true, {maxDistance: 100})
 					}, element.data, draw, element.scale);
 				case 'sid':
 					return this.BuildImageButton(element.name, element.srcID, element.x, element.y,
@@ -294,7 +297,7 @@ gn.prototype.ParseLayout = function(element, draw) {
 								DATA.data = new Object();
 								DATA.data.sid = this.FindNearestSlot(event.stageX, event.stageY, data.maxDistance);
 								this.socket.emit(element.event, DATA)
-							}, null, true, {maxDistance: 70})
+							}, null, true, {maxDistance: 120})
 					}, element.data, draw, element.scale);
 				default: break;
 			}
@@ -343,7 +346,13 @@ gn.prototype.BuildMenu = function() {
 	
 	// Collection
 	// To-Do
-	var btnC = this.BuildTextButton('button-main-c', 1200, 338, 244, 55, 0, ()=>{console.log("c")}, null, false);
+	var btnC = this.BuildTextButton('button-main-c', 1200, 338, 244, 55, 0, ()=>{
+		if(!this.collectionAssetsLoaded) {
+			this.LoadCollection();
+		} else {
+			this.ShowCollectionList();
+		}
+	}, null, false);
 	btnC.alpha = 0;
 	cMenu.addChild(btnC);
 	
@@ -358,7 +367,7 @@ gn.prototype.BuildMenu = function() {
 	this.panel['main'] = cMenu;
 	stage.addChild(cMenu);
 	
-	// SP Panel
+	// SP Panel {
 	var cSP = new createjs.Container();
 	cSP.x = 1280;
 	var panelbgSP = new createjs.Bitmap(this.assets['assets-bg-panel']);
@@ -413,8 +422,9 @@ gn.prototype.BuildMenu = function() {
 	this.panel['SPRM'] = cSPRM;
 	cSPRM.alpha = 0;
 	cSP.addChild(cSPRM);
+	// }
 	
-	// MP Panel
+	// MP Panel {
 	var cMP = new createjs.Container();
 	cMP.x = 1280;
 	var panelbg = new createjs.Bitmap(this.assets['assets-bg-panel']);
@@ -506,6 +516,7 @@ gn.prototype.BuildMenu = function() {
 	this.panel['MPRM'] = cMPRM;
 	cMPRM.alpha = 0;
 	cMP.addChild(cMPRM);
+	// }
 	
 	stage.update();
 }
@@ -536,8 +547,145 @@ gn.prototype.HidePanel = function(event, data) {
 		.to(data.state, data.time, data.ease);
 	if(data.callback != null)
 		tween.call(data.callback);
-};
-
+}
+gn.prototype.LoadCollection = function() {
+	var collectionPreload = new createjs.LoadQueue(true, './assets/img/cp/');
+	var collectionManifest = [
+		{"src": "cp-bg.png", "id": "assets-collection-bg"},
+		{"src": "cp-list-circle-red.png", "id": "assets-collection-list-circle-red"},
+		{"src": "cp-list-circle-blue.png", "id": "assets-collection-list-circle-blue"},
+		{"src": "cp-list-cover.png", "id": "assets-collection-list-cover"},
+		{"src": "cp-list.png", "id": "assets-collection-list"},
+		{"src": "cp-list-ghost.png", "id": "assets-collection-list-ghost"},
+		{"src": "cp-to-human.png", "id": "assets-collection-to-human"},
+		{"src": "cp-list-human.png", "id": "assets-collection-list-human"},
+		{"src": "cp-to-ghost.png", "id": "assets-collection-to-ghost"}
+	];
+	
+	collectionPreload.on('progress', (event) => {
+		this.progressBar.scaleX = event.progress;
+		stage.update();
+	});
+	collectionPreload.on("fileload", (event) => {
+		this.assets[event.item.id] = event.target.getResult(event.item.id);
+	});
+	collectionPreload.on("complete", (event) => {
+		this.collectionAssetsLoaded = true;
+		this.ShowCollectionList();
+	});
+	
+	
+	createjs.Tween.get(stage)
+		.to({alpha: 0}, 400)
+		.call(() => {
+			stage.removeAllChildren();
+			stage.clear();
+			
+			this.BuildProgressBar();
+			collectionPreload.loadManifest(collectionManifest);
+			stage.alpha = 1;
+		});
+}
+gn.prototype.ShowCollectionList = function() {
+	var cCP = new createjs.Container();
+	cCP.alpha = 0;
+	
+	var layout = [
+		{
+			name: "Todomeki",
+		}
+	];
+	
+	var bg = new createjs.Bitmap(this.assets['assets-collection-bg']);
+	cCP.addChild(bg);
+	
+	var btnBackCP = this.BuildTextButton('button-back', 1200, 36, 89, 43, 0,
+		this.BuildMenu, null, false, 0.8);
+	cCP.addChild(btnBackCP);
+	
+	var cover = new createjs.Bitmap(this.assets['assets-collection-list-cover']);
+	cover.name = 'cover';
+	cCP.addChild(cover);
+	
+	var nameList = new createjs.Bitmap(this.assets['assets-collection-list']);
+	nameList.name = 'nameList';
+	nameList.alpha = 0;
+	cCP.addChild(nameList);
+	
+	// list circle {
+	var cLPM = new createjs.Container(); // List Panel Main
+	
+	var ghostNameList = ['Nekomata','Ameonna','Todomeki',
+        'Kappa','Wanyudo','Foxfire','Dojoji','Futakuchi','Raiju','Ubume'];
+    var humanNameList = ['Miko','Inari','Inugami','Ebisu','Snake','Asura','Amaterasu',
+    	'Ensigns','Thorns'];
+    	
+    var listItems = [];
+	
+	var posX = 364, dx = 80;
+	ghostNameList.forEach((u) => {
+		// Circle image
+		var btn = new createjs.Bitmap(this.assets['assets-collection-list-circle-red']);
+		btn.name = 'item-' + u;
+		btn.on('click', () => {
+			console.log('Move to details: ' + u);
+		});
+		btn.regX = 12; 
+		btn.regY = 12;
+		btn.x = posX;
+		btn.y = 180;
+		posX += dx;
+		// hitArea
+		var hit = new createjs.Shape();
+		hit.graphics.beginFill('#000').drawRect(0, 0, 60, 185); // To-Do : use layout data
+		btn.hitArea = hit;
+		
+		listItems.push(btn);
+		cLPM.addChild(btn);
+	});
+	posX = 546;
+	humanNameList.forEach((u) => {
+		// Circle image
+		var btn = new createjs.Bitmap(this.assets['assets-collection-list-circle-blue']);
+		btn.name = 'item-' + u;
+		btn.on('click', () => {
+			console.log('Move to details: ' + u);
+		});
+		btn.regX = 12; 
+		btn.regY = 12;
+		btn.x = posX;
+		btn.y = 442;
+		posX += dx;
+		// hitArea
+		var hit = new createjs.Shape();
+		hit.graphics.beginFill('#000').drawRect(0, 0, 60, 185); // To-Do : use layout data
+		btn.hitArea = hit;
+		
+		listItems.push(btn);
+		cLPM.addChild(btn);
+	});
+	// }
+	cLPM.alpha = 0;
+	cCP.addChild(cLPM);
+	
+	stage.addChild(cCP);
+	stage.update();
+	
+	// Animation
+	createjs.Tween.get(cCP)
+		.to({alpha: 0.7}, 500)
+		.call(() => {
+			createjs.Tween.get(cCP)
+				.to({alpha: 1}, 200);
+				
+			createjs.Tween.get(nameList)
+				.to({alpha: 1}, 600);
+				
+			createjs.Tween.get(cLPM)
+				.to({alpha: 1}, 600);
+		});
+		
+}
 // Build
 gn.prototype.BuildRoadSign = function(data) {
 	var imgstick = this.assets['assets-road-stick'];
@@ -556,7 +704,7 @@ gn.prototype.BuildRoadSign = function(data) {
 	sign.regY = 10;
 	sign.y = -53;
 	
-	sign.on('click', ()=>{
+	sign.on('click', () => {
 		this.socket.emit('switch-roadsign', {rid: data.rid});
 	})
 	
@@ -826,7 +974,9 @@ gn.prototype.BuildEnsign = function(data) {
 	
 	c.addChild(unit);
 	
-	// To-Do show range
+	var effectContainer = new createjs.Container();
+	effectContainer.name = 'effect';
+	c.addChild(effectContainer);
 	
 	c.x = this.mapData.joints[+data.jid].x;
 	c.y = this.mapData.joints[+data.jid].y;
@@ -834,6 +984,28 @@ gn.prototype.BuildEnsign = function(data) {
 	this.ensigns[data.eid] = c;
 	this.objects.addChild(c);
 	stage.update();
+	
+	this.DisplayEffect({
+		tag : 'ensign',
+		eid : data.eid,
+		
+		effectName : 'ensign-' + data.type,
+		width : 200,
+		height : 200,
+		
+		InitProperties : {
+			alpha : 0,
+			scaleX : 0,
+			scaleY : 0
+		},
+		
+		EnterAnimationProperties : {alpha: 1, scaleX: 1, scaleY: 1},
+		EnterAnimationTime : 600,
+		Ease : createjs.Ease.quartInOut,
+		Duration : 400,
+		LeaveAnimationProperties : {alpha: 0},
+		LeaveAnimationTime : 200
+	});
 }
 gn.prototype.BuildBlocker = function(data) {
 	var img = this.assets['assets-' + data.type];
@@ -1042,6 +1214,8 @@ gn.prototype.DisplayEffect = function(data) {
 		case 'blocker':
 			c = this.blockers[data.bid];
 			break;
+		case 'ensign':
+			c = this.ensigns[data.eid];
 		default:
 			break;
 	}
@@ -1169,48 +1343,55 @@ gn.prototype.GameEnd = function(data) {
 	
 	// Button back to main menu
 	var btnBack = this.BuildImage('button-back-gameend', 640, 540, 167, 78, 0, ()=>{
+		// Currently refresh the page to reload thing.
+		window.location.reload();
+		
 		stage.removeAllChildren();
 		
-		// Reset
-		this.roomNoSP = -1;
-		this.roomNoMP = -1;
-		this.playerIndex = -1;
-		this.mode = '';
-		this.side = null;
-		this.opposite = null;
-		this.map = null;
-		this.onKeys = [];
+		if(this.side == 'ghost') {
+			stage.off('stagemousedown', this.heroMovement);
+		}
 		
-		this.manifest = [];
-		this.layout = [];
-		this.mapData = null;
+		// // Reset
+		// this.roomNoSP = -1;
+		// this.roomNoMP = -1;
+		// this.playerIndex = -1;
+		// this.mode = '';
+		// this.side = null;
+		// this.opposite = null;
+		// this.map = null;
+		// this.onKeys = [];
 		
-		// Game Elements
-		this.objects = new createjs.Container();
-		this.effects = new createjs.Container();
-		this.units = [];
-		this.hero = null;
-		this.heroName = null;
-		this.towers = [];
-		this.blockers = [];
-		this.ensigns = [];
-		this.roadsigns = [];
-		this.goals = [];
-		this.gold = 0;
-		this.soul = 0;
+		// this.manifest = [];
+		// this.layout = [];
+		// this.mapData = null;
 		
-		// UI
-		this.currentMenu = "main";
-		this.progressBar = null;
-		this.inputState = 'normal';
-		this.UI = [];
-		this.Text = [];
-		this.panel = [];
-		this.currentPanel = '';
+		// // Game Elements
+		// this.objects = new createjs.Container();
+		// this.effects = new createjs.Container();
+		// this.units = [];
+		// this.hero = null;
+		// this.heroName = null;
+		// this.towers = [];
+		// this.blockers = [];
+		// this.ensigns = [];
+		// this.roadsigns = [];
+		// this.goals = [];
+		// this.gold = 0;
+		// this.soul = 0;
 		
-		// Rebuild
-		this.BuildProgressBar();
-		this.BuildMenu();
+		// // UI
+		// this.currentMenu = "main";
+		// this.progressBar = null;
+		// this.inputState = 'normal';
+		// this.UI = [];
+		// this.Text = [];
+		// this.panel = [];
+		// this.currentPanel = '';
+		
+		// // Rebuild
+		// this.BuildProgressBar();
+		// this.BuildMenu();
 	}, null, false);
 	btnBack.alpha = 0;
 	stage.addChild(btnBack);
@@ -1398,7 +1579,7 @@ function initGame(socket){
 			{"src": "img/bg/panel-shadow.png", "id": "assets-bg-panel"},
 			{"src": "img/icons/checkmark-red.png", "id": "assets-icon-checkmark-red"},
 			{"src": "img/icons/checkmark-blue.png", "id": "assets-icon-checkmark-blue"},
-			{"src": "img/icons/circle.png", "id": "assets-icon-circle"},
+			{"src": "img/icons/circle-red.png", "id": "assets-icon-circle"},
 			{"src": "img/text-buttons/main-menu-c.png", "id": "button-main-c"},
 			{"src": "img/text-buttons/main-menu-sp.png", "id": "button-main-sp"},
 			{"src": "img/text-buttons/main-menu-mp.png", "id": "button-main-mp"},
@@ -1606,6 +1787,30 @@ function initGame(socket){
 			gnclient.BuffEffect(data);
 	});
 	
+	socket.on('unit-state', function(data) {
+		if(data.state == 'sound') {
+			data.effectName = 'sound';
+			data.width = 64;
+			data.height = 64;
+			data.InitProperties = {
+				alpha: 0,
+				x : 0,
+				y : -20,
+				scaleX: 0,
+				scaleY: 0
+			};
+			
+			data.EnterAnimationProperties = {alpha: 1, scaleX: 1, scaleY: 1};
+			data.EnterAnimationTime = 400;
+			data.Ease = createjs.Ease.quartOut;
+			data.Duration = 1000;
+			data.LeaveAnimationProperties = {alpha: 0, scaleX: 0, scaleY: 0};
+			data.LeaveAnimationTime = 400;
+			
+			gnclient.DisplayEffect(data);
+		}
+	});
+	
 	socket.on('unit-dead', function(data) {
 		gnclient.RemoveUnit(data);
 	});
@@ -1627,25 +1832,28 @@ function initGame(socket){
 		// Effect
 		switch (gnclient.heroName + '-Skill' + data.skillID) {
 			case 'Nekomata-Skill1':
-				data.tag = data.targetTag;
-				data.effectName = 'shield';
-				data.width = 200;
-				data.height = 200;
+				data.tag = data.skillData.tag;
+				data.tid = data.skillData.tid;
+				data.bid = data.skillData.bid;
+				
+				data.effectName = 'scratch';
+				data.width = 64;
+				data.height = 64;
 				
 				data.InitProperties = {
 					alpha : 0,
-					x : 0,
-					y : -15,
-					scaleX : 0,
-					scaleY : 0
+					x : 25,
+					y : -60,
+					scaleX : 0.6,
+					scaleY : 0.6
 				};
 				
-				data.EnterAnimationProperties = {alpha: 1, scaleX: 1, scaleY: 1};
-				data.EnterAnimationTime = 600;
-				data.Ease = createjs.Ease.quartInOut;
-				data.Duration = 10000;
-				data.LeaveAnimationProperties = {alpha: 0, scaleX: 0, scaleY: 0};
-				data.LeaveAnimationTime = 400;
+				data.EnterAnimationProperties = {alpha: 1, x: 0, y: -20, scaleX: 1, scaleY: 1};
+				data.EnterAnimationTime = 300;
+				data.Ease = createjs.Ease.none;
+				data.Duration = 0;
+				data.LeaveAnimationProperties = {alpha: 0, x: -25, y: 0, scaleX: 0.6, scaleY: 0.6};
+				data.LeaveAnimationTime = 300;
 				
 				gnclient.DisplayEffect(data);
 				break;
@@ -1663,11 +1871,11 @@ function initGame(socket){
 					scaleY : 0
 				};
 				
-				data.EnterAnimationProperties = {alpha: 1, scaleX: 1, scaleY: 1};
+				data.EnterAnimationProperties = {alpha: 0.5, scaleX: 3, scaleY: 3};
 				data.EnterAnimationTime = 600;
 				data.Ease = createjs.Ease.quartInOut;
 				data.Duration = 10000;
-				data.LeaveAnimationProperties = {alpha: 0, scaleX: 0, scaleY: 0};
+				data.LeaveAnimationProperties = {alpha: 0};
 				data.LeaveAnimationTime = 400;
 				
 				gnclient.DisplayEffect(data);
@@ -1711,18 +1919,22 @@ function initGame(socket){
 	});
 	
 	socket.on('hero-dead', function(data) {
+		if(gnclient.side == 'ghost')
+			gnclient.TogglePanel('panel-Reborn');
 		gnclient.RemoveHero(data);
-		gnclient.TogglePanel('panel-Reborn');
 	});
 	
 	socket.on('hero-select', function(data) {
-		gnclient.DrawHeroSelection(data);
+		if(gnclient.side == 'ghost')
+			gnclient.DrawHeroSelection(data);
 	})
 	
 	socket.on('hero-reborn', function(data) {
-		gnclient.RemoveHeroRebornCD();
+		if(gnclient.side == 'ghost') {
+			gnclient.RemoveHeroRebornCD();
+			gnclient.TogglePanel('panel-' + data.type);
+		}
 		gnclient.BuildHero(data);
-		gnclient.TogglePanel('panel-' + data.type);
 	});
 	
 	socket.on('hero-reborn-cd', function(data) {
@@ -1748,6 +1960,53 @@ function initGame(socket){
 		gnclient.BuffEffect(data);
 	});
 	
+	socket.on('tower-state', function(data) {
+		if(data.state == 'fire') {
+			data.effectName = 'thunder';
+			data.width = 64;
+			data.height = 64;
+			
+			data.InitProperties = {
+				alpha : 0,
+				x : 0,
+				y : -40,
+				scaleX : 0,
+				scaleY : 0
+			};
+			
+			data.EnterAnimationProperties = {alpha: 1, y: -54, scaleX: 1, scaleY: 1};
+			data.EnterAnimationTime = 500;
+			data.Ease = createjs.Ease.quartInOut;
+			data.Duration = 5000;
+			data.LeaveAnimationProperties = {alpha: 0, y: -78};
+			data.LeaveAnimationTime = 200;
+			
+			gnclient.DisplayEffect(data);
+		}
+		if(data.state == 'paralyzed') {
+			data.effectName = 'paralyzed';
+			data.width = 64;
+			data.height = 64;
+			
+			data.InitProperties = {
+				alpha : 0,
+				x : 0,
+				y : -15,
+				scaleX : 0,
+				scaleY : 0
+			};
+			
+			data.EnterAnimationProperties = {alpha: 1, scaleX: 1, scaleY: 1};
+			data.EnterAnimationTime = 600;
+			data.Ease = createjs.Ease.quartInOut;
+			data.Duration = 5000;
+			data.LeaveAnimationProperties = {alpha: 0, scaleX: 0, scaleY: 0};
+			data.LeaveAnimationTime = 400;
+			
+			gnclient.DisplayEffect(data);
+		}
+	});
+	
 	socket.on('tower-hp-update', function(data) {
 		gnclient.UpdateHPBar(data);
 	});
@@ -1764,6 +2023,31 @@ function initGame(socket){
 	
 	socket.on('blocker-buff', function(data) {
 		gnclient.BuffEffect(data);
+	});
+	
+	socket.on('blocker-state', function(data) {
+		if(data.state == 'fire') {
+			data.effectName = 'thunder';
+			data.width = 64;
+			data.height = 64;
+			
+			data.InitProperties = {
+				alpha : 0,
+				x : 0,
+				y : -10,
+				scaleX : 0,
+				scaleY : 0
+			};
+			
+			data.EnterAnimationProperties = {alpha: 1, y: -24, scaleX: 1, scaleY: 1};
+			data.EnterAnimationTime = 500;
+			data.Ease = createjs.Ease.quartInOut;
+			data.Duration = 5000;
+			data.LeaveAnimationProperties = {alpha: 0, y: -48};
+			data.LeaveAnimationTime = 200;
+			
+			gnclient.DisplayEffect(data);
+		}
 	});
 	
 	socket.on('blocker-hp-update', function(data) {

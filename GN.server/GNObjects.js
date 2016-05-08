@@ -7,54 +7,54 @@ var Weather = require('./Statics/Weather');
 //Values
 const _HERO = {
     Nekomata: {
-        hp: 1800, atk: 220, range: 75, rate: 1, def: 10, spd: 80 / 50, price: 200, value: 200, layer: Layers.land },
+        hp: 1900, atk: 210, range: 100, rate: 1, def: 20, spd: 80 / 50, price: 200, value: 300, layer: Layers.land },
     Ameonna: {
-        hp: 1500, atk: 170, range: 100, rate: 1, def: 30, spd: 70 / 50, price: 200, value: 200, layer: Layers.land },
+        hp: 1400, atk: 170, range: 100, rate: 1, def: 30, spd: 75 / 50, price: 200, value: 300, layer: Layers.land },
     Todomeki: {
-        hp: 1800, atk: 200, range: 150, rate: 1, def: 20, spd: 80 / 50, price: 200, value: 200, layer: Layers.land }
+        hp: 1700, atk: 190, range: 125, rate: 1, def: 30, spd: 65 / 50, price: 200, value: 300, layer: Layers.land }
 };
 
 const _UNIT = {
     Kappa: {
-        hp: 700, atk: 100, range: 75, rate: 1.5, def: 10, spd: 60 / 50, price: 80, value: 100, layer: Layers.land },
+        hp: 700, atk: 100, range: 75, rate: 1.5, def: 10, spd: 60 / 50, price: 100, value: 120, layer: Layers.land },
     Wanyudo: {
-        hp: 700, atk: 250, range: 125, rate: 0.75, def: 20, spd: 100 / 50, price: 100, value: 120, layer: Layers.land },
+        hp: 900, atk: 500, range: 125, rate:1, def: 20, spd: 100 / 50, price: 140, value: 160, layer: Layers.land },
     Foxfire: {
-        hp: 800, atk: 130, range: 75, rate: 1, def: 10, spd: 70 / 50, price: 120, value: 140, layer: Layers.sky },
+        hp: 800, atk: 130, range: 75, rate: 1, def: 10, spd: 70 / 50, price: 140, value: 160, layer: Layers.sky },
     Dojoji: {
-        hp: 1400, atk: 80, range: 125, rate: 1.5, def: 35, spd: 65 / 50, price: 140, value: 160, layer: Layers.land },
+        hp: 1200, atk: 80, range: 125, rate: 1.25, def: 35, spd: 55 / 50, price: 180, value: 200, layer: Layers.land },
     Futakuchi: {
-        hp: 600, atk: 120, range: 75, rate: 0.5, def: 30, spd: 50 / 50, price: 160, value: 180, layer: Layers.land },
+        hp: 600, atk: 120, range: 75, rate: 0.5, def: 30, spd: 45 / 50, price: 180, value: 200, layer: Layers.land },
     Raiju: {
-        hp: 1100, atk: 200, range: 100, rate: 0.75, def: 20, spd: 65 / 50, price: 180, value: 200, layer: Layers.land },
+        hp: 1100, atk: 200, range: 100, rate: 0.75, def: 20, spd: 65 / 50, price: 220, value: 240, layer: Layers.land },
     Ubume: {
-        hp: 1100, atk: 150, range: 100, rate: 1, def: 20, spd: 90 / 50, price: 200, value: 220, layer: Layers.sky }
+        hp: 1000, atk: 150, range: 100, rate: 1, def: 20, spd: 90 / 50, price: 220, value: 240, layer: Layers.sky }
 };
 
 const _ENSIGN = {
     Atk:{
-        buff: 'atk', radius: 100, duration: 10, price: 400},
+        buff: 'atk', radius: 100, duration: 10, price: 300},
     Def:{
-        buff: 'def', radius: 100, duration: 10, price: 400},
+        buff: 'def', radius: 100, duration: 10, price: 300},
     Range:{
-        buff: 'range', radius: 100, duration: 10, price: 400}
+        buff: 'range', radius: 100, duration: 10, price: 300}
 };
 
-const _TOWER = { // rangeIndex: {100: 1, 125: 1.5, 150: 2, 175: 2.5, 200: 3}
+const _TOWER = { // rangeIndex: {75: 0.5, 100: 1, 125: 1.5, 150: 2, 175: 2.5, 200: 3}
     Miko: { // 100
-        hp: 2000, atk: 100, range: 125, rate: 1.25, def: 20, spd: 1000 / 500, price: 200, value: 240, layer: Layers.land },
+        hp: 2000, atk: 100, range: 125, rate: 1.25, def: 20, spd: 1000 / 500, price: 200, value: 230, layer: Layers.land },
     Inari: { // 110
-        hp: 2300, atk: 130, range: 150, rate: 1, def: 10, spd: 1000 / 500, price: 240, value: 280, layer: Layers.land | Layers.sky },
+        hp: 2100, atk: 120, range: 150, rate: 1, def: 10, spd: 1000 / 500, price: 250, value: 280, layer: Layers.land | Layers.sky },
     Inugami: { // 140
-        hp: 1800, atk: 160, range: 125, rate: 1, def: 15, spd: 1000 / 500, price: 260, value: 300, layer: Layers.land | Layers.sky },
+        hp: 1900, atk: 150, range: 125, rate: 1, def: 15, spd: 1000 / 500, price: 300, value: 330, layer: Layers.land | Layers.sky },
     Ebisu: { // 80
-        hp: 2000, atk: 100, range: 100, rate: 1, def: 40, spd: 1000 / 500, price: 260, value: 300, layer: Layers.land },
+        hp: 2050, atk: 100, range: 100, rate: 1, def: 40, spd: 1000 / 500, price: 300, value: 330, layer: Layers.land },
     Snake: { // 125
-        hp: 2400, atk: 120, range: 150, rate: 1.25, def: 30, spd: 1000 / 500, price: 280, value: 320, layer: Layers.land },
+        hp: 2250, atk: 130, range: 150, rate: 1, def: 30, spd: 1000 / 500, price: 350, value: 380, layer: Layers.land },
     Asura: { // 135
-        hp: 2100, atk: 200, range: 100, rate: 0.75, def: 20, spd: 1000 / 500, price: 320, value: 360, layer: Layers.land },
+        hp: 2300, atk: 250, range: 100, rate: 1.5, def: 20, spd: 1000 / 500, price: 350, value: 380, layer: Layers.land },
     Amaterasu: { // 120
-        hp: 2500, atk: 180, range: 200, rate: 0.75, def: 30, spd: 1000 / 500, price: 360, value: 400, layer: Layers.land | Layers.sky }
+        hp: 2400, atk: 170, range: 200, rate: 0.75, def: 20, spd: 1000 / 500, price: 400, value: 430, layer: Layers.land | Layers.sky }
 };
 
 var Hero = require('./Hero');
@@ -79,10 +79,10 @@ var GNObjects = function(GM){
             _HERO.Nekomata.rate, _HERO.Nekomata.def, _HERO.Nekomata.spd, _HERO.Nekomata.layer, _HERO.Nekomata.price, _HERO.Nekomata.value, that.GM);
         // var
         this.scratchRadius = this.range * 1.5;
-        this.scratchAtk = 500;
+        this.scratchAtk = 800;
         // override the time here↓
-        this.skillCDTime[0] = 5000;
-        this.skillCDTime[1] = 5000;
+        this.skillCDTime[0] = 20000;
+        this.skillCDTime[1] = 10000;
     }
     Nekomata.prototype = new Hero();
     // functions
@@ -94,14 +94,14 @@ var GNObjects = function(GM){
             
             if(joint != null) {
                 // Find the nearest tower in selected position
-                var target = joint.FindNearestTower(this.scratchRadius);
+                var target = joint.FindNearestTower(this.scratchRadius, true);
                 
                 if (target != null) {
                     // Skill damage to modified
                     var dmg = Math.max(this.scratchAtk - target.def, this.GM.settings.MinDamage);
-                    target.DealDamage(this, dmg);
-                    this.usedSkill(0);
                     
+                    target.DealDamage(this, dmg);
+                    this.usedSkill(0, {tag: Tags[target.tag], tid: target.tid, bid: target.bid});
                     return true;
                 }
             } else {
@@ -168,14 +168,15 @@ var GNObjects = function(GM){
         Hero.call(this, "Ameonna", that.GM.assignHeroID(), Tags.hero, x, y, joint, _HERO.Ameonna.hp, _HERO.Ameonna.atk, _HERO.Ameonna.range,
             _HERO.Ameonna.rate, _HERO.Ameonna.def, _HERO.Ameonna.spd, _HERO.Ameonna.layer, _HERO.Ameonna.price, _HERO.Ameonna.value, that.GM);
         // var
-        this.healAmount = 200;
-        this.rainDuration = 10000;
-        this.shieldRadius = 300;
-        this.shieldDuration = 10000;
+        this.healAmount = 300;
+        this.rainDuration = 5;
+        this.shieldRadius = 250;
+        this.sheldRate = 3;
+        this.shieldDuration = 7500;
         
         // override the time here↓
-        this.skillCDTime[0] = 5000;
-        this.skillCDTime[1] = 5000;
+        this.skillCDTime[0] = 10000;
+        this.skillCDTime[1] = 20000;
     }
     Ameonna.prototype = new Hero();
     // functions
@@ -204,10 +205,10 @@ var GNObjects = function(GM){
     // Skill 1 - Shield
     Ameonna.prototype.Shield = function() {
         if(this.canUseSkill(1)) {
-            this.Buff('def', 3, this.shieldDuration / 1000);
+            this.Buff('def', this.sheldRate, this.shieldDuration / 1000);
             this.GM.units.forEach((u) => {
                 if(u.transform.DistanceTo(this.transform) < this.shieldRadius) {
-                    u.Buff('def', 3, this.shieldDuration / 1000);
+                    u.Buff('def', this.sheldRate, this.shieldDuration / 1000);
                 }
             });
             this.usedSkill(1);
@@ -238,10 +239,11 @@ var GNObjects = function(GM){
         // var
         
         this.EyeBombAtk = 300;
+        this.ParalyzeDuration = 5000;
         
         // override the time here↓
-        this.skillCDTime[0] = 5000;
-        this.skillCDTime[1] = 5000;
+        this.skillCDTime[0] = 10000;
+        this.skillCDTime[1] = 20000;
     }
     Todomeki.prototype = new Hero();
     // functions
@@ -253,11 +255,11 @@ var GNObjects = function(GM){
             
             if(joint != null) {
                 // Find the nearest tower in selected position
-                var target = joint.FindNearestTower(this.range * 1.5);
+                var target = joint.FindNearestTower(this.range * 1.5, false);
                 
                 if (target != null) {
-                    target.setState(States.paralyzed);
-                    this.usedSkill(0);
+                    target.setState(this, States.paralyzed, this.ParalyzeDuration);
+                    this.usedSkill(0, {tag: Tags[target.tag], tid: target.tid, bid: target.bid});
                 } else {
                     // Failed to use skill: No target in range
                 }
@@ -317,9 +319,6 @@ var GNObjects = function(GM){
     }
     Kappa.prototype = new Unit();
     // functions
-    Kappa.prototype.funA = function() {
-        //...
-    }
     
     this.Kappa = Kappa;
     
@@ -389,36 +388,35 @@ var GNObjects = function(GM){
     Foxfire.prototype.Move = function () {
         if(this.joint != null) {
             var j = this.joint;
-            var that = this;
             
             // DEBUG
             console.log(this.name + " will move to " + j.name);
             // DEBUG
             
-            this.MoveTo(j.transform.x, j.transform.y, function() {
-                if(that.isDead)
+            this.MoveTo(j.transform.x, j.transform.y, () => {
+                if(this.isDead)
                     return false;
                 
                 // DEBUG
-                console.log(that.name + " arrive at " + j.name);
+                console.log(this.name + " arrive at " + j.name);
                 // DEBUG
                 
                 // Notice the Joint and get blocker (if exist)
-                var blocker = j.SteppedBy(that);
+                var blocker = j.SteppedBy(this);
                 // Ignore blocker and move to next joint
-                if(j.Next() != null && that.canMove) {
-                    that.joint = j.Next();
-                    that.Move();
+                if(j.Next() != null && this.canMove) {
+                    this.joint = j.Next();
+                    this.Move();
                 } else {
                     if(j.dest == null)
-                        that.End(j.jid);
+                        this.End(j.jid);
                 }
                 
                 // Find the nearest tower
-                var target = j.FindNearestTower(that.range);
-                that.target = target;
-                if(target != null && !that.isAttacking) {
-                    that.Attack();
+                var target = j.FindNearestTower(this.range, true);
+                this.target = target;
+                if(target != null && !this.isAttacking) {
+                    this.Attack();
                 }
             });
         }
@@ -442,6 +440,7 @@ var GNObjects = function(GM){
     Dojoji.prototype.didAttackedTarget = function(target, dmg) {
         if(Math.random() > (1 - this.nerfPossibility)) {
             target.Nerf('def', this.nerfRate, this.nerfDuration);
+            this.GM.GEM.emit(Tags[this.tag] + '-state', {id: this.id, tag: Tags[this.tag], state: States[States.sound]});
         }
     }
     
@@ -471,7 +470,7 @@ var GNObjects = function(GM){
             // Decrease the attack rate
             this.rate = 0.05;
             // Increase value for reward
-            this.Buff('value', 2, 10);
+            // this.Buff('value', 2, 10);
             return true;
         }
     }
@@ -484,8 +483,8 @@ var GNObjects = function(GM){
         Unit.call(this, "Raiju-" + this.uid, this.uid, Tags.unit, x, y, joint, _UNIT.Raiju.hp, _UNIT.Raiju.atk, _UNIT.Raiju.range,
             _UNIT.Raiju.rate, _UNIT.Raiju.def, _UNIT.Raiju.spd, _UNIT.Raiju.layer, _UNIT.Raiju.price, _UNIT.Raiju.value, that.GM);
         // var
-        this.firePossibility = 0.5;
-        this.fireDuration = 5000;
+        this.firePossibility = 0.2;
+        this.fireDuration = 3100;
     }
     Raiju.prototype = new Unit();
     // functions
@@ -509,7 +508,7 @@ var GNObjects = function(GM){
         Unit.call(this, "Ubume-" + this.uid, this.uid, Tags.unit, x, y, joint, _UNIT.Ubume.hp, _UNIT.Ubume.atk, _UNIT.Ubume.range,
             _UNIT.Ubume.rate, _UNIT.Ubume.def, _UNIT.Ubume.spd, _UNIT.Ubume.layer, _UNIT.Ubume.price, _UNIT.Ubume.value, that.GM);
         // var
-        this.healRate = 0.1;
+        this.healRate = 0.25;
     }
     Ubume.prototype = new Unit();
     // functions
@@ -596,7 +595,7 @@ var GNObjects = function(GM){
     Inugami.prototype.didAttackedTarget = function(target, dmg) {
         var time = (new Date()).getTime();
         if(time - this.lastNerfTime > this.nerfInterval) {
-            target.Nerf('atk', 0.5, 4);
+            target.Nerf('atk', 0.5, 5);
             this.lastNerfTime = time;
         }
     }
@@ -610,7 +609,7 @@ var GNObjects = function(GM){
             
         this.slot = slot;
         
-        this.pullPosibility = 0.6;
+        //this.pullPosibility = 0.6;
         this.pullLastTime = -1;
         this.pullInterval = 20000;
         
@@ -637,7 +636,7 @@ var GNObjects = function(GM){
         }, this.pullInterval);
     }
     Ebisu.prototype.Skill = function() {
-        if(this.isDead) {
+        if(this.isDead || this.GM.gameover) {
             clearInterval(this.skillInterval);
             return;
         }
@@ -669,7 +668,7 @@ var GNObjects = function(GM){
             
         this.slot = slot;
         this.AOETargetsNumber = 3;
-        this.AOEAttenuation = 0.25;
+        this.AOEAttenuation = 0.75;
     }
     Snake.prototype = new Tower();
     Snake.prototype.didAttackedTarget = function(target, dmg) {

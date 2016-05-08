@@ -36,34 +36,33 @@ Hero.prototype.Move = function(path) {
     
     if(this.path.length > 0) {
         var j = this.path[0];
-        var that = this;
         
-        this.MoveTo(j.transform.x, j.transform.y, function() {
-            if(that.isDead)
+        this.MoveTo(j.transform.x, j.transform.y, () => {
+            if(this.isDead)
                 return false;
             
             //Notice the joint
-            var blocker = j.SteppedBy(that);
-            that.joint = j;
+            var blocker = j.SteppedBy(this);
+            this.joint = j;
             
             // If blocked
             if(blocker != null) {
                 // The unit will stay at the same position
-                that.Move(that.path);
+                this.Move(this.path);
             } else {
                 // Move to next joint on path
-                if(that.path.length > 0 && that.canMove) {
-                    if(that.path.length > 1)
-                        that.path.shift();
-                    that.Move(that.path);
+                if(this.path.length > 0 && this.canMove) {
+                    if(this.path.length > 1)
+                        this.path.shift();
+                    this.Move(this.path);
                 }
             }
             
             // Get the nearest tower
-            var target = j.FindNearestTower(that.range);
-            that.target = target;
-            if(target != null && !that.isAttacking) {
-                that.Attack();
+            var target = j.FindNearestTower(this.range, true);
+            this.target = target;
+            if(target != null && !this.isAttacking) {
+                this.Attack();
             }
         });
     }
@@ -97,9 +96,9 @@ Hero.prototype.ResetSkill = function() {
 Hero.prototype.canUseSkill = function(skillID) {
     return (new Date().getTime() > this.skillLastTime[skillID] + this.skillCDTime[skillID]);
 }
-Hero.prototype.usedSkill = function(skillID) {
+Hero.prototype.usedSkill = function(skillID, skillData) {
     this.skillLastTime[skillID] = (new Date()).getTime();
-    this.GM.GEM.emit('hero-skill', {skillID: +skillID + 1, duration: this.skillCDTime[skillID]});
+    this.GM.GEM.emit('hero-skill', {skillID: +skillID + 1, duration: this.skillCDTime[skillID], skillData: skillData || {}});
     this.GM.GEM.emit('hero-skill-cd', {skillID: +skillID + 1, duration: this.skillCDTime[skillID]});
 }
 module.exports = Hero;

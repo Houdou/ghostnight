@@ -1,3 +1,5 @@
+require('es6-shim');
+
 var http = require('http');
 var path = require('path');
 
@@ -198,12 +200,12 @@ function startGame(roomNo){
 	var GEM = new GameEventManager(room);
 	var settings = {
 		MinDamage: 5,
-		TimeLimit: 180,
+		TimeLimit: 120,
 		Room: roomNo, 
 		debug: true,
 		soul: 1000,
 		gold: 2000,
-		soulIncreasing: { value: 10, interval: 10}
+		soulIncreasing: { value: 5, interval: 2}
 		
 	};
 	// Create the game server

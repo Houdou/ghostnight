@@ -28,43 +28,42 @@ Unit.prototype.MoveTo = function(x, y, end) {
 Unit.prototype.Move = function () {
     if(this.joint != null) {
         var j = this.joint;
-        var that = this;
         
         // DEBUG
         console.log(this.name + " will move to " + j.name);
         // DEBUG
         
-        this.MoveTo(j.transform.x, j.transform.y, function() {
-            if(that.isDead)
+        this.MoveTo(j.transform.x, j.transform.y, () => {
+            if(this.isDead)
                 return false;
             
             // DEBUG
-            console.log(that.name + " arrive at " + j.name);
+            console.log(this.name + " arrive at " + j.name);
             // DEBUG
             
             // Notice the Joint and get blocker (if exist)
-            var blocker = j.SteppedBy(that);
+            var blocker = j.SteppedBy(this);
             // If blocked
             if(blocker != null) {
                 // The unit will stay at the same position
-                that.Move();
+                this.Move();
             } else {
                 // Move to next joint
-                if(j.Next() != null && that.canMove) {
-                    that.joint = j.Next();
-                    that.Move();
+                if(j.Next() != null && this.canMove) {
+                    this.joint = j.Next();
+                    this.Move();
                 } else {
                     if(j.dest == null)
-                        that.End(j.jid);
+                        this.End(j.jid);
                 }
                 
             }
             
             // Get the nearest tower
-            var target = j.FindNearestTower(that.range);
-            that.target = target;
-            if(target != null && !that.isAttacking) {
-                that.Attack();
+            var target = j.FindNearestTower(this.range, true);
+            this.target = target;
+            if(target != null && !this.isAttacking) {
+                this.Attack();
             }
         });
     }
