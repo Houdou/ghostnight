@@ -33,7 +33,9 @@ Ensign.prototype.Effect = function() {
         if(t != null && !t.isDead && distances[i] < this.BuffAreaRadius) {
             // TO-DO
             // Buff the tower according the distance
-            t.Buff(this.BuffType, 2, this.BuffDuration);
+            var buffRate = 1.5;
+            if (this.BuffType == "Def") {buffRate = 2;}
+            t.Buff(this.BuffType, buffRate, this.BuffDuration);
         }
     }
     

@@ -7,6 +7,41 @@
         <script type="text/javascript" src="/socket.io/socket.io.js"></script>
         <script type="text/javascript" src="js/ghostnight-client.js"></script>
         <style>
+        	html body{
+        		margin: 0;
+        		width: 100%;
+				height: 100%;
+        	}
+        	.gn-game{
+				width: 100%;
+				height: 100%;
+				background: url('./bg-b.png') repeat;
+				position: absolute;
+        	}
+        	.gn-game:before {
+				content: '';
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+				background-image: linear-gradient(to bottom right, #6098BF, #AD6658);
+				opacity: .4;
+			}
+			.footer{
+				display: none;
+			}
+			@media(min-height: 768px) {
+				.footer{
+					bottom: 5px;
+					position: absolute;
+					text-align: center;
+					color: white;
+					height: auto;
+					width: 100%;
+					display: inherit;
+				}
+			}
             canvas{
                 left: 50%;
                 top: 50%;
@@ -16,19 +51,18 @@
         </style>
         <title>Ghost Night</title>
     </head>
-    <body style="background-color: #2D2D2D" onload="init()">
-        <canvas id="canvas" name="canvas" width="1280" height="720" style="background-color: #202020">Your browser doesn't support canvas.</canvas>
-        <a href="http://goo.gl/forms/PQLmp2gjVN" style="font-size: 48px;color:#DDDDDD">Please fill this survey</a>
-        <!--<canvas id="gamecanvas" name="gamecanvas" width="1280" height="720" style="background-color: #202020">Your browser doesn't support canvas.</canvas>-->
+    <body onload="init()">
+    	<div class="gn-game">
+        	<canvas id="canvas" name="canvas" width="1280" height="720" style="background-color: #202020">Your browser doesn't support canvas.</canvas>
+        	<div class="footer">GhostNight v1.0.0. Powered by Travis, Yuki, Mike.</div>
+        </div>
         <script>
             /*global createjs, GN, socket, io*/ 
             var canvas, stage;
             var socket;
             
             function init() {
-            	
             	canvas = document.getElementById("canvas");
-                // gamecanvas = document.getElementById("gamecanvas");
                 stage = new createjs.Stage(canvas);
             	
             	stage.autoClear = true;
@@ -40,10 +74,6 @@
                 createjs.Ticker.addEventListener("tick", stage);
                 
                 socket = io.connect();
-                
-                stage.on('stagemousedown', function(evt, data){
-                    socket.emit('click', {x: evt.stageX, y: evt.stageY, button: evt.nativeEvent.button});
-                })
             	
             	var compatibility = new createjs.Text("Your browser do not support ES6,\nPlease use the lastest version of Chrome.", "24px Arial", "#666666");
             	compatibility.x = canvas.width / 2;

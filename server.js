@@ -1,5 +1,3 @@
-require('es6-shim');
-
 var http = require('http');
 var path = require('path');
 
@@ -200,14 +198,28 @@ function startGame(roomNo){
 	var GEM = new GameEventManager(room);
 	var settings = {
 		MinDamage: 5,
-		TimeLimit: 1200,
 		Room: roomNo, 
 		debug: true,
 		soul: 1000,
 		gold: 2000,
-		soulIncreasing: { value: 5, interval: 2}
-		
+		soulIncreasing: {value: 5, interval: 2}
 	};
+	
+	switch (room.map) {
+		case 'm01':
+			settings.TimeLimit = 3 * 60;
+			break;
+		case 'm02':
+			settings.TimeLimit = 5 * 60;
+			break;
+		case 'm03':
+			settings.TimeLimit = 8 * 60;
+			break;
+		default:
+			settings.TimeLimit = 5 * 60;
+			break;
+	}
+	
 	// Create the game server
 	room.GN = new GhostNight(settings, GEM);
 	

@@ -1,15 +1,13 @@
 # TODO
 
 ## Final stage
-AI
-Music
-Refine Code
-UML Diagram
-Report
-Collection
-Tutorial
-Input hint
-Slot Hammer
+AI 											|	DONE
+Music										|	DONE
+Refine Code									|
+UML Diagram									|
+Report										|
+Collection									|	DONE
+Tutorial									|	DONE
 
 ## Design
 ### Class Design

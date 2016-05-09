@@ -6,28 +6,28 @@ var Weather = require('./Statics/Weather');
 //Values
 const _HERO = {
     Nekomata: {
-        hp: 1900, atk: 210, range: 100, rate: 1, def: 20, spd: 80 / 50, price: 200, value: 300, layer: Layers.land },
+        hp: 1900, atk: 210, range: 100, rate: 1, def: 20, spd: 100 / 50, price: 200, value: 300, layer: Layers.land },
     Ameonna: {
-        hp: 1400, atk: 170, range: 100, rate: 1, def: 30, spd: 75 / 50, price: 200, value: 300, layer: Layers.land },
+        hp: 1400, atk: 170, range: 100, rate: 1, def: 30, spd: 80 / 50, price: 200, value: 300, layer: Layers.land },
     Todomeki: {
-        hp: 1700, atk: 190, range: 125, rate: 1, def: 30, spd: 65 / 50, price: 200, value: 300, layer: Layers.land }
+        hp: 1700, atk: 190, range: 125, rate: 1, def: 30, spd: 70 / 50, price: 200, value: 300, layer: Layers.land }
 };
 
 const _UNIT = {
     Kappa: {
-        hp: 700, atk: 100, range: 75, rate: 1.5, def: 10, spd: 60 / 50, price: 100, value: 120, layer: Layers.land },
+        hp: 700, atk: 100, range: 75, rate: 1.5, def: 10, spd: 65 / 50, price: 100, value: 120, layer: Layers.land },
     Wanyudo: {
-        hp: 900, atk: 500, range: 125, rate:1, def: 20, spd: 100 / 50, price: 140, value: 160, layer: Layers.land },
+        hp: 900, atk: 500, range: 125, rate:1, def: 20, spd: 120 / 50, price: 130, value: 150, layer: Layers.land },
     Foxfire: {
-        hp: 800, atk: 130, range: 75, rate: 1, def: 10, spd: 70 / 50, price: 140, value: 160, layer: Layers.sky },
+        hp: 800, atk: 130, range: 75, rate: 1, def: 10, spd: 75 / 50, price: 130, value: 150, layer: Layers.sky },
     Dojoji: {
-        hp: 1200, atk: 80, range: 125, rate: 1.25, def: 35, spd: 55 / 50, price: 180, value: 200, layer: Layers.land },
+        hp: 1200, atk: 80, range: 125, rate: 1.25, def: 35, spd: 60 / 50, price: 160, value: 180, layer: Layers.land },
     Futakuchi: {
-        hp: 600, atk: 120, range: 75, rate: 0.5, def: 30, spd: 45 / 50, price: 180, value: 200, layer: Layers.land },
+        hp: 600, atk: 120, range: 75, rate: 0.5, def: 30, spd: 50 / 50, price: 160, value: 180, layer: Layers.land },
     Raiju: {
-        hp: 1100, atk: 200, range: 100, rate: 0.75, def: 20, spd: 65 / 50, price: 220, value: 240, layer: Layers.land },
+        hp: 1100, atk: 200, range: 100, rate: 0.75, def: 20, spd: 70 / 50, price: 190, value: 210, layer: Layers.land },
     Ubume: {
-        hp: 1000, atk: 150, range: 100, rate: 1, def: 20, spd: 90 / 50, price: 220, value: 240, layer: Layers.sky }
+        hp: 1000, atk: 150, range: 100, rate: 1, def: 20, spd: 100 / 50, price: 190, value: 210, layer: Layers.sky }
 };
 
 const _ENSIGN = {
@@ -39,21 +39,21 @@ const _ENSIGN = {
         buff: 'range', radius: 100, duration: 10, price: 300}
 };
 
-const _TOWER = { // rangeIndex: {75: 0.5, 100: 1, 125: 1.5, 150: 2, 175: 2.5, 200: 3}
+const _TOWER = { // rangeIndex: 75: 0.5, 100: 1, 125: 1.5, 150: 2, 175: 2.5, 200: 3
     Miko: { // 100
-        hp: 2000, atk: 100, range: 125, rate: 1.25, def: 20, spd: 1000 / 500, price: 200, value: 230, layer: Layers.land },
+        hp: 2000, atk: 105, range: 125, rate: 1.25, def: 20, spd: 1000 / 500, price: 200, value: 230, layer: Layers.land },
     Inari: { // 110
         hp: 2100, atk: 120, range: 150, rate: 1, def: 10, spd: 1000 / 500, price: 250, value: 280, layer: Layers.land | Layers.sky },
     Inugami: { // 140
-        hp: 1900, atk: 150, range: 125, rate: 1, def: 15, spd: 1000 / 500, price: 300, value: 330, layer: Layers.land | Layers.sky },
+        hp: 1900, atk: 140, range: 125, rate: 1, def: 15, spd: 1000 / 500, price: 300, value: 330, layer: Layers.land | Layers.sky },
     Ebisu: { // 80
-        hp: 2050, atk: 100, range: 100, rate: 1, def: 40, spd: 1000 / 500, price: 300, value: 330, layer: Layers.land },
+        hp: 2050, atk: 90, range: 100, rate: 1, def: 40, spd: 1000 / 500, price: 300, value: 330, layer: Layers.land },
     Snake: { // 125
-        hp: 2250, atk: 130, range: 150, rate: 1, def: 30, spd: 1000 / 500, price: 350, value: 380, layer: Layers.land },
+        hp: 2250, atk: 120, range: 150, rate: 1, def: 30, spd: 1000 / 500, price: 350, value: 380, layer: Layers.land },
     Asura: { // 135
-        hp: 2300, atk: 250, range: 100, rate: 1.5, def: 20, spd: 1000 / 500, price: 350, value: 380, layer: Layers.land },
+        hp: 2300, atk: 225, range: 100, rate: 1.5, def: 20, spd: 1000 / 500, price: 350, value: 380, layer: Layers.land },
     Amaterasu: { // 120
-        hp: 2400, atk: 170, range: 200, rate: 0.75, def: 20, spd: 1000 / 500, price: 400, value: 430, layer: Layers.land | Layers.sky }
+        hp: 2400, atk: 160, range: 200, rate: 0.75, def: 20, spd: 1000 / 500, price: 400, value: 430, layer: Layers.land | Layers.sky }
 };
 
 var Hero = require('./Hero');
@@ -61,7 +61,7 @@ var Unit = require('./Unit');
 var Tower = require('./Tower');
 var Ensign = require('./Ensign');
 
-var GNObjects = function(GM){
+var GNObjects = function(GM) {
     this.GM = GM;
     
     this._HERO = _HERO;
@@ -171,7 +171,7 @@ var GNObjects = function(GM){
         this.rainDuration = 5;
         this.shieldRadius = 250;
         this.sheldRate = 3;
-        this.shieldDuration = 7500;
+        this.shieldDuration = 7.5;
         
         // override the time here↓
         this.skillCDTime[0] = 10000;
@@ -193,7 +193,7 @@ var GNObjects = function(GM){
                 u.Heal(this, this.healAmount);
                 // Speed up Kappa
                 if(u instanceof Kappa) {
-                    u.Buff('spd', 1.5, this.rainDuration / 1000);
+                    u.Buff('spd', 2, this.rainDuration);
                 }
             });
             this.usedSkill(0);
@@ -204,10 +204,10 @@ var GNObjects = function(GM){
     // Skill 1 - Shield
     Ameonna.prototype.Shield = function() {
         if(this.canUseSkill(1)) {
-            this.Buff('def', this.sheldRate, this.shieldDuration / 1000);
+            this.Buff('def', this.sheldRate, this.shieldDuration);
             this.GM.units.forEach((u) => {
                 if(u.transform.DistanceTo(this.transform) < this.shieldRadius) {
-                    u.Buff('def', this.sheldRate, this.shieldDuration / 1000);
+                    u.Buff('def', this.sheldRate, this.shieldDuration);
                 }
             });
             this.usedSkill(1);
@@ -238,7 +238,7 @@ var GNObjects = function(GM){
         // var
         
         this.EyeBombAtk = 300;
-        this.ParalyzeDuration = 5000;
+        this.ParalyzeDuration = 5;
         
         // override the time here↓
         this.skillCDTime[0] = 10000;
@@ -483,7 +483,7 @@ var GNObjects = function(GM){
             _UNIT.Raiju.rate, _UNIT.Raiju.def, _UNIT.Raiju.spd, _UNIT.Raiju.layer, _UNIT.Raiju.price, _UNIT.Raiju.value, that.GM);
         // var
         this.firePossibility = 0.2;
-        this.fireDuration = 3100;
+        this.fireDuration = 3.1;
     };
     Raiju.prototype = new Unit();
     // functions
@@ -722,8 +722,6 @@ var GNObjects = function(GM){
     };
     this.Amaterasu = Amaterasu;
 };
-
-
 
 GNObjects.prototype.GetHeroType = function(type) {
     switch (type) {

@@ -35,7 +35,7 @@ GameUnit.prototype.Nerf = function(property, multiplier, duration){
         console.log("Nagative multiplier or duration setting");
         return false;
     }
-    // Convert (ms) into (s)
+    // Convert (s) into (ms)
     duration *= 1000;
     
     if(this[property] != undefined) {
@@ -59,6 +59,9 @@ GameUnit.prototype.Buff = GameUnit.prototype.Nerf;
 GameUnit.prototype.setState = function(from, addState, duration) {
     // Check if the unit is already in that state
     if((this.state & addState) != 0) { return false; }
+    
+    // Convert (s) into (ms)
+    duration *= 1000;
     
     // Set interval to handle the states
     this.stateUpdateInterval = setInterval(() => {

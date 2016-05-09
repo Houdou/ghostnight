@@ -583,8 +583,7 @@ gn.prototype.LoadCollection = function() {
 		{"src": "cp-Asura.png", "id": "assets-collection-details-Asura"},
 		{"src": "cp-Amaterasu.png", "id": "assets-collection-details-Amaterasu"},
 		{"src": "cp-Ensigns.png", "id": "assets-collection-details-Ensigns"},
-		{"src": "cp-Thorns.png", "id": "assets-collection-details-Thorns"},
-		
+		{"src": "cp-Thorns.png", "id": "assets-collection-details-Thorns"}
 	];
 	
 	collectionPreload.on('progress', (event) => {
@@ -1529,7 +1528,6 @@ gn.prototype.CoolDownEffect = function(data) {
 					cover.off('tick', cover._onTick);
 					// Make sure the mask is removed
 					cover.updateCache();
-					stage.update();
 				}
 				// Calculate the length of mask
 				var percentage = (time - DATA.startTime)/(DATA.duration);
@@ -1942,7 +1940,7 @@ function initGame(socket){
 	
 	socket.on('time', function(data) {
 		var time = gnclient.TimeLimit - parseInt(data.time / 1000);
-		var timeStr = parseInt(Math.floor(time / 60)) + ':' + (time % 60);
+		var timeStr = parseInt(Math.floor(time / 60)) + ':' + ('00' + (time % 60)).substr(-2, 2);
 		
 		gnclient.UpdateText('time', {
 			text: timeStr
@@ -2056,7 +2054,7 @@ function initGame(socket){
 			data.EnterAnimationProperties = {alpha: 1, scaleX: 1, scaleY: 1};
 			data.EnterAnimationTime = 400;
 			data.Ease = createjs.Ease.quartOut;
-			data.Duration = 10000;
+			data.Duration = 5000;
 			data.LeaveAnimationProperties = {alpha: 0, scaleX: 0, scaleY: 0};
 			data.LeaveAnimationTime = 400;
 			
