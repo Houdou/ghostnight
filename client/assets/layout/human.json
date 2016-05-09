@@ -13,7 +13,7 @@
 		"name": "",
 		"srcID": "assets-money",
 		"type": "static",
-		"x": 168,
+		"x": 160,
 		"y": 105,
 		"width": 19,
 		"height": 31,
@@ -26,11 +26,32 @@
 		"color": "#222222",
 		"type": "text",
 		"align": "right",
-		"x": 240,
+		"x": 224,
 		"y": 90
 	},
 	{
-		"name": "Atk\n400",
+		"text": "0:00",
+		"name": "time",
+		"size": "28px",
+		"color": "#222222",
+		"type": "text",
+		"align": "right",
+		"x": 290,
+		"y": 90
+	},
+	{
+		"name": "",
+		"srcID": "assets-game-menu-bg",
+		"type": "static",
+		"x": 1192,
+		"y": 80,
+		"width": 144,
+		"height": 88,
+		"scale": 0.9,
+		"buttonStrOffset": 0
+	},
+	{
+		"name": "Atk\n300",
 		"srcID": "button-Atk",
 		"type": "build",
 		"event": "build-ensign",
@@ -43,7 +64,7 @@
 		"buttonStrOffset": 30
 	},
 	{
-		"name": "Def\n400",
+		"name": "Def\n300",
 		"srcID": "button-Def",
 		"type": "build",
 		"event": "build-ensign",
@@ -56,7 +77,7 @@
 		"buttonStrOffset": 30
 	},
 	{
-		"name": "Range\n400",
+		"name": "Range\n300",
 		"srcID": "button-Range",
 		"type": "build",
 		"event": "build-ensign",
@@ -82,7 +103,7 @@
 		"buttonStrOffset": 27
 	},
 	{
-		"name": "Inari\n240",
+		"name": "Inari\n250",
 		"srcID": "button-Inari",
 		"type": "build",
 		"event": "build-tower",
@@ -95,7 +116,7 @@
 		"buttonStrOffset": 27
 	},
 	{
-		"name": "Inugami\n260",
+		"name": "Inugami\n300",
 		"srcID": "button-Inugami",
 		"type": "build",
 		"event": "build-tower",
@@ -108,7 +129,7 @@
 		"buttonStrOffset": 27
 	},
 	{
-		"name": "Ebisu\n260",
+		"name": "Ebisu\n300",
 		"srcID": "button-Ebisu",
 		"type": "build",
 		"event": "build-tower",
@@ -121,7 +142,7 @@
 		"buttonStrOffset": 27
 	},
 	{
-		"name": "Snake\n280",
+		"name": "Snake\n350",
 		"srcID": "button-Snake",
 		"type": "build",
 		"event": "build-tower",
@@ -134,7 +155,7 @@
 		"buttonStrOffset": 27
 	},
 	{
-		"name": "Asura\n320",
+		"name": "Asura\n350",
 		"srcID": "button-Asura",
 		"type": "build",
 		"event": "build-tower",
@@ -147,7 +168,7 @@
 		"buttonStrOffset": 27
 	},
 	{
-		"name": "Amaterasu\n360",
+		"name": "Amaterasu\n400",
 		"srcID": "button-Amaterasu",
 		"type": "build",
 		"event": "build-tower",

@@ -3,7 +3,6 @@ var States = require('./Statics/States');
 var Tags = require('./Statics/Tags');
 var Weather = require('./Statics/Weather');
 
-
 //Values
 const _HERO = {
     Nekomata: {
@@ -83,7 +82,7 @@ var GNObjects = function(GM){
         // override the time here↓
         this.skillCDTime[0] = 20000;
         this.skillCDTime[1] = 10000;
-    }
+    };
     Nekomata.prototype = new Hero();
     // functions
     // Skill 0 - Scratch
@@ -112,7 +111,7 @@ var GNObjects = function(GM){
             // Skill not ready
             return false;
         }
-    }
+    };
     // Skill 1 - Teleport
     Nekomata.prototype.Teleport = function(jid) {
         if(this.canUseSkill(1)) {
@@ -136,7 +135,7 @@ var GNObjects = function(GM){
             // Skill not ready
             return false;
         }
-    }
+    };
     Nekomata.prototype.Skill = function(skillID, data) {
         if(this.GM.debug)
             console.log(this.name + " used skill " + skillID);
@@ -159,7 +158,7 @@ var GNObjects = function(GM){
                 console.log("Invalid skill id");
                 return false;
         }
-    }
+    };
     this.Nekomata = Nekomata;
     
     // Class Ameonna : Hero
@@ -177,7 +176,7 @@ var GNObjects = function(GM){
         // override the time here↓
         this.skillCDTime[0] = 10000;
         this.skillCDTime[1] = 20000;
-    }
+    };
     Ameonna.prototype = new Hero();
     // functions
     // Skill 0 - Rain
@@ -201,7 +200,7 @@ var GNObjects = function(GM){
         } else {
             // Skill not ready
         }
-    }
+    };
     // Skill 1 - Shield
     Ameonna.prototype.Shield = function() {
         if(this.canUseSkill(1)) {
@@ -215,7 +214,7 @@ var GNObjects = function(GM){
         } else {
             // Skill not ready
         }
-    }
+    };
     Ameonna.prototype.Skill = function(skillID, data) {
         if(this.GM.debug)
             console.log(this.name + " used skill " + skillID);
@@ -228,7 +227,7 @@ var GNObjects = function(GM){
                 console.log("Invalid skill id");
                 return false;
         }
-    }
+    };
     this.Ameonna = Ameonna;
     
     // Class Todomeki : Hero
@@ -244,7 +243,7 @@ var GNObjects = function(GM){
         // override the time here↓
         this.skillCDTime[0] = 10000;
         this.skillCDTime[1] = 20000;
-    }
+    };
     Todomeki.prototype = new Hero();
     // functions
     // Skill 0 - Paralyze
@@ -267,7 +266,7 @@ var GNObjects = function(GM){
         } else {
             // Skill not ready
         }
-    }
+    };
     // Skill 1 - Eyebomb
     Todomeki.prototype.EyeBomb = function() {
         if(this.canUseSkill(1)) {
@@ -283,7 +282,7 @@ var GNObjects = function(GM){
         } else {
             // Skill not ready
         }
-    }
+    };
     Todomeki.prototype.Skill = function(skillID, data) {
         if(this.GM.debug)
             console.log(this.name + " used skill " + skillID);
@@ -301,7 +300,7 @@ var GNObjects = function(GM){
                 console.log("Invalid skill id");
                 return false;
         }
-    }
+    };
     this.Todomeki = Todomeki;
     
     /**
@@ -316,7 +315,7 @@ var GNObjects = function(GM){
         Unit.call(this, "Kappa-" + this.uid, this.uid, Tags.unit, x, y, joint, _UNIT.Kappa.hp, _UNIT.Kappa.atk, _UNIT.Kappa.range,
             _UNIT.Kappa.rate, _UNIT.Kappa.def, _UNIT.Kappa.spd, _UNIT.Kappa.layer, _UNIT.Kappa.price, _UNIT.Kappa.value, that.GM);
         // var
-    }
+    };
     Kappa.prototype = new Unit();
     // functions
     
@@ -329,7 +328,7 @@ var GNObjects = function(GM){
         Unit.call(this, "Wanyudo-" + this.uid, this.uid, Tags.unit, x, y, joint, _UNIT.Wanyudo.hp, _UNIT.Wanyudo.atk, _UNIT.Wanyudo.range,
             _UNIT.Wanyudo.rate, _UNIT.Wanyudo.def, _UNIT.Wanyudo.spd, _UNIT.Wanyudo.layer, _UNIT.Wanyudo.price, _UNIT.Wanyudo.value, that.GM);
         // var
-    }
+    };
     Wanyudo.prototype = new Unit();
     // functions
     Wanyudo.prototype.Move = function () {
@@ -372,7 +371,7 @@ var GNObjects = function(GM){
                 }
             });
         }
-    }
+    };
     this.Wanyudo = Wanyudo;
     
     // Class Foxfire : Unit
@@ -382,7 +381,7 @@ var GNObjects = function(GM){
         Unit.call(this, "Foxfire-" + this.uid, this.uid, Tags.unit, x, y, joint, _UNIT.Foxfire.hp, _UNIT.Foxfire.atk, _UNIT.Foxfire.range,
             _UNIT.Foxfire.rate, _UNIT.Foxfire.def, _UNIT.Foxfire.spd, _UNIT.Foxfire.layer, _UNIT.Foxfire.price, _UNIT.Foxfire.value, that.GM);
         // var
-    }
+    };
     Foxfire.prototype = new Unit();
     // functions
     Foxfire.prototype.Move = function () {
@@ -420,7 +419,7 @@ var GNObjects = function(GM){
                 }
             });
         }
-    }
+    };
     
     this.Foxfire = Foxfire;
     
@@ -434,7 +433,7 @@ var GNObjects = function(GM){
         this.nerfPossibility = 0.2;
         this.nerfRate = 0.1;
         this.nerfDuration = 5;
-    }
+    };
     Dojoji.prototype = new Unit();
     // functions
     Dojoji.prototype.didAttackedTarget = function(target, dmg) {
@@ -442,7 +441,7 @@ var GNObjects = function(GM){
             target.Nerf('def', this.nerfRate, this.nerfDuration);
             this.GM.GEM.emit(Tags[this.tag] + '-state', {id: this.id, tag: Tags[this.tag], state: States[States.sound]});
         }
-    }
+    };
     
     this.Dojoji = Dojoji;
     
@@ -454,7 +453,7 @@ var GNObjects = function(GM){
             _UNIT.Futakuchi.rate, _UNIT.Futakuchi.def, _UNIT.Futakuchi.spd, _UNIT.Futakuchi.layer, _UNIT.Futakuchi.price, _UNIT.Futakuchi.value, that.GM);
         // var
         this.eaten = false;
-    }
+    };
     Futakuchi.prototype = new Unit();
     // functions
     Futakuchi.prototype.didAttackedTarget = function(target, dmg) {
@@ -473,7 +472,7 @@ var GNObjects = function(GM){
             // this.Buff('value', 2, 10);
             return true;
         }
-    }
+    };
     this.Futakuchi = Futakuchi;
     
     // Class Raiju : Unit
@@ -485,7 +484,7 @@ var GNObjects = function(GM){
         // var
         this.firePossibility = 0.2;
         this.fireDuration = 3100;
-    }
+    };
     Raiju.prototype = new Unit();
     // functions
     Raiju.prototype.didAttackedTarget = function(target, dmg) {
@@ -497,7 +496,7 @@ var GNObjects = function(GM){
                 
             }
         }
-    }
+    };
     
     this.Raiju = Raiju;
     
@@ -509,13 +508,13 @@ var GNObjects = function(GM){
             _UNIT.Ubume.rate, _UNIT.Ubume.def, _UNIT.Ubume.spd, _UNIT.Ubume.layer, _UNIT.Ubume.price, _UNIT.Ubume.value, that.GM);
         // var
         this.healRate = 0.25;
-    }
+    };
     Ubume.prototype = new Unit();
     // functions
     Ubume.prototype.didAttackedTarget = function(target, dmg) {
         // Heal hp with a given percentage;
         this.Heal(this, dmg * this.healRate);
-    }
+    };
     
     this.Ubume = Ubume;
     
@@ -530,7 +529,7 @@ var GNObjects = function(GM){
         Ensign.call(this, "AtkEnsign-" + this.eid, this.eid, Tags.ensign, x, y, joint,
             _ENSIGN.Atk.buff, _ENSIGN.Atk.radius, _ENSIGN.Atk.duration, _ENSIGN.Atk.price, that.GM);
         // var
-    }
+    };
     AtkEnsign.prototype = new Ensign();
     this.AtkEnsign = AtkEnsign;
     
@@ -540,7 +539,7 @@ var GNObjects = function(GM){
         Ensign.call(this, "DefEnsign-" + this.eid, this.eid, Tags.ensign, x, y, joint,
             _ENSIGN.Def.buff, _ENSIGN.Def.radius, _ENSIGN.Def.duration, _ENSIGN.Def.price, that.GM);
         // var
-    }
+    };
     DefEnsign.prototype = new Ensign();
     this.DefEnsign = DefEnsign;
     
@@ -550,7 +549,7 @@ var GNObjects = function(GM){
         Ensign.call(this, "RangeEnsign-" + this.eid, this.eid, Tags.ensign, x, y, joint,
             _ENSIGN.Range.buff, _ENSIGN.Range.radius, _ENSIGN.Range.duration, _ENSIGN.Range.price, that.GM);
         // var
-    }
+    };
     RangeEnsign.prototype = new Ensign();
     this.RangeEnsign = RangeEnsign;
     
@@ -566,7 +565,7 @@ var GNObjects = function(GM){
             _TOWER.Miko.rate, _TOWER.Miko.def, _TOWER.Miko.spd, _TOWER.Miko.layer, _TOWER.Miko.price, _TOWER.Miko.value, that.GM);
             
         this.slot = slot;
-    }
+    };
     Miko.prototype = new Tower();
     this.Miko = Miko;
     
@@ -577,7 +576,7 @@ var GNObjects = function(GM){
             _TOWER.Inari.rate, _TOWER.Inari.def, _TOWER.Inari.spd, _TOWER.Inari.layer, _TOWER.Inari.price, _TOWER.Inari.value, that.GM);
             
         this.slot = slot;
-    }
+    };
     Inari.prototype = new Tower();
     this.Inari = Inari;
     
@@ -590,7 +589,7 @@ var GNObjects = function(GM){
         this.slot = slot;
         this.lastNerfTime = -1;
         this.nerfInterval = 5000;
-    }
+    };
     Inugami.prototype = new Tower();
     Inugami.prototype.didAttackedTarget = function(target, dmg) {
         var time = (new Date()).getTime();
@@ -598,7 +597,7 @@ var GNObjects = function(GM){
             target.Nerf('atk', 0.5, 5);
             this.lastNerfTime = time;
         }
-    }
+    };
     this.Inugami = Inugami;
     
     // Class Ebisu : Tower
@@ -627,14 +626,14 @@ var GNObjects = function(GM){
         } else {
             console.log("Slot setting unreasonable, Ebisu cannot reach any joint");
         }
-    }
+    };
     Ebisu.prototype = new Tower();
     Ebisu.prototype.enableSkill = function() {
         var that = this;
         this.skillInterval = setInterval(function(){
             that.Skill();
         }, this.pullInterval);
-    }
+    };
     Ebisu.prototype.Skill = function() {
         if(this.isDead || this.GM.gameover) {
             clearInterval(this.skillInterval);
@@ -657,7 +656,7 @@ var GNObjects = function(GM){
             // Update time
             this.pullLastTime = new Date().time;
         }
-    }
+    };
     this.Ebisu = Ebisu;
     
     // Class Snake : Tower
@@ -669,7 +668,7 @@ var GNObjects = function(GM){
         this.slot = slot;
         this.AOETargetsNumber = 3;
         this.AOEAttenuation = 0.75;
-    }
+    };
     Snake.prototype = new Tower();
     Snake.prototype.didAttackedTarget = function(target, dmg) {
         var AOETargets = new Array();
@@ -701,7 +700,7 @@ var GNObjects = function(GM){
             _TOWER.Asura.rate, _TOWER.Asura.def, _TOWER.Asura.spd, _TOWER.Asura.layer, _TOWER.Asura.price, _TOWER.Asura.value, that.GM);
             
         this.slot = slot;
-    }
+    };
     Asura.prototype = new Tower();
     this.Asura = Asura;
     
@@ -714,13 +713,13 @@ var GNObjects = function(GM){
         this.slot = slot;
         this.TsukiyomiRate = 0.1;
         this.TsukiyomiMax = 10;
-    }
+    };
     Amaterasu.prototype = new Tower();
     // functions
     Amaterasu.prototype.didAttackedTarget = function(target, dmg) {
         // Damage permanently
         target.maxhp -= Math.min(dmg * this.TsukiyomiRate, this.TsukiyomiMax);
-    }
+    };
     this.Amaterasu = Amaterasu;
 };
 
@@ -738,7 +737,7 @@ GNObjects.prototype.GetHeroType = function(type) {
             console.log("Wrong spelling of hero type");
             return null;
     }
-}
+};
 GNObjects.prototype.GetUnitType = function(type) {
     switch (type) {
         case 'Kappa':
@@ -759,7 +758,7 @@ GNObjects.prototype.GetUnitType = function(type) {
             console.log("Wrong spelling of unit type");
             return null;
     }
-}
+};
 GNObjects.prototype.GetEnsignType = function(type) {
     switch (type) {
         case 'Atk':
@@ -772,7 +771,7 @@ GNObjects.prototype.GetEnsignType = function(type) {
             console.log("Wrong spelling of ensign type");
             return null;
     }
-}
+};
 GNObjects.prototype.GetTowerType = function(type) {
     switch (type) {
         case 'Miko':
@@ -799,12 +798,12 @@ GNObjects.prototype.GetCDList = function() {
         'Kappa','Wanyudo','Foxfire','Dojoji','Futakuchi','Raiju','Ubume',
         'Atk','Def','Range',
         'Miko','Inari','Inugami','Ebisu','Snake','Asura','Amaterasu'];
-}
+};
 GNObjects.prototype.GetGameUnitList = function() {
     return ['Nekomata','Ameonna','Todomeki',
         'Kappa','Wanyudo','Foxfire','Dojoji','Futakuchi','Raiju','Ubume',
         'Blocker','Atk','Def','Range',
         'Miko','Inari','Inugami','Ebisu','Snake','Asura','Amaterasu'];
-}
+};
 
 module.exports = GNObjects;

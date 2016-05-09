@@ -24,6 +24,10 @@ var GameEventManager = function(room) {
         room.SetupSocket(false);
     });
     
+    this.on('time', function(data) {
+        room.broadcast('time', data);
+    });
+    
     this.on('button-cd', function(data){
     	room.broadcast('button-cd', data);
     });
@@ -34,7 +38,7 @@ var GameEventManager = function(room) {
     
     this.on('goal-life-bar-built', function(){
     	room.broadcast('goal-life-bar-built');
-    })
+    });
     
     this.on('goal-damage', function(data){
     	room.broadcast('goal-damage', data);
@@ -72,12 +76,12 @@ var GameEventManager = function(room) {
     this.on('unit-buff', function(data) {
         data.uid = data.id;
         room.broadcast('unit-buff', data);
-    })
+    });
     
     this.on('unit-state', function(data) {
         data.uid = data.id;
         room.broadcast('unit-state', data);
-    })
+    });
     
     this.on('unit-dead', function(data){
     	data.uid = data.id;
@@ -168,7 +172,7 @@ var GameEventManager = function(room) {
     this.on('tower-dead', function(data) {
         data.tid = data.id;
         room.broadcast('tower-dead', data);
-    })
+    });
     
     this.on('blocker-built', function(data) {
         room.broadcast('blocker-built', data);
@@ -201,7 +205,7 @@ var GameEventManager = function(room) {
     this.on('roadsign-changed', function(data) {
         room.broadcast('roadsign-changed', data);
     });
-}
+};
 util.inherits(GameEventManager, EventEmitter);
 
 module.exports = GameEventManager;

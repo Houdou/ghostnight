@@ -65,32 +65,29 @@ var GameMaster = function(settings, GEM){
     this.logger = new Logger({fileName: "Room" + this.settings.Room + ".txt"}, {settings: this.settings});
 };
 GameMaster.prototype.StartTiming = function() {
-    var that = this;
-    
-    if(this.startTime == -1) {
+	if(this.startTime == -1) {
         this.time = 0;
         this.startTime = (new Date()).getTime();
         this.gameover = false;
         
         this.tickNumber = 0;
         
-        this.timerInterval = setInterval(function(){
-            that.time = (new Date()).getTime() - that.startTime;
+        this.timerInterval = setInterval(() => {
+            this.time = (new Date()).getTime() - this.startTime;
             
             // Econ system
-            that.tickNumber++;
-            if (that.tickNumber % that.soulIncreasing.interval == 0) {
+            this.tickNumber++;
+            if (this.tickNumber % this.soulIncreasing.interval == 0) {
             	
-            	that.AddSoul(that.soulIncreasing.value);
+            	this.AddSoul(this.soulIncreasing.value);
             }
-            // console.log("tickNumber", that.tickNumber);
-            console.log(that.time);
+            if(this.debug)
+            	console.log(this.time);
+            this.GEM.emit('time', {time: this.time, tick: this.tickNumber});
             
-            if(that.time >= that.settings.TimeLimit * 1000) {
-            	that.GameEnd('timeout');
-            	//that.GEM.emit('game-end', {type: 'timeout', win: 'human'});
-                //console.log("Time out");
-                clearInterval(that.timerInterval);
+            if(this.time >= this.settings.TimeLimit * 1000) {
+            	this.GameEnd('timeout');
+                clearInterval(this.timerInterval);
             }
         }, 1000);
         return true;

@@ -22,6 +22,7 @@
 	{"src": "img/text-buttons/name-Nekomata.png", "id": "assets-name-Nekomata"},
 	{"src": "img/text-buttons/name-Ameonna.png", "id": "assets-name-Ameonna"},
 	{"src": "img/text-buttons/name-Todomeki.png", "id": "assets-name-Todomeki"},
+	{"src": "img/text-buttons/btn-buyback.png", "id": "button-buyback"},
 	{"src": "img/icons/soul.png", "id": "assets-money"},
 	{"src": "layout/ghost.json", "id": "layout-ghost"}
 ]

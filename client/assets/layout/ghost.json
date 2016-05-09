@@ -13,7 +13,7 @@
 		"name": "",
 		"srcID": "assets-money",
 		"type": "static",
-		"x": 168,
+		"x": 160,
 		"y": 105,
 		"width": 19,
 		"height": 31,
@@ -26,8 +26,29 @@
 		"color": "#222222",
 		"type": "text",
 		"align": "right",
-		"x": 240,
+		"x": 224,
 		"y": 90
+	},
+	{
+		"text": "0:00",
+		"name": "time",
+		"size": "28px",
+		"color": "#222222",
+		"type": "text",
+		"align": "right",
+		"x": 290,
+		"y": 90
+	},
+	{
+		"name": "",
+		"srcID": "assets-game-menu-bg",
+		"type": "static",
+		"x": 1192,
+		"y": 80,
+		"width": 144,
+		"height": 88,
+		"scale": 0.9,
+		"buttonStrOffset": 0
 	},
 	{
 		"srcID": "panel-Nekomata",
@@ -248,7 +269,7 @@
 			},
 			{
 				"name": "",
-				"srcID": "assets-cirlce",
+				"srcID": "assets-circle-red",
 				"type": "static",
 				"x": 30,
 				"y": 32,
@@ -260,9 +281,9 @@
 				"name": "",
 				"srcID": "assets-hero-reborn-cd-bg",
 				"type": "static",
-				"x": 96,
+				"x": 72,
 				"y": 72,
-				"width": 186,
+				"width": 118,
 				"height": 12,
 				"scale": 1
 			},
@@ -270,11 +291,23 @@
 				"name": "",
 				"srcID": "assets-hero-reborn-cd-value",
 				"type": "static",
-				"x": 96,
+				"x": 72,
 				"y": 72,
-				"width": 186,
+				"width": 118,
 				"height": 12,
 				"scale": 0.001
+			},
+			{
+				"name": "",
+				"srcID": "button-buyback",
+				"type": "button",
+				"event": "buyback-hero",
+				"data": {},
+				"x": 176,
+				"y": 72,
+				"width": 62,
+				"height": 29,
+				"scale": 1
 			}
 		],
 		"x": 220,
@@ -284,7 +317,7 @@
 		"active": true
 	},
 	{
-		"name": "Kappa\n80",
+		"name": "Kappa\n100",
 		"srcID": "button-Kappa",
 		"type": "build",
 		"event": "create-unit",
@@ -297,7 +330,7 @@
 		"buttonStrOffset": 27
 	},
 	{
-		"name": "Wanyudo\n100",
+		"name": "Wanyudo\n140",
 		"srcID": "button-Wanyudo",
 		"type": "build",
 		"event": "create-unit",
@@ -310,7 +343,7 @@
 		"buttonStrOffset": 27
 	},
 	{
-		"name": "Foxfire\n120",
+		"name": "Foxfire\n140",
 		"srcID": "button-Foxfire",
 		"type": "build",
 		"event": "create-unit",
@@ -323,7 +356,7 @@
 		"buttonStrOffset": 27
 	},
 	{
-		"name": "Dojoji\n140",
+		"name": "Dojoji\n180",
 		"srcID": "button-Dojoji",
 		"type": "build",
 		"event": "create-unit",
@@ -336,7 +369,7 @@
 		"buttonStrOffset": 27
 	},
 	{
-		"name": "Futakuchi\n160",
+		"name": "Futakuchi\n180",
 		"srcID": "button-Futakuchi",
 		"type": "build",
 		"event": "create-unit",
@@ -349,7 +382,7 @@
 		"buttonStrOffset": 27
 	},
 	{
-		"name": "Raiju\n180",
+		"name": "Raiju\n220",
 		"srcID": "button-Raiju",
 		"type": "build",
 		"event": "create-unit",
@@ -362,7 +395,7 @@
 		"buttonStrOffset": 27
 	},
 	{
-		"name": "Ubume\n200",
+		"name": "Ubume\n220",
 		"srcID": "button-Ubume",
 		"type": "build",
 		"event": "create-unit",

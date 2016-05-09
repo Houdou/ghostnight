@@ -19,7 +19,7 @@ var SetupGhost = function(socket, room, on) {
             GN.ChangeHeroSelection(data.type);
         });
         
-        socket.on('pay-reborn', function(data) {
+        socket.on('buyback-hero', function(data) {
             GN.RebornHero(true);
         });
         

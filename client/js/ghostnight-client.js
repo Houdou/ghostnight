@@ -10,13 +10,15 @@ var gn = function(stage, socket) {
 	this.side = null;
 	this.opposite = null;
 	this.map = null;
+	this.TimeLimit = -1;
 	this.socket = socket;
-	this.onKeys = [];
+	this.onKeys = {};
 	
 	// Assets
 	this.manifest = [];
 	this.layout = [];
 	this.assets = {};
+	this.sounds = {};
 	this.collectionAssetsLoaded = false;
 	this.collectionItem = '';
 	this.collectionPanel = '';
@@ -56,7 +58,7 @@ gn.prototype.BuildPanel = function(panelID, x, y, width, height) {
 	
 	this.stage.addChild(c);
 	return c;
-}
+};
 gn.prototype.TogglePanel = function(panelID) {
 	for(var c in this.panel) {
 		if(c == panelID) {
@@ -67,7 +69,7 @@ gn.prototype.TogglePanel = function(panelID) {
 		}
 	}
 	stage.update();
-}
+};
 gn.prototype.BuildButton = function(str, x, y, width, height, onclickFunction, data) {
 	var c = new createjs.Container();
 		
@@ -89,7 +91,7 @@ gn.prototype.BuildButton = function(str, x, y, width, height, onclickFunction, d
 	this.stage.addChild(c);
 	this.stage.update();
 	return c;
-}
+};
 gn.prototype.BuildImage = function(srcImgID, x, y, width, height, offset, onclickFunction, eventData, draw, scale) {
 	var c = new createjs.Bitmap(this.assets[srcImgID]);
 	c.regX = width/2;
@@ -112,7 +114,7 @@ gn.prototype.BuildImage = function(srcImgID, x, y, width, height, offset, onclic
 	}
 	
 	return c;
-}
+};
 gn.prototype.BuildTextButton = function(srcImgID, x, y, width, height, offset, onclickFunction, eventData, draw, scale) {
 	var c = new createjs.Bitmap(this.assets[srcImgID]);
 	c.regX = width/2;
@@ -138,7 +140,7 @@ gn.prototype.BuildTextButton = function(srcImgID, x, y, width, height, offset, o
 	}
 	
 	return c;
-}
+};
 gn.prototype.BuildImageButton = function(name, srcImgID, x, y, width, height, offset, onclickFunction, eventData, draw, scale) {
 	var c = new createjs.Container();
 		
@@ -182,7 +184,7 @@ gn.prototype.BuildImageButton = function(name, srcImgID, x, y, width, height, of
 	}
 	
 	return c;
-}
+};
 gn.prototype.BuildText = function(text, name, size, color, align, x, y, draw, scale) {
 	var str = new createjs.Text(text, size + " Brush Script MT", color);
 	str.textAlign = align;
@@ -199,7 +201,7 @@ gn.prototype.BuildText = function(text, name, size, color, align, x, y, draw, sc
 	}
 	
 	return str;
-}
+};
 gn.prototype.BuildProgressBar = function() {
 	var progressBar = new createjs.Shape();
 	progressBar.graphics.beginFill("#EF5311").drawRect(0, 0, 1280, 4);
@@ -210,7 +212,7 @@ gn.prototype.BuildProgressBar = function() {
 	
 	stage.addChild(this.progressBar);
 	stage.update();
-}
+};
 
 gn.prototype.ParseLayout = function(element, draw) {
 	switch (element.type) {
@@ -314,7 +316,7 @@ gn.prototype.ParseLayout = function(element, draw) {
 			return this.BuildText(element.text, element.name, element.size, element.color, element.align, element.x, element.y, draw);
 		default: break;
 	}
-}
+};
 
 // Menu
 gn.prototype.BuildMenu = function() {
@@ -345,12 +347,14 @@ gn.prototype.BuildMenu = function() {
 	cMenu.addChild(btnMP);
 	
 	// Collection
-	// To-Do
 	var btnC = this.BuildTextButton('button-main-c', 1200, 338, 244, 55, 0, ()=>{
+		this.roomNoSP = -1;
+		this.roomNoMP = -1;
+		
 		if(!this.collectionAssetsLoaded) {
 			this.LoadCollection();
 		} else {
-			this.ShowCollectionList();
+			this.ShowCollection();
 		}
 	}, null, false);
 	btnC.alpha = 0;
@@ -453,7 +457,7 @@ gn.prototype.BuildMenu = function() {
 		(event)=>{
 			var rn = prompt('Room Number');
 			if (rn != null) {
-				var roomNo = ('000'+ rn).substr(-3, 3)
+				var roomNo = ('000'+ rn).substr(-3, 3);
 				this.socket.emit('join-room', roomNo);
 			}
 		}, null,
@@ -520,7 +524,7 @@ gn.prototype.BuildMenu = function() {
 	// }
 	
 	stage.update();
-}
+};
 gn.prototype.ShowPanel = function(event, data) {
 	// Hide main
 	createjs.Tween.get(this.panel['main'], {override: true})
@@ -534,7 +538,7 @@ gn.prototype.ShowPanel = function(event, data) {
 		.to(data.state, data.time, data.ease);
 	if(data.callback != null)
 		tween.call(data.callback);
-}
+};
 gn.prototype.HidePanel = function(event, data) {
 	// Show main
 	createjs.Tween.get(this.panel['main'], {override: true})
@@ -548,7 +552,7 @@ gn.prototype.HidePanel = function(event, data) {
 		.to(data.state, data.time, data.ease);
 	if(data.callback != null)
 		tween.call(data.callback);
-}
+};
 gn.prototype.LoadCollection = function() {
 	var collectionPreload = new createjs.LoadQueue(true, './assets/img/cp/');
 	var collectionManifest = [
@@ -561,7 +565,26 @@ gn.prototype.LoadCollection = function() {
 		{"src": "cp-to-human.png", "id": "assets-collection-to-human"},
 		{"src": "cp-list-human.png", "id": "assets-collection-list-human"},
 		{"src": "cp-to-ghost.png", "id": "assets-collection-to-ghost"},
-		{"src": "cp-Todomeki.png", "id": "assets-collection-details-Todomeki"}
+		{"src": "cp-Nekomata.png", "id": "assets-collection-details-Nekomata"},
+		{"src": "cp-Ameonna.png", "id": "assets-collection-details-Ameonna"},
+		{"src": "cp-Todomeki.png", "id": "assets-collection-details-Todomeki"},
+		{"src": "cp-Kappa.png", "id": "assets-collection-details-Kappa"},
+		{"src": "cp-Wanyudo.png", "id": "assets-collection-details-Wanyudo"},
+		{"src": "cp-Foxfire.png", "id": "assets-collection-details-Foxfire"},
+		{"src": "cp-Dojoji.png", "id": "assets-collection-details-Dojoji"},
+		{"src": "cp-Futakuchi.png", "id": "assets-collection-details-Futakuchi"},
+		{"src": "cp-Raiju.png", "id": "assets-collection-details-Raiju"},
+		{"src": "cp-Ubume.png", "id": "assets-collection-details-Ubume"},
+		{"src": "cp-Miko.png", "id": "assets-collection-details-Miko"},
+		{"src": "cp-Inari.png", "id": "assets-collection-details-Inari"},
+		{"src": "cp-Inugami.png", "id": "assets-collection-details-Inugami"},
+		{"src": "cp-Ebisu.png", "id": "assets-collection-details-Ebisu"},
+		{"src": "cp-Snake.png", "id": "assets-collection-details-Snake"},
+		{"src": "cp-Asura.png", "id": "assets-collection-details-Asura"},
+		{"src": "cp-Amaterasu.png", "id": "assets-collection-details-Amaterasu"},
+		{"src": "cp-Ensigns.png", "id": "assets-collection-details-Ensigns"},
+		{"src": "cp-Thorns.png", "id": "assets-collection-details-Thorns"},
+		
 	];
 	
 	collectionPreload.on('progress', (event) => {
@@ -573,7 +596,7 @@ gn.prototype.LoadCollection = function() {
 	});
 	collectionPreload.on("complete", (event) => {
 		this.collectionAssetsLoaded = true;
-		this.ShowCollectionList();
+		this.ShowCollection();
 	});
 	
 	
@@ -590,8 +613,8 @@ gn.prototype.LoadCollection = function() {
 			
 			stage.alpha = 1;
 		});
-}
-gn.prototype.ShowCollectionList = function() {
+};
+gn.prototype.ShowCollection = function() {
 	var cCP = new createjs.Container();
 	cCP.alpha = 0;
 	
@@ -641,14 +664,15 @@ gn.prototype.ShowCollectionList = function() {
 	
 	var toGhost = new createjs.Bitmap(this.assets['assets-collection-to-ghost']);
 	toGhost.on('click', () => {
+		this.ShowDetails('Nekomata');
 		this.collectionItem = 'Nekomata';
 		this.collectionPanel = 'ghost';
 		
 		createjs.Tween.get(cLPG)
-			.to({y: 0}, 600, createjs.Ease.quartOut);
+			.to({y: 0}, 800, createjs.Ease.quartOut);
 		createjs.Tween.get(cLPH)
-			.to({y: 720}, 600, createjs.Ease.quartOut);
-	})
+			.to({y: 720}, 800, createjs.Ease.quartOut);
+	});
 	toGhost.y = 0;
 	cLPH.addChild(toGhost);
 	
@@ -671,10 +695,7 @@ gn.prototype.ShowCollectionList = function() {
 			createjs.Tween.get(cLPM)
 				.to({alpha: 0}, 600);
 		});
-		btn.regX = 12; 
-		btn.regY = 12;
-		btn.x = 60;
-		btn.y = posY;
+		btn.set({x: 60, y: posY, regX: 12, regY: 12});
 		posY += 64;
 		// hitArea
 		var hit = new createjs.Shape();
@@ -696,14 +717,15 @@ gn.prototype.ShowCollectionList = function() {
 	
 	var toHuman = new createjs.Bitmap(this.assets['assets-collection-to-human']);
 	toHuman.on('click', () => {
+		this.ShowDetails('Miko');
 		this.collectionItem = 'Miko';
 		this.collectionPanel = 'human';
 		
 		createjs.Tween.get(cLPG)
-			.to({y: -720}, 600, createjs.Ease.quartOut);
+			.to({y: -720}, 800, createjs.Ease.quartOut);
 		createjs.Tween.get(cLPH)
-			.to({y: 0}, 600, createjs.Ease.quartOut);
-	})
+			.to({y: 0}, 800, createjs.Ease.quartOut);
+	});
 	toHuman.y = 720 - 42;
 	cLPG.addChild(toHuman);
 	
@@ -726,10 +748,7 @@ gn.prototype.ShowCollectionList = function() {
 			createjs.Tween.get(cLPM)
 				.to({alpha: 0}, 600);
 		});
-		btn.regX = 12; 
-		btn.regY = 12;
-		btn.x = 60;
-		btn.y = posY;
+		btn.set({x: 60, y: posY, regX: 12, regY: 12});
 		posY += 64;
 		// hitArea
 		var hit = new createjs.Shape();
@@ -776,10 +795,7 @@ gn.prototype.ShowCollectionList = function() {
 					this.collectionItem = u;
 				});
 		});
-		btn.regX = 12; 
-		btn.regY = 12;
-		btn.x = posX;
-		btn.y = 180;
+		btn.set({x: posX, y: 180, regX: 12, regY: 12});
 		posX += dx;
 		// hitArea
 		var hit = new createjs.Shape();
@@ -809,10 +825,7 @@ gn.prototype.ShowCollectionList = function() {
 					this.collectionItem = u;
 				});
 		});
-		btn.regX = 12; 
-		btn.regY = 12;
-		btn.x = posX;
-		btn.y = 442;
+		btn.set({x: posX, y: 442, regX: 12, regY: 12});
 		posX += dx;
 		// hitArea
 		var hit = new createjs.Shape();
@@ -833,10 +846,10 @@ gn.prototype.ShowCollectionList = function() {
 	
 	// Enter Animation
 	createjs.Tween.get(cCP)
-		.to({alpha: 0.7}, 500)
+		.to({alpha: 0.6}, 600)
 		.call(() => {
 			createjs.Tween.get(cCP)
-				.to({alpha: 1}, 200);
+				.to({alpha: 1}, 400);
 				
 			createjs.Tween.get(nameList)
 				.to({alpha: 1}, 600);
@@ -844,7 +857,7 @@ gn.prototype.ShowCollectionList = function() {
 			createjs.Tween.get(cLPM)
 				.to({alpha: 1}, 600);
 		});
-}
+};
 gn.prototype.ShowDetails = function(type) {
 	// if(type == this.collectionItem) { return; }
 	
@@ -868,7 +881,7 @@ gn.prototype.ShowDetails = function(type) {
 		createjs.Tween.get(detail, {override: true})
 			.to({alpha: 1}, 400);
 	}
-}
+};
 
 // Build
 gn.prototype.BuildRoadSign = function(data) {
@@ -890,7 +903,7 @@ gn.prototype.BuildRoadSign = function(data) {
 	
 	sign.on('click', () => {
 		this.socket.emit('switch-roadsign', {rid: data.rid});
-	})
+	});
 	
 	c.x = data.x;
 	c.y = data.y;
@@ -898,7 +911,7 @@ gn.prototype.BuildRoadSign = function(data) {
 	this.roadsigns[data.rid] = sign;
 	stage.addChild(c);
 	stage.update();
-}
+};
 gn.prototype.BuildGoal = function(data) {
 	var goalimg = this.assets['assets-goal-red'];
 	
@@ -915,7 +928,7 @@ gn.prototype.BuildGoal = function(data) {
 	this.goals[data.gid] = goal;
 	stage.addChild(goal);
 	stage.update();
-}
+};
 gn.prototype.BuildGoalLife = function() {
 	var img = this.assets['assets-goal-life-value'];
 	var c = new createjs.Container();
@@ -936,7 +949,7 @@ gn.prototype.BuildGoalLife = function() {
 	
 	stage.addChild(c);
 	stage.update();
-}
+};
 gn.prototype.BuildUnit = function(data) {
 	var img = this.assets['assets-' + data.type];
 	var unit = new createjs.Bitmap(img);
@@ -1002,7 +1015,7 @@ gn.prototype.BuildUnit = function(data) {
 	this.units[data.uid] = c;
 	this.objects.addChild(c);
 	stage.update();
-}
+};
 gn.prototype.DrawHeroSelection = function(data) {
 	if(this.currentPanel == 'panel-Reborn') {
 		var circle = this.panel['panel-Reborn'].getChildAt(3);
@@ -1020,7 +1033,7 @@ gn.prototype.DrawHeroSelection = function(data) {
 				break;
 		}
 	}
-}
+};
 gn.prototype.BuildHero = function(data) {
 	var img = this.assets['assets-' + data.type];
 	var unit = new createjs.Bitmap(img);
@@ -1088,7 +1101,7 @@ gn.prototype.BuildHero = function(data) {
 	
 	this.objects.addChild(c);
 	stage.update();
-}
+};
 gn.prototype.BuildTower = function(data) {
 	var img = this.assets['assets-' + data.type];
 	var unit = new createjs.Bitmap(img);
@@ -1138,7 +1151,7 @@ gn.prototype.BuildTower = function(data) {
 	this.towers[data.tid] = c;
 	this.objects.addChild(c);
 	stage.update();
-}
+};
 gn.prototype.BuildEnsign = function(data) {
 	var img = this.assets['assets-' + data.type];
 	var unit = new createjs.Bitmap(img);
@@ -1190,7 +1203,7 @@ gn.prototype.BuildEnsign = function(data) {
 		LeaveAnimationProperties : {alpha: 0},
 		LeaveAnimationTime : 200
 	});
-}
+};
 gn.prototype.BuildBlocker = function(data) {
 	var img = this.assets['assets-' + data.type];
 	var unit = new createjs.Bitmap(img);
@@ -1240,7 +1253,7 @@ gn.prototype.BuildBlocker = function(data) {
 	this.blockers[data.bid] = c;
 	this.objects.addChild(c);
 	stage.update();
-}
+};
 
 // Update
 gn.prototype.MoveUnitTo = function(data) {
@@ -1249,37 +1262,38 @@ gn.prototype.MoveUnitTo = function(data) {
 		createjs.Tween.get(unit, {override: true})
 			.to({x: data.x, y: data.y}, data.duration);
 	}
-}
+};
 gn.prototype.MoveHeroTo = function(data) {
 	if(this.hero != undefined) {
 		createjs.Tween.get(this.hero, {override: true})
 			.to({x: data.x, y: data.y}, data.duration);
 	}
-}
+};
 gn.prototype.ChangeRoadSign = function(data) {
 	var roadsign = this.roadsigns[data.rid];
-	
 	var r = Math.atan2(data.dy, data.dx);
-	roadsign.rotation = r / Math.PI * 180;
-	stage.update();
-}
+	
+	createjs.Tween.get(roadsign)
+		.to({rotation : r / Math.PI * 180}, 300, createjs.Ease.quartOut);
+	
+};
 gn.prototype.HeroRebornCD = function(data) {
 	var panel = this.panel['panel-Reborn'];
 	var rebornBar = panel.getChildByName('assets-hero-reborn-cd-value');
 	rebornBar.alpha = 1;
 	rebornBar.scaleY = 1;
-	rebornBar.x = 96 - 186/2;
+	rebornBar.x = 72 - 118/2;
 	
 	createjs.Tween.get(rebornBar, {override: true})
-		.to({scaleX: 1, x: 96}, data.time)
+		.to({scaleX: 1, x: 72}, data.time)
 		.call(() => {this.RemoveHeroRebornCD();});
-}
+};
 gn.prototype.UpdateGoalLife = function(data) {
 	var value = this.UI['goal-life'];
 	
 	value.cache(0, 0, 175 * data.life / data.maxlife, 13);
 	stage.update();
-}
+};
 gn.prototype.UpdateHPBar = function(data) {
 	var c = null;
 	var width = 0;
@@ -1311,54 +1325,79 @@ gn.prototype.UpdateHPBar = function(data) {
 		value.cache(0, 0, data.hp / data.maxhp * width, height);
 		stage.update();
 	}
-}
+};
 gn.prototype.UpdateText = function(name, data) {
 	var text = this.Text[name];
-	text.text = data.text;
+	for(var property in data)
+		text[property] = data[property];
 	
 	stage.update();
 	return text;
-}
+};
 gn.prototype.Resorting = function() {
 	this.objects.sortChildren((a, b, option)=>{
 		return a.y - b.y;
 	});
 	stage.update();
-}
+};
 
 // Remove
 gn.prototype.RemoveUnit = function(data) {
-	this.objects.removeChild(this.units[data.uid]);
-	stage.update();
-}
+	createjs.Tween.get(this.units[data.uid])
+		.to({alpha: 0}, 300)
+		.call(() => {
+			this.objects.removeChild(this.units[data.uid]);
+			stage.update();
+		});
+};
 gn.prototype.RemoveHero = function(data) {
-	this.objects.removeChild(this.hero);
-	this.hero = null;
-	stage.update();
-}
+	createjs.Tween.get(this.hero)
+		.to({alpha: 0}, 300)
+		.call(() => {
+			this.objects.removeChild(this.hero);
+			this.hero = null;
+			stage.update();
+		});
+};
 gn.prototype.RemoveTower = function(data) {
-	this.objects.removeChild(this.towers[data.tid]);
-	stage.update();
-}
+	createjs.Tween.get(this.towers[data.tid])
+		.to({alpha: 0}, 300)
+		.call(() => {
+			this.objects.removeChild(this.towers[data.tid]);
+			stage.update();
+		});
+};
 gn.prototype.RemoveEnsign = function(data){
-	this.objects.removeChild(this.ensigns[data.eid]);
-	stage.update();
-}
+	createjs.Tween.get(this.ensigns[data.eid])
+		.to({alpha: 0}, 300)
+		.call(() => {
+			this.objects.removeChild(this.ensigns[data.eid]);
+			stage.update();
+		});
+};
 gn.prototype.RemoveBlocker = function(data) {
-	this.objects.removeChild(this.blockers[data.bid]);
-	stage.update();
-}
+	createjs.Tween.get(this.blockers[data.bid])
+		.to({alpha: 0}, 300)
+		.call(() => {
+			this.objects.removeChild(this.blockers[data.bid]);
+			stage.update();
+		});
+};
 gn.prototype.RemoveGoal = function(data) {
-	stage.removeChild(this.goals[data.gid]);
-	stage.update();
-}
+	createjs.Tween.get(this.goals[data.gid])
+		.to({alpha: 0}, 300)
+		.call(() => {
+			stage.removeChild(this.goals[data.gid]);
+			stage.update();
+		});
+};
 gn.prototype.RemoveHeroRebornCD = function() {
 	var panel = this.panel['panel-Reborn'];
 	var rebornBar = panel.getChildByName('assets-hero-reborn-cd-value');
 	rebornBar.alpha = 0;
 	stage.update();
 	rebornBar.scaleX = 0;
-}
+};
 
 // Effects
 gn.prototype.AttackEffect = function(data) {
@@ -1379,10 +1418,10 @@ gn.prototype.AttackEffect = function(data) {
 		.to({x: data.to.x, y: data.to.y}, 350)
 		.to({alpha: 0}, 200)
 		.call(() => {this.effects.removeChild(effect);});
-}
+};
 gn.prototype.DamageEffect = function(data) {
 	
-}
+};
 gn.prototype.DisplayEffect = function(data) {
 	var c = null;
 	switch (data.tag) {
@@ -1428,27 +1467,21 @@ gn.prototype.DisplayEffect = function(data) {
 					});
 			});
 	}
-}
+};
 gn.prototype.BuffEffect = function(data) {
 	var c = null;
-	var width = 0;
-	var height = 0;
 	switch (data.tag) {
 		case 'unit':
 			c = this.units[data.uid];
-			width = 45; height = 14;
 			break;
 		case 'hero':
 			c = this.hero;
-			width = 68; height = 21;
 			break;
 		case 'tower':
 			c = this.towers[data.tid];
-			width = 68; height = 21;
 			break;
 		case 'blocker':
 			c = this.blockers[data.bid];
-			width = 68; height = 21;
 			break;
 		default:
 			break;
@@ -1469,13 +1502,13 @@ gn.prototype.BuffEffect = function(data) {
 		}, data.duration);
 		stage.update();
 	}
-}
+};
 gn.prototype.resortBuff = function(buffs) {
 	for(var i in buffs.children) {
 		buffs.children[i].x = i * 40;
 	}
 	stage.update();
-}
+};
 gn.prototype.CoolDownEffect = function(data) {
 	// Check if the corresponding button exists.
 	if(this.UI['button-' + data.type] != undefined) {
@@ -1509,7 +1542,7 @@ gn.prototype.CoolDownEffect = function(data) {
 			console.log('Unable to find button-' + data.type);
 		}
 	}
-}
+};
 gn.prototype.GameEnd = function(data) {
 	// Black out
 	var cover = new createjs.Bitmap(this.assets['assets-cover']);
@@ -1593,7 +1626,7 @@ gn.prototype.GameEnd = function(data) {
 			createjs.Tween.get(btnBack)
 				.to({alpha: 1}, 1000);
 		});
-}
+};
 
 // Utilities
 gn.prototype.FindNearestJoint = function(x, y, maxDistance) {
@@ -1610,7 +1643,7 @@ gn.prototype.FindNearestJoint = function(x, y, maxDistance) {
 	}
 	
 	return jid;
-}
+};
 gn.prototype.FindNearestSlot = function(x, y, maxDistance) {
 	var d = maxDistance * maxDistance;
 	var sid = -1;
@@ -1625,50 +1658,153 @@ gn.prototype.FindNearestSlot = function(x, y, maxDistance) {
 	}
 	
 	return sid;
-}
+};
 var gnc;
 function initGame(socket){
 	var gnclient = new gn(stage, socket);
 	gnc = gnclient;
 	
+	// Loading {
 	var menuPreload = new createjs.LoadQueue(true, './assets/');
 	var settingPreload = new createjs.LoadQueue(true, './settings/');
 	var preload = new createjs.LoadQueue(true, './assets/');
 	
 	loadMenu();
 	
-	window.addEventListener("keydown", (event)=>{
-		gnclient.Resorting();
-	})
-	
-	
-	socket.on('room-joined', function(data){
-		// {roomNo, playerIndex, map, side, (opposite)}
-		gnclient['roomNo' + data.mode] = data.roomNo;
-		gnclient.playerIndex = data.playerIndex;
-		
-		// Display Room panel
-		createjs.Tween.get(gnclient.panel[gnclient.mode + 'RM'])
-			.to({alpha: 1}, 400);
-		gnclient.UpdateText('roomNo' + data.mode, {text: gnclient['roomNo' + data.mode]});
-		stage.update();
-		
-		// Side choose
-		gnclient.side = data.side;
-		sidesChange(data);
-		
-		// Map choose
-		gnclient.map = data.map;
-		mapChange(data);
-		
-		// Somebody already in
-		gnclient.opposite = data.opposite;
-		if (data.opposite != null) {
-			sidesChange({playerIndex: 0, side: data.opposite});
+	function handleSettingsLoad(event) {
+		if(event.item.type == 'manifest') {
+			// Append the loaded manifest to current one.
+			gnclient.manifest = gnclient.manifest.concat(event.result);
 		}
+	}
+	
+	function handleProgress(event) {
+		// Use progress bar to indicate the loading progress
+		gnclient.progressBar.scaleX = event.progress;
+		stage.update();
+	}
+	
+	function handleAssetsLoad(event) {
+		// Store the loaded assets into ghostnight client
+		switch (event.item.type) {
+			case createjs.AbstractLoader.IMAGE:
+				gnclient.assets[event.item.id] = event.target.getResult(event.item.id);
+				break;
+			case createjs.AbstractLoader.JSON:
+				if(event.item.id.substr(0, 6) == 'layout')
+					gnclient.layout = event.result;
+				break;
+			case createjs.AbstractLoader.SOUND:
+				gnclient.sounds[event.item.id] = createjs.Sound.createInstance(event.item.id);
+			default:
+				break;
+		}
+	}
+	
+	function handleMenuComplete(event) {
+		// Add main music
+		var music = gnclient.sounds['music-main'];
+		music.volume = 0;
+		music.play({loop: -1});
+		createjs.Tween.get(music)
+			.to({volume: 1}, 2600, createjs.Ease.sineInOut);
+		
+		gnclient.BuildMenu();
+	}
+	
+	function handleComplete(event) {
+		// Remove progress bar
+		stage.removeChild(gnclient.progressBar);
+		
+		// Add background
+		var bg = new createjs.Bitmap(gnclient.assets['assets-map']);
+		bg.cache(0, 0, stage.canvas.width, stage.canvas.height);
+		stage.addChild(bg);
+		
+		// UI
+		gnclient.layout.forEach(function(element) {
+			gnclient.ParseLayout(element, true);
+		});
 		
 		stage.update();
-	});
+		console.log("loading complete");
+		socket.emit('load-complete');
+	}
+	
+	function loadMenu() {
+		console.log('loading menu...');
+		
+		menuPreload.installPlugin(createjs.Sound);
+		
+		var menuManifest = [
+			{"src": "img/bg/home.png", "id": "assets-bg-main"},
+			{"src": "img/bg/panel-shadow.png", "id": "assets-bg-panel"},
+			{"src": "img/icons/checkmark-red.png", "id": "assets-icon-checkmark-red"},
+			{"src": "img/icons/checkmark-blue.png", "id": "assets-icon-checkmark-blue"},
+			{"src": "img/icons/circle-red.png", "id": "assets-icon-circle"},
+			{"src": "img/text-buttons/main-menu-c.png", "id": "button-main-c"},
+			{"src": "img/text-buttons/main-menu-sp.png", "id": "button-main-sp"},
+			{"src": "img/text-buttons/main-menu-mp.png", "id": "button-main-mp"},
+			{"src": "img/text-buttons/mp-create-rm.png", "id": "button-mp-create"},
+			{"src": "img/text-buttons/mp-join-rm.png", "id": "button-mp-join"},
+			{"src": "img/text-buttons/btn-ghost.png", "id": "button-ghost"},
+			{"src": "img/text-buttons/btn-human.png", "id": "button-human"},
+			{"src": "img/text-buttons/btn-map.png", "id": "button-map"},
+			{"src": "img/text-buttons/btn-m01.png", "id": "button-m01"},
+			{"src": "img/text-buttons/btn-m02.png", "id": "button-m02"},
+			{"src": "img/text-buttons/btn-m03.png", "id": "button-m03"},
+			{"src": "img/text-buttons/btn-back.png", "id": "button-back"},
+			{"src": "img/text-buttons/btn-back-gameend.png", "id": "button-back-gameend"},
+			{"src": "img/text-buttons/start-btn.png", "id": "button-start"},
+			{"src": "music/main.mp3", "id": "music-main"}
+		];
+		
+		menuPreload.on('progress', handleProgress);
+		menuPreload.on("fileload", handleAssetsLoad);
+		menuPreload.on("complete", handleMenuComplete);
+		
+		stage.removeAllChildren();
+		stage.clear();
+		
+		gnclient.BuildProgressBar();
+		menuPreload.loadManifest(menuManifest);
+	}
+	
+	var loadSetting = function(data) {
+		console.log('loading settings...');
+		var manifest = [
+			{src: 'common.json', type: 'manifest'},
+			{src: gnclient.side + '.json', type: 'manifest'}
+		];
+		
+		settingPreload.on("fileload", handleSettingsLoad);
+		settingPreload.on("complete", loadScene);
+		
+		settingPreload.loadManifest(manifest);
+	};
+	
+	var loadScene = function() {
+		console.log('loading scene...');
+		
+		preload.installPlugin(createjs.Sound);
+		
+		var manifest = gnclient.manifest;
+		manifest.push({src: 'img/bg/' + gnclient.map + '.png', id:'assets-map'});
+		
+		preload.on('progress', handleProgress);
+		preload.on("fileload", handleAssetsLoad);
+		preload.on("complete", handleComplete);
+		
+		stage.removeAllChildren();
+		stage.clear();
+		
+		createjs.Tween.get(gnclient.sounds['music-main'])
+			.to({volume: 0}, 4000);
+		
+		gnclient.BuildProgressBar();
+		preload.loadManifest(manifest);
+	};
+	// }
 	
 	var sidesChange = function(data){
 		if (data.playerIndex == undefined) { return; }
@@ -1702,128 +1838,39 @@ function initGame(socket){
 					x: 334 + parseInt(data.map.substr(-1, 1)) * 75
 				}, 500, createjs.Ease.quartOut);
 		}
-	}
+	};
 	
-	function handleSettingsLoad(event) {
-		if(event.item.type == 'manifest') {
-			// Append the loaded manifest to current one.
-			gnclient.manifest = gnclient.manifest.concat(event.result);
-		}
-	}
-	
-	function handleProgress(event) {
-		// Use progress bar to indicate the loading progress
-		gnclient.progressBar.scaleX = event.progress;
+	socket.on('room-joined', function(data){
+		// {roomNo, playerIndex, map, side, (opposite)}
+		gnclient['roomNo' + data.mode] = data.roomNo;
+		gnclient.playerIndex = data.playerIndex;
+		
+		// Display Room panel
+		createjs.Tween.get(gnclient.panel[gnclient.mode + 'RM'])
+			.to({alpha: 1}, 400);
+		gnclient.UpdateText('roomNo' + data.mode, {text: gnclient['roomNo' + data.mode]});
 		stage.update();
-	}
-	
-	function handleAssetsLoad(event) {
-		// Store the loaded assets into ghostnight client
-		switch (event.item.type) {
-			case createjs.AbstractLoader.IMAGE:
-				gnclient.assets[event.item.id] = event.target.getResult(event.item.id);
-				break;
-			case createjs.AbstractLoader.JSON:
-				if(event.item.id.substr(0, 6) == 'layout')
-					gnclient.layout = event.result;
-				break;
-			default:
-				break;
+		
+		// Side choose
+		gnclient.side = data.side;
+		sidesChange(data);
+		
+		// Map choose
+		gnclient.map = data.map;
+		mapChange(data);
+		
+		// Somebody already in
+		gnclient.opposite = data.opposite;
+		if (data.opposite != null) {
+			sidesChange({playerIndex: 0, side: data.opposite});
 		}
-	}
-	
-	function handleMenuComplete(event) {
-		gnclient.BuildMenu();
-	}
-	
-	function handleComplete(event) {
-		// Remove progress bar
-		stage.removeChild(gnclient.progressBar);
-		
-		// Add background
-		var bg = new createjs.Bitmap(gnclient.assets['assets-map']);
-		bg.cache(0, 0, stage.canvas.width, stage.canvas.height);
-		stage.addChild(bg);
-		
-		// UI
-		gnclient.layout.forEach(function(element) {
-			gnclient.ParseLayout(element, true);
-		});
 		
 		stage.update();
-		console.log("loading complete");
-		socket.emit('load-complete');
-	}
-	
-	function loadMenu() {
-		console.log('loading menu...');
-		
-		var menuManifest = [
-			{"src": "img/bg/home.png", "id": "assets-bg-main"},
-			{"src": "img/bg/panel-shadow.png", "id": "assets-bg-panel"},
-			{"src": "img/icons/checkmark-red.png", "id": "assets-icon-checkmark-red"},
-			{"src": "img/icons/checkmark-blue.png", "id": "assets-icon-checkmark-blue"},
-			{"src": "img/icons/circle-red.png", "id": "assets-icon-circle"},
-			{"src": "img/text-buttons/main-menu-c.png", "id": "button-main-c"},
-			{"src": "img/text-buttons/main-menu-sp.png", "id": "button-main-sp"},
-			{"src": "img/text-buttons/main-menu-mp.png", "id": "button-main-mp"},
-			{"src": "img/text-buttons/mp-create-rm.png", "id": "button-mp-create"},
-			{"src": "img/text-buttons/mp-join-rm.png", "id": "button-mp-join"},
-			{"src": "img/text-buttons/btn-ghost.png", "id": "button-ghost"},
-			{"src": "img/text-buttons/btn-human.png", "id": "button-human"},
-			{"src": "img/text-buttons/btn-map.png", "id": "button-map"},
-			{"src": "img/text-buttons/btn-m01.png", "id": "button-m01"},
-			{"src": "img/text-buttons/btn-m02.png", "id": "button-m02"},
-			{"src": "img/text-buttons/btn-m03.png", "id": "button-m03"},
-			{"src": "img/text-buttons/btn-back.png", "id": "button-back"},
-			{"src": "img/text-buttons/btn-back-gameend.png", "id": "button-back-gameend"},
-			{"src": "img/text-buttons/start-btn.png", "id": "button-start"}
-		];
-		
-		menuPreload.on('progress', handleProgress);
-		menuPreload.on("fileload", handleAssetsLoad);
-		menuPreload.on("complete", handleMenuComplete);
-		
-		stage.removeAllChildren();
-		stage.clear();
-		
-		gnclient.BuildProgressBar();
-		menuPreload.loadManifest(menuManifest);
-	}
-	
-	var loadSetting = function(data) {
-		console.log('loading settings.');
-		var manifest = [
-			{src: 'common.json', type: 'manifest'},
-			{src: gnclient.side + '.json', type: 'manifest'}
-		]
-		
-		settingPreload.on("fileload", handleSettingsLoad);
-		settingPreload.on("complete", loadScene);
-		
-		settingPreload.loadManifest(manifest);
-	}
-	
-	var loadScene = function() {
-		console.log('loading scene...');
-		
-		var manifest = gnclient.manifest;
-		manifest.push({src: 'img/bg/' + gnclient.map + '.png', id:'assets-map'});
-		
-		preload.on('progress', handleProgress);
-		preload.on("fileload", handleAssetsLoad);
-		preload.on("complete", handleComplete);
-		
-		stage.removeAllChildren();
-		stage.clear();
-		
-		gnclient.BuildProgressBar();
-		preload.loadManifest(manifest);
-	}
+	});
 	
 	socket.on('other-joined-room', function(data) {
 		sidesChange(data);
-	})
+	});
 	
 	socket.on('side-chosen', function(data) {
 		sidesChange(data);
@@ -1837,12 +1884,50 @@ function initGame(socket){
 		loadSetting(data);
 	});
 	
-	
-	socket.on('game-started', function() {
+	socket.on('game-started', function(data) {
+		gnclient.TimeLimit = data.TimeLimit;
+		
 		stage.addChild(gnclient.objects);
 		setInterval(()=>{gnclient.Resorting();}, 200);
 		stage.addChild(gnclient.effects);
 		console.log('game-started');
+		
+		// keyboard shortcut
+		window.addEventListener("keydown", (event)=>{
+			if(gnclient.onKeys["" + event.keyCode]) { gnclient.onKeys["" + event.keyCode]();}
+		});
+		
+		// Sound {
+		// Play game music
+		var music = gnclient.sounds['music-game'];
+		music.volume = 0;
+		music.play({loop: -1});
+		createjs.Tween.get(music)
+			.to({volume: 1}, 1800);
+		
+		// Control button
+		var hit = new createjs.Shape();
+		hit.graphics.beginFill('#000').drawRect(0, 0, 32, 32);
+		
+		var btnMute = new createjs.Bitmap(gnclient.assets['assets-game-menu-mute']);
+		btnMute.on('click', (event) => {
+			createjs.Tween.get(music)
+				.to({volume : 0}, 300);
+		});
+		btnMute.set({x: 1192 - 28, y: 76, regX: 16, regY: 16, hitArea: hit});
+		gnclient.UI['btnMute-game'] = btnMute;
+		stage.addChild(btnMute);
+		
+		var btnUnmute = new createjs.Bitmap(gnclient.assets['assets-game-menu-unmute']);
+		btnUnmute.on('click', (event) => {
+			createjs.Tween.get(music)
+				.to({volume : 1}, 300);
+		});
+		btnUnmute.set({x: 1192 + 28, y: 76, regX: 16, regY: 16, hitArea: hit});
+		gnclient.UI['btnUnmute-game'] = btnUnmute;
+		stage.addChild(btnUnmute);
+		stage.update();
+		// }
 	});
 	
 	socket.on('game-end', function(data) {
@@ -1854,6 +1939,15 @@ function initGame(socket){
 		console.log('Game end.', data);
 		gnclient.GameEnd(data);
 	});
+	
+	socket.on('time', function(data) {
+		var time = gnclient.TimeLimit - parseInt(data.time / 1000);
+		var timeStr = parseInt(Math.floor(time / 60)) + ':' + (time % 60);
+		
+		gnclient.UpdateText('time', {
+			text: timeStr
+		});
+	})
 	
 	socket.on('roadsign-built', function(data) {
 	    gnclient.BuildRoadSign(data);
@@ -2072,7 +2166,7 @@ function initGame(socket){
 	socket.on('hero-skill-cd', function(data) {
 		data.type = gnclient.heroName + '-Skill' + data.skillID;
 		gnclient.CoolDownEffect(data);
-	})
+	});
 	
 	socket.on('hero-hp-update', function(data) {
 		if(data.type == 'heal') {
@@ -2111,7 +2205,7 @@ function initGame(socket){
 	socket.on('hero-select', function(data) {
 		if(gnclient.side == 'ghost')
 			gnclient.DrawHeroSelection(data);
-	})
+	});
 	
 	socket.on('hero-reborn', function(data) {
 		if(gnclient.side == 'ghost') {
@@ -2243,7 +2337,7 @@ function initGame(socket){
 	});
 	
 	socket.on('ensign-built', function(data) {
-		gnclient.BuildEnsign(data)
+		gnclient.BuildEnsign(data);
 	});
 	
 	socket.on('ensign-removed', function(data) {
@@ -2256,5 +2350,5 @@ function initGame(socket){
 	
 	gnclient.say = function(msg){
 		gnclient.socket.emit('send-message', {message: msg});
-	}
+	};
 }

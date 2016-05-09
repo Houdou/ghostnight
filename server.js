@@ -200,7 +200,7 @@ function startGame(roomNo){
 	var GEM = new GameEventManager(room);
 	var settings = {
 		MinDamage: 5,
-		TimeLimit: 120,
+		TimeLimit: 1200,
 		Room: roomNo, 
 		debug: true,
 		soul: 1000,
@@ -226,7 +226,7 @@ function startGame(roomNo){
 		room.GN.GM.mapLoaded = true;
 		// Start the game server
 		room.GN.StartGame();
-		room.broadcast("game-started", {});
+		room.broadcast("game-started", {TimeLimit: settings.TimeLimit});
 	});
 }
 

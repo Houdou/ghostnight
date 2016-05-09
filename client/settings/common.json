@@ -32,6 +32,9 @@
 	{"src": "img/icons/buff/def-nerf.png", "id": "assets-def-nerf"},
 	{"src": "img/icons/buff/rng-buff.png", "id": "assets-range-buff"},
 	{"src": "img/icons/buff/rng-nerf.png", "id": "assets-range-nerf"},
+	{"src": "img/icons/game-menu-bg.png", "id": "assets-game-menu-bg"},
+	{"src": "img/icons/game-menu-mute.png", "id": "assets-game-menu-mute"},
+	{"src": "img/icons/game-menu-unmute.png", "id": "assets-game-menu-unmute"},
 	{"src": "img/bg/cover.png", "id":"assets-cover"},
 	{"src": "img/road-sign.png", "id": "assets-road-sign"},
 	{"src": "img/road-stick.png", "id": "assets-road-stick"},
@@ -73,5 +76,6 @@
 	{"src": "img/effects/ve-sound.png", "id": "assets-effects-sound"},
 	{"src": "img/effects/hero-effect/effect-shield.png", "id": "assets-effects-shield"},
 	{"src": "img/text-buttons/win.png", "id": "assets-win"},
-	{"src": "img/text-buttons/lose.png", "id": "assets-lose"}
+	{"src": "img/text-buttons/lose.png", "id": "assets-lose"},
+	{"src": "music/game.mp3", "id": "music-game"}
 ]
