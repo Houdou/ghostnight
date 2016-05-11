@@ -24,6 +24,10 @@ var GameEventManager = function(room) {
         room.SetupSocket(false);
     });
     
+    this.on('delete-room', function() {
+        delete room.GN;
+    });
+    
     this.on('time', function(data) {
         room.broadcast('time', data);
     });

@@ -11,7 +11,8 @@
 		{"id": 8, "x": 959, "y": 280}
 	],
 	"blockers": [
-		{"id": 0, "x": 112, "y": 222, "bindJoint": 5}
+		{"id": 0, "x": 556, "y": 217, "bindJoint": 79},
+		{"id": 1, "x": 847, "y": 511, "bindJoint": 116}
 	],
 	"entryJoint": {"id": 0},
 	"goals": [

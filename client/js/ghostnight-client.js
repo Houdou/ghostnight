@@ -1274,7 +1274,6 @@ gn.prototype.ChangeRoadSign = function(data) {
 	
 	createjs.Tween.get(roadsign)
 		.to({rotation : r / Math.PI * 180}, 300, createjs.Ease.quartOut);
-	
 };
 gn.prototype.HeroRebornCD = function(data) {
 	var panel = this.panel['panel-Reborn'];
@@ -1657,10 +1656,8 @@ gn.prototype.FindNearestSlot = function(x, y, maxDistance) {
 	
 	return sid;
 };
-var gnc;
 function initGame(socket){
 	var gnclient = new gn(stage, socket);
-	gnc = gnclient;
 	
 	// Loading {
 	var menuPreload = new createjs.LoadQueue(true, './assets/');
@@ -1838,6 +1835,7 @@ function initGame(socket){
 		}
 	};
 	
+	// System
 	socket.on('room-joined', function(data){
 		// {roomNo, playerIndex, map, side, (opposite)}
 		gnclient['roomNo' + data.mode] = data.roomNo;
@@ -1947,6 +1945,7 @@ function initGame(socket){
 		});
 	})
 	
+	// Scene
 	socket.on('roadsign-built', function(data) {
 	    gnclient.BuildRoadSign(data);
 	});

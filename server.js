@@ -199,24 +199,28 @@ function startGame(roomNo){
 	var settings = {
 		MinDamage: 5,
 		Room: roomNo, 
-		debug: true,
+		debug: false,
 		soul: 1000,
-		gold: 2000,
+		gold: 2500,
 		soulIncreasing: {value: 5, interval: 2}
 	};
 	
 	switch (room.map) {
 		case 'm01':
-			settings.TimeLimit = 3 * 60;
+			settings.TimeLimit = 4 * 60;
+			settings.gold = 2000;
 			break;
 		case 'm02':
 			settings.TimeLimit = 5 * 60;
+			settings.gold = 2500;
 			break;
 		case 'm03':
-			settings.TimeLimit = 8 * 60;
+			settings.TimeLimit = 6 * 60;
+			settings.gold = 3000;
 			break;
 		default:
 			settings.TimeLimit = 5 * 60;
+			settings.gold = 2500;
 			break;
 	}
 	
@@ -227,6 +231,9 @@ function startGame(roomNo){
 		// Setup a simple AI to play the game
 		var GNAI = new room.GN.AI(room);
 		room.players.push({socket: GNAI, side: 'human'});
+		GNAI.on('send-message', function(data) {
+	        room.broadcast('message-send', {side: "human", message: data.message});
+	    });
 	}
 	
 	room.SetupSocket(true);
@@ -245,21 +252,4 @@ function startGame(roomNo){
 server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function() {
     var addr = server.address();
     console.log("Server listening at", addr.address + ":" + addr.port);
-    
-    // Test
-    // var GN = new GhostNight({MinDamage: 1, TimeLimit: 60, Room: "048", soul: 2000, debug: true}, new GameEventManager(new Room('048')));
-    
-    // GN.Scene.LoadMap('m03', function(){
-    // 	GN.GM.mapLoaded = true;
-    // 	// var m = GN.CreateTower('Snake', 0);
-    	
-    // 	GN.StartGame();
-    	
-    // 	setTimeout(function() {GN.RebornHero(false);}, 1000);
-    // 	// setTimeout(function() {GN.CreateUnit("Kappa");}, 3000);
-    	
-    // 	// setTimeout(function() {GN.CreateEnsign("Atk", 14);}, 8000);
-    // 	setTimeout(function() {GN.MoveHeroTo(139);}, 2000);
-    	
-    // });
 });

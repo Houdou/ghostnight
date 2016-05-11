@@ -6,11 +6,11 @@ var Weather = require('./Statics/Weather');
 //Values
 const _HERO = {
     Nekomata: {
-        hp: 1900, atk: 210, range: 100, rate: 1, def: 20, spd: 100 / 50, price: 200, value: 300, layer: Layers.land },
+        hp: 2000, atk: 220, range: 100, rate: 1, def: 20, spd: 100 / 50, price: 200, value: 400, layer: Layers.land },
     Ameonna: {
-        hp: 1400, atk: 170, range: 100, rate: 1, def: 30, spd: 80 / 50, price: 200, value: 300, layer: Layers.land },
+        hp: 1500, atk: 170, range: 100, rate: 1, def: 35, spd: 80 / 50, price: 200, value: 400, layer: Layers.land },
     Todomeki: {
-        hp: 1700, atk: 190, range: 125, rate: 1, def: 30, spd: 70 / 50, price: 200, value: 300, layer: Layers.land }
+        hp: 1700, atk: 190, range: 125, rate: 1, def: 30, spd: 65 / 50, price: 200, value: 400, layer: Layers.land }
 };
 
 const _UNIT = {
@@ -41,19 +41,19 @@ const _ENSIGN = {
 
 const _TOWER = { // rangeIndex: 75: 0.5, 100: 1, 125: 1.5, 150: 2, 175: 2.5, 200: 3
     Miko: { // 100
-        hp: 2000, atk: 105, range: 125, rate: 1.25, def: 20, spd: 1000 / 500, price: 200, value: 230, layer: Layers.land },
+        hp: 2000, atk: 105, range: 125, rate: 1.25, def: 25, spd: 1000 / 500, price: 200, value: 230, layer: Layers.land },
     Inari: { // 110
-        hp: 2100, atk: 120, range: 150, rate: 1, def: 10, spd: 1000 / 500, price: 250, value: 280, layer: Layers.land | Layers.sky },
+        hp: 2100, atk: 120, range: 150, rate: 1, def: 15, spd: 1000 / 500, price: 250, value: 280, layer: Layers.land | Layers.sky },
     Inugami: { // 140
-        hp: 1900, atk: 140, range: 125, rate: 1, def: 15, spd: 1000 / 500, price: 300, value: 330, layer: Layers.land | Layers.sky },
+        hp: 1900, atk: 140, range: 125, rate: 1, def: 20, spd: 1000 / 500, price: 300, value: 330, layer: Layers.land | Layers.sky },
     Ebisu: { // 80
-        hp: 2050, atk: 90, range: 100, rate: 1, def: 40, spd: 1000 / 500, price: 300, value: 330, layer: Layers.land },
+        hp: 2050, atk: 90, range: 100, rate: 1, def: 45, spd: 1000 / 500, price: 300, value: 330, layer: Layers.land },
     Snake: { // 125
-        hp: 2250, atk: 120, range: 150, rate: 1, def: 30, spd: 1000 / 500, price: 350, value: 380, layer: Layers.land },
+        hp: 2250, atk: 120, range: 150, rate: 1, def: 35, spd: 1000 / 500, price: 350, value: 380, layer: Layers.land },
     Asura: { // 135
-        hp: 2300, atk: 225, range: 100, rate: 1.5, def: 20, spd: 1000 / 500, price: 350, value: 380, layer: Layers.land },
+        hp: 2300, atk: 225, range: 100, rate: 1.5, def: 25, spd: 1000 / 500, price: 350, value: 380, layer: Layers.land },
     Amaterasu: { // 120
-        hp: 2400, atk: 160, range: 200, rate: 0.75, def: 20, spd: 1000 / 500, price: 400, value: 430, layer: Layers.land | Layers.sky }
+        hp: 2400, atk: 160, range: 200, rate: 0.75, def: 25, spd: 1000 / 500, price: 400, value: 430, layer: Layers.land | Layers.sky }
 };
 
 var Hero = require('./Hero');
@@ -237,7 +237,7 @@ var GNObjects = function(GM) {
             _HERO.Todomeki.rate, _HERO.Todomeki.def, _HERO.Todomeki.spd, _HERO.Todomeki.layer, _HERO.Todomeki.price, _HERO.Todomeki.value, that.GM);
         // var
         
-        this.EyeBombAtk = 300;
+        this.EyeBombAtk = 250;
         this.ParalyzeDuration = 5;
         
         // override the time here↓
@@ -436,6 +436,7 @@ var GNObjects = function(GM) {
     };
     Dojoji.prototype = new Unit();
     // functions
+    // Override the didAttackedTarget
     Dojoji.prototype.didAttackedTarget = function(target, dmg) {
         if(Math.random() > (1 - this.nerfPossibility)) {
             target.Nerf('def', this.nerfRate, this.nerfDuration);
@@ -483,7 +484,7 @@ var GNObjects = function(GM) {
             _UNIT.Raiju.rate, _UNIT.Raiju.def, _UNIT.Raiju.spd, _UNIT.Raiju.layer, _UNIT.Raiju.price, _UNIT.Raiju.value, that.GM);
         // var
         this.firePossibility = 0.2;
-        this.fireDuration = 3.1;
+        this.fireDuration = 4.1;
     };
     Raiju.prototype = new Unit();
     // functions
@@ -666,8 +667,8 @@ var GNObjects = function(GM) {
             _TOWER.Snake.rate, _TOWER.Snake.def, _TOWER.Snake.spd, _TOWER.Snake.layer, _TOWER.Snake.price, _TOWER.Snake.value, that.GM);
             
         this.slot = slot;
-        this.AOETargetsNumber = 3;
-        this.AOEAttenuation = 0.75;
+        this.AOETargetsNumber = 5;
+        this.AOEAttenuation = 0.8;
     };
     Snake.prototype = new Tower();
     Snake.prototype.didAttackedTarget = function(target, dmg) {

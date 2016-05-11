@@ -130,7 +130,9 @@ GameMaster.prototype.GameEnd = function(type){
 	// Stop ensigns
 	this.ensigns.forEach((e)=>{clearTimeout(e.removeTimeout)});
 	
-	console.log(this.statistics);
+	console.log(this.statistics); 
+	
+	this.GEM.emit('delete-room');
 }
 
 // Econ system
@@ -184,13 +186,15 @@ GameMaster.prototype.UnitReachEnd = function(value, jid) {
 			this.goals[i].life -= 1;
 			this.life -= 1;
 			this.GEM.emit("goal-damage", {gid: i, goalLife: this.goals[i].life, life: this.life, maxlife: this.maxlife});
-			
+			this.AddSoul(50);
 			if(this.debug)
 				console.log("Goal " + i + " deduct life to " + this.goals[i].life);
 			
 			if(this.goals[i].life == 0) {
 				console.log("Goal " + i + " dead");
 				this.GEM.emit('goal-dead', {gid: i});
+				this.AddSoul(50);
+				this.AddGold(200);
 			}
 			
 			if(this.life == 0) {

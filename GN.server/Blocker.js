@@ -41,6 +41,8 @@ Blocker.prototype.UnblockJoint = function() {
 // Override the Dead method
 Blocker.prototype.Dead = function(killedBy) {
     this.UnblockJoint();
+    // Econ system
+    this.GM.AddSoul(this.value);
     // Prevent accidental overkill
     this.slot.tower = null;
 }

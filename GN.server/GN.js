@@ -87,7 +87,7 @@ GhostNight.prototype.SetupGoal = function() {
     });
     this.GM.GEM.emit('goal-life-bar-built');
 }
-
+// Roadsign
 GhostNight.prototype.SetupRoadSign = function() {
     this.GM.roadSigns.forEach((rs)=>{
 		this.GM.GEM.emit('roadsign-built', {rid: rs.rid, x: rs.transform.x, y: rs.transform.y});
@@ -146,7 +146,6 @@ GhostNight.prototype.CreateHero = function(type) {
         return null;
     }
 }
-
 GhostNight.prototype.MoveHeroTo = function(jid) {
     // Find jid in the game master
     var joint = this.GM.joints[jid];
