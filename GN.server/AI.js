@@ -251,7 +251,7 @@ var AI = function(room) {
     			break;
     	}
     	that.unitsNum = unitsNum;
-    	say(JSON.stringify(unitsNum));
+    	// say(JSON.stringify(unitsNum));
     	return unitsNum;
     }
     
@@ -292,13 +292,13 @@ var AI = function(room) {
     function goldStateJudge() {
     	if (that.gold < 700 && getSlotsVacancy() != 0) {
     		that.goldState = -1;
-    		say('poor: '+that.gold);
+    		//say('poor: '+that.gold);
     	} else if (that.gold >= 1300 + 350 * (Math.min(getSlotsVacancy(), 5))) {
     		that.goldState = 1;
-    		say('rich: '+that.gold);
+    		//say('rich: '+that.gold);
     	} else {
     		that.goldState = 0;
-    		say('normal: '+that.gold);
+    		//say('normal: '+that.gold);
     	}
     }
     
