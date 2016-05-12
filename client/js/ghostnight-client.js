@@ -1656,8 +1656,10 @@ gn.prototype.FindNearestSlot = function(x, y, maxDistance) {
 	
 	return sid;
 };
+var gnc
 function initGame(socket){
 	var gnclient = new gn(stage, socket);
+	gnc = gnclient;
 	
 	// Loading {
 	var menuPreload = new createjs.LoadQueue(true, './assets/');
